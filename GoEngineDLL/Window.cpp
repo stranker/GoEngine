@@ -2,6 +2,7 @@
 
 bool Window::init()
 {
+	fprintf(stderr, "Windows init");
 	/* Initialize the library */
 	if (!glfwInit()) {
 		fprintf(stderr, "Falla al inicialiar GLFW\n");
@@ -17,16 +18,15 @@ bool Window::init()
 		glfwTerminate();
 		return false;
 	}
-	return true;
-
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-	
 
+	return true;	
 }
 
 bool Window::free()
 {
+	fprintf(stderr, "Windows free");
 	if (window != NULL) {
 		glfwDestroyWindow((GLFWwindow*)window);
 	}
@@ -36,18 +36,23 @@ bool Window::free()
 }
 
 void Window::pool_events(){
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
-	{
-		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+	glfwPollEvents();
+}
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+void Window::set_clear_color(float r, float g, float b, float a){
+	glClearColor(r, g, b, a);
+}
 
-		/* Poll for and process events */
-		glfwPollEvents();
-	}
+void Window::clear_color(){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Window::swap_buffers(){
+	glfwSwapBuffers(window);
+}
+
+bool Window::should_close(){
+	return glfwWindowShouldClose(window);
 }
 
 Window::Window(int _width, int _height, const char * _title){

@@ -16,6 +16,8 @@ private:
 	Window *window;
 public:
 	bool free();
+	void init();
+	void loop();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
 };

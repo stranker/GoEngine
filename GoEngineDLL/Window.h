@@ -17,6 +17,10 @@ public:
 	bool init();
 	bool free();
 	void pool_events();
+	void set_clear_color(float r, float g, float b, float a);
+	void clear_color();
+	void swap_buffers();
+	bool should_close();
 	Window(int _width, int _height, const char* _title);
 	~Window();
 };
