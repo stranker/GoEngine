@@ -3,16 +3,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include "Exports.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
+#include "Exports.h"
+#include "Window.h"
+
 class ENGINEDLL_API BaseGame
 {
+private:
+	Window *window;
 public:
-	int create_window();
-	BaseGame();
+	bool free();
+	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
 };
 
