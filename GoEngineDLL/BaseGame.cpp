@@ -8,32 +8,26 @@ bool BaseGame::free()
 	return true;
 }
 
-// Identificar el vertex buffer
-GLuint vertexbuffer;
 void BaseGame::init(){
 	window->init();
+	glewInit(); //Inicializa GLEW
 
 	//VAO
-	GLuint VertexArrayID;
-	if (glewInit() == GLEW_OK) {		glGenVertexArrays(1, (&VertexArrayID));		glBindVertexArray(VertexArrayID);	}
+	renderer->GenerateVertexArray();
+	renderer->BindVertexArray();
 	//
 
 	//Vectores
-	static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f,  1.0f, 0.0f,
-	};
 	//
 
 	//Creando un buffer
 	
 	// Generar un buffer, poner el resultado en el vertexbuffer que acabamos de crear
-	glGenBuffers(1, &vertexbuffer);
+	renderer->GenerateBuffer();
 	// Los siguientes comandos le darán características especiales al 'vertexbuffer' 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	renderer->BindBuffer();
 	// Darle nuestros vértices a  OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	renderer->GenerateBufferData();
 	//
 }
 
@@ -45,7 +39,7 @@ void BaseGame::loop(){
 		//Dibujando el triangulo
 		// 1rst attribute buffer : vértices
 		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, renderer->GetVertexBuffer());
 		glVertexAttribPointer(
 			0,                  // atributo 0. No hay razón particular para el 0, pero debe corresponder en el shader.
 			3,                  // tamaño
@@ -68,6 +62,7 @@ void BaseGame::loop(){
 
 BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title){
 	window = new Window(_screen_width, _screen_height, _screen_title);
+	renderer = new Renderer();
 }
 
 BaseGame::~BaseGame(){

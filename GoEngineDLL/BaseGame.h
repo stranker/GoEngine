@@ -9,11 +9,13 @@
 
 #include "Exports.h"
 #include "Window.h"
+#include "Renderer.h"
 
 class ENGINEDLL_API BaseGame
 {
 private:
 	Window *window;
+	Renderer *renderer;
 public:
 	bool free();
 	void init();
