@@ -3,9 +3,9 @@
 int main(){
 
 	Game *game = new Game(800, 600, "SKYRIM");
-	game->init();
-	game->loop();
-	game->free();
+	game->Init();
+	game->Loop();
+	game->Destroy();
 	delete game;
 	return 0;
 }

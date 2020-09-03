@@ -1,11 +1,11 @@
 #include "Window.h"
 
-bool Window::init()
+bool Window::Init()
 {
-	fprintf(stderr, "Windows init");
+	cout << "Windows Init" << endl;
 	/* Initialize the library */
 	if (!glfwInit()) {
-		fprintf(stderr, "Falla al inicialiar GLFW\n");
+		cout << "Falla al inicialiar GLFW" << endl;
 		getchar();
 		return false;
 	}
@@ -13,21 +13,19 @@ bool Window::init()
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(width, height, title, NULL, NULL);
 	if (!window){
-		fprintf(stderr, "Falla al crear Window\n");
+		cout << "Falla al crear Window" << endl;
 		getchar();
 		glfwTerminate();
 		return false;
 	}
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-
-	return true;	
+	return true;
 }
 
-bool Window::free()
-{
-	fprintf(stderr, "Windows free");
-	if (window != NULL) {
+bool Window::Destroy(){
+	cout << "Windows Destroy" << endl;
+	if (window) {
 		glfwDestroyWindow((GLFWwindow*)window);
 	}
 	window = NULL;
@@ -35,24 +33,16 @@ bool Window::free()
 	return true;
 }
 
-void Window::pool_events(){
+void Window::PoolEvents(){
 	glfwPollEvents();
 }
 
-void Window::set_clear_color(float r, float g, float b, float a){
-	glClearColor(r, g, b, a);
-}
-
-void Window::clear_color(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void Window::swap_buffers(){
-	glfwSwapBuffers(window);
-}
-
-bool Window::should_close(){
+bool Window::ShouldClose(){
 	return glfwWindowShouldClose(window);
+}
+
+GLFWwindow* Window::GetWindowPtr(){
+	return window;
 }
 
 Window::Window(int _width, int _height, const char * _title){

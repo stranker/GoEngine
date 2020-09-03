@@ -3,10 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
-
 #include "Exports.h"
 #include "Window.h"
 #include "Renderer.h"
@@ -17,9 +13,9 @@ private:
 	Window *window;
 	Renderer *renderer;
 public:
-	bool free();
-	void init();
-	void loop();
+	void Init();
+	void Destroy();
+	void Loop();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
 };

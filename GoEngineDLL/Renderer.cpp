@@ -1,42 +1,71 @@
 #include "Renderer.h"
 
-void Renderer::GenerateVertexArray()
-{
-	glGenVertexArrays(1, (&vertexArrayId));
+void Renderer::Init(){
+	cout << "Renderer Init" << endl;
+	if (window)	{
+		if (glewInit() != GLEW_OK){
+			cout << "Failed to init Glew" << endl;
+		}
+		glGenVertexArrays(1, (&vertexArrayId));
+		glBindVertexArray(vertexArrayId);
+	}
 }
 
-void Renderer::BindVertexArray()
-{
-	glBindVertexArray(vertexArrayId);
+void Renderer::Destroy(){
+	cout << "Renderer Destroy" << endl;
 }
 
-void Renderer::GenerateBuffer()
-{
+GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize) {
+	GLuint vertexBuffer;
 	glGenBuffers(1, &vertexBuffer);
-}
-
-void Renderer::BindBuffer()
-{
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, dataSize, data, GL_STATIC_DRAW);
+	return vertexBuffer;
 }
 
-void Renderer::GenerateBufferData()
-{
+void Renderer::BindBuffer(GLuint vertexBuffer, uint8_t size){
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glVertexAttribPointer(
+		0,                  // atributo 0. No hay razón particular para el 0, pero debe corresponder en el shader.
+		size,                  // tamaño
+		GL_FLOAT,           // tipo
+		GL_FALSE,           // normalizado?
+		0,                    // Paso
+		(void*)0            // desfase del buffer
+	);
+}
 
-	float g_vertex_buffer_data[] = { //Esto no deberia ir aca, pero cuando lo quiero pasar como dato no me lo toma el glBufferData
-		-1.0f, -1.0f, 0.0f,			//Plz halp Natarelli-sama :,c
+void Renderer::CreateTriangleBuffer(){
+	float triangle_vertex_data[] = {
+		-1.0f, -1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,
 		0.0f,  1.0f, 0.0f,
 	};
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	unsigned int vertexBuffer = CreateVertexBuffer(triangle_vertex_data, sizeof(triangle_vertex_data));
+	BindBuffer(vertexBuffer, 3);
 }
 
-Renderer::Renderer()
-{
+void Renderer::SetClearColor(float r, float g, float b, float a){
+	glClearColor(r, g, b, a);
+}
+
+void Renderer::ClearScreen(){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::SwapBuffers(){
+	glfwSwapBuffers(window->GetWindowPtr());
+}
+
+void Renderer::DrawBuffer(uint8_t vertexCount){
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+}
+
+Renderer::Renderer(Window* _window){
+	window = _window;
 }
 
 
-Renderer::~Renderer()
-{
+Renderer::~Renderer(){
 }
