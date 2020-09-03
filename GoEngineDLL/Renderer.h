@@ -11,8 +11,8 @@ private:
 	Window* window;
 	GLuint vertexArrayId;
 public:
-	void Init();
-	void Destroy();
+	bool Init();
+	bool Destroy();
 	GLuint CreateVertexBuffer(float *data, size_t dataSize);
 	void BindBuffer(GLuint vertexBuffer, uint8_t size);
 	void CreateTriangleBuffer();

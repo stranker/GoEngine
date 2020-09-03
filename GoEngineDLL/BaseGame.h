@@ -13,8 +13,8 @@ private:
 	Window *window;
 	Renderer *renderer;
 public:
-	void Init();
-	void Destroy();
+	bool Init();
+	bool Destroy();
 	void Loop();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();

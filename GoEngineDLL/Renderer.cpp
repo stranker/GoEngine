@@ -1,18 +1,23 @@
 #include "Renderer.h"
 
-void Renderer::Init(){
+bool Renderer::Init(){
 	cout << "Renderer Init" << endl;
-	if (window)	{
-		if (glewInit() != GLEW_OK){
-			cout << "Failed to init Glew" << endl;
-		}
-		glGenVertexArrays(1, (&vertexArrayId));
-		glBindVertexArray(vertexArrayId);
+	if (!window) {
+		cout << "Window ptr not created" << endl;
+		return false;
 	}
+	if (glewInit() != GLEW_OK){
+		cout << "Failed to init Glew" << endl;
+		return false;
+	}
+	glGenVertexArrays(1, (&vertexArrayId));
+	glBindVertexArray(vertexArrayId);
+	return true;
 }
 
-void Renderer::Destroy(){
+bool Renderer::Destroy(){
 	cout << "Renderer Destroy" << endl;
+	return true;
 }
 
 GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize) {

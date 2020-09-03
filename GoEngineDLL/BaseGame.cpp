@@ -1,12 +1,13 @@
 #include "BaseGame.h"
 
-void BaseGame::Init() {
+bool BaseGame::Init() {
 	window->Init();
 	renderer->Init();
 	renderer->CreateTriangleBuffer();
+	return true;
 }
 
-void BaseGame::Destroy(){
+bool BaseGame::Destroy(){
 	if (renderer){
 		renderer->Destroy();
 		delete renderer;
@@ -15,6 +16,7 @@ void BaseGame::Destroy(){
 		window->Destroy();
 		delete window;
 	}
+	return true;
 }
 
 void BaseGame::Loop(){
