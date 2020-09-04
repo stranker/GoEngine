@@ -28,27 +28,24 @@ GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize) {
 	return vertexBuffer;
 }
 
-void Renderer::BindBuffer(GLuint vertexBuffer, uint8_t size){
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glVertexAttribPointer(
-		0,                  // atributo 0. No hay razón particular para el 0, pero debe corresponder en el shader.
-		size,                  // tamaño
-		GL_FLOAT,           // tipo
-		GL_FALSE,           // normalizado?
-		0,                    // Paso
-		(void*)0            // desfase del buffer
-	);
+void Renderer::BindBuffer(GLuint attributeId, uint8_t dataCount, uint8_t dataSize, uint8_t offset){
+	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataSize * sizeof(float), (void*)(offset * sizeof(float)));
+	glEnableVertexAttribArray(attributeId);
 }
 
-void Renderer::CreateTriangleBuffer(){
+GLuint Renderer::CreateTriangleBuffer(){
 	float triangle_vertex_data[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f,  1.0f, 0.0f,
+		// positions         // colors
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,   // bottom left
+		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,   // top 
 	};
-	unsigned int vertexBuffer = CreateVertexBuffer(triangle_vertex_data, sizeof(triangle_vertex_data));
-	BindBuffer(vertexBuffer, 3);
+	GLuint vertexBuffer = CreateVertexBuffer(triangle_vertex_data, sizeof(triangle_vertex_data));
+	// Positions
+	BindBuffer(0, 3, 7, 0);
+	// Colors
+	BindBuffer(1, 4, 7, 3);
+	return vertexBuffer;
 }
 
 void Renderer::SetClearColor(float r, float g, float b, float a){

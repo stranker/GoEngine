@@ -3,7 +3,6 @@
 bool BaseGame::Init() {
 	window->Init();
 	renderer->Init();
-	renderer->CreateTriangleBuffer();
 	return true;
 }
 
@@ -20,10 +19,16 @@ bool BaseGame::Destroy(){
 }
 
 void BaseGame::Loop(){
+	GLuint vertexBuffer = renderer->CreateTriangleBuffer();
+	Material *material = new Material();
+	material->LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
+	material->Use();
 	while (!window->ShouldClose()){
 		renderer->SetClearColor(0.5f, 0.0f, 0.5f, 1.0f);
 		renderer->ClearScreen();
+
 		renderer->DrawBuffer(3);
+
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}

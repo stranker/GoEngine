@@ -6,6 +6,7 @@
 #include "Exports.h"
 #include "Window.h"
 #include "Renderer.h"
+#include "Material.h"
 
 class ENGINEDLL_API BaseGame
 {
