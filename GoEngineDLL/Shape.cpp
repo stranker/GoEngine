@@ -18,8 +18,14 @@ GLuint Shape::CreateTriangleBuffer()
 	return vertexBuffer;
 }
 
-Shape::Shape()
+void Shape::Draw()
 {
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+Shape::Shape(Renderer* _renderer)
+{
+	SetRenderer(_renderer);
 }
 
 

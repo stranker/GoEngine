@@ -17,7 +17,6 @@ public:
 	void SetClearColor(float r, float g, float b, float a);
 	void ClearScreen();
 	void SwapBuffers();
-	void DrawBuffer(uint8_t vertexCount);
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

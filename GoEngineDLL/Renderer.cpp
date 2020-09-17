@@ -45,10 +45,6 @@ void Renderer::SwapBuffers(){
 	glfwSwapBuffers(window->GetWindowPtr());
 }
 
-void Renderer::DrawBuffer(uint8_t vertexCount){
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-}
-
 Renderer::Renderer(Window* _window){
 	window = _window;
 }

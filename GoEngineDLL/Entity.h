@@ -8,5 +8,7 @@ public:
 	void SetRenderer(Renderer *_renderer);
 	Entity();
 	~Entity();
+
+	virtual void Draw();
 };
 

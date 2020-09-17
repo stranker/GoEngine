@@ -19,7 +19,7 @@ bool BaseGame::Destroy(){
 }
 
 void BaseGame::Loop(){
-	Shape *shape = new Shape();
+	Shape *shape = new Shape(renderer);
 	GLuint vertexBuffer = shape->CreateTriangleBuffer();
 
 	Material *material = new Material();
@@ -29,7 +29,7 @@ void BaseGame::Loop(){
 		renderer->SetClearColor(0.5f, 0.0f, 0.5f, 1.0f);
 		renderer->ClearScreen();
 
-		renderer->DrawBuffer(3);
+		shape->Draw();
 
 		renderer->SwapBuffers();
 		window->PoolEvents();

@@ -15,3 +15,7 @@ Entity::Entity()
 Entity::~Entity()
 {
 }
+
+void Entity::Draw()
+{
+}

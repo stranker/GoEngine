@@ -5,7 +5,8 @@ class Shape :
 {
 public:
 	GLuint CreateTriangleBuffer();
-	Shape();
+	void Draw();
+	Shape(Renderer* _renderer);
 	~Shape();
 };
 
