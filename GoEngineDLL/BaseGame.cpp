@@ -19,7 +19,9 @@ bool BaseGame::Destroy(){
 }
 
 void BaseGame::Loop(){
-	GLuint vertexBuffer = renderer->CreateTriangleBuffer();
+	Shape *shape = new Shape();
+	GLuint vertexBuffer = shape->CreateTriangleBuffer();
+
 	Material *material = new Material();
 	material->LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
 	material->Use();

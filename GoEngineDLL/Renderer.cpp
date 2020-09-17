@@ -33,21 +33,6 @@ void Renderer::BindBuffer(GLuint attributeId, uint8_t dataCount, uint8_t dataSiz
 	glEnableVertexAttribArray(attributeId);
 }
 
-GLuint Renderer::CreateTriangleBuffer(){
-	float triangle_vertex_data[] = {
-		// positions         // colors
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,   // bottom left
-		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,   // top 
-	};
-	GLuint vertexBuffer = CreateVertexBuffer(triangle_vertex_data, sizeof(triangle_vertex_data));
-	// Positions
-	BindBuffer(0, 3, 7, 0);
-	// Colors
-	BindBuffer(1, 4, 7, 3);
-	return vertexBuffer;
-}
-
 void Renderer::SetClearColor(float r, float g, float b, float a){
 	glClearColor(r, g, b, a);
 }

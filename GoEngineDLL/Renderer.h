@@ -14,7 +14,6 @@ public:
 	bool Destroy();
 	GLuint CreateVertexBuffer(float *data, size_t dataSize);
 	void BindBuffer(GLuint attributeId, uint8_t dataCount, uint8_t dataSize, uint8_t offset);
-	GLuint CreateTriangleBuffer();
 	void SetClearColor(float r, float g, float b, float a);
 	void ClearScreen();
 	void SwapBuffers();
