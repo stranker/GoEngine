@@ -8,12 +8,14 @@
 #include "Renderer.h"
 #include "Triangle.h"
 #include "Square.h"
+#include "Input.h"
 
 class ENGINEDLL_API BaseGame
 {
 private:
 	Window *window;
 	Renderer *renderer;
+	Input *input;
 	Triangle *triangle;
 	Square *square;
 	Material *material;
