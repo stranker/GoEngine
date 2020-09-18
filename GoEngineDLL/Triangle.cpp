@@ -24,8 +24,8 @@ Triangle::Triangle(Renderer* _renderer) : Shape(_renderer) {
 		0.0f, 1.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f, 1.0f,
 	};
-	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), positionVertexCount);
-	SetColorVertex(color_vertex_data, sizeof(color_vertex_data), colorVertexCount);
+	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 3);
+	SetColorVertex(color_vertex_data, sizeof(color_vertex_data), 4);
 }
 
 
