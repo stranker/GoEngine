@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Exports.h"
 #include "GL/glew.h"
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
@@ -7,7 +8,7 @@
 
 using namespace std;
 
-class Window
+class ENGINEDLL_API Window
 {
 private:
 	GLFWwindow* window;

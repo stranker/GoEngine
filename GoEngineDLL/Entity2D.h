@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Material.h"
 
-class Entity2D :
+class ENGINEDLL_API Entity2D :
 	public Entity
 {
 protected:

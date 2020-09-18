@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Exports.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class Transform {
+class ENGINEDLL_API Transform {
 protected:
 	glm::vec3 position;
 	glm::vec3 rotationDegrees;
@@ -23,6 +24,7 @@ public:
 	glm::vec3 GetPosition();
 	glm::vec3 GetRotation();
 	glm::vec3 GetScale();
+	glm::mat4 GetTransform();
 	void UpdateModel();
 	Transform();
 	~Transform();

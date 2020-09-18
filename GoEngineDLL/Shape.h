@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity2D.h"
-class Shape :
+
+class ENGINEDLL_API Shape :
 	public Entity2D
 {
 protected:

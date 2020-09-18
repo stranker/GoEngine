@@ -1,6 +1,7 @@
 #pragma once
 #include "Shape.h"
-class Square :
+
+class ENGINEDLL_API Square :
 	public Shape {
 public:
 	void Draw() override;

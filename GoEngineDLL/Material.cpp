@@ -1,5 +1,10 @@
 #include "Material.h"
 
+void Material::SetMatrixProperty(const char * property, glm::mat4 matrix) {
+	unsigned int transformLoc = glGetUniformLocation(ID, property);
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
 void Material::Use(){
 	glUseProgram(ID);
 }

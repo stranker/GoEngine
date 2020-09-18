@@ -36,6 +36,10 @@ glm::vec3 Transform::GetScale() {
 	return localScale;
 }
 
+glm::mat4 Transform::GetTransform() {
+	return transform;
+}
+
 void Transform::UpdateModel() {
 	transform = translation * rotation * scale;
 }

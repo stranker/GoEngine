@@ -16,10 +16,10 @@ void Square::Draw() {
 
 Square::Square(Renderer *_renderer) : Shape(_renderer) {
 	float position_vertex_data[] = {
-		0.5f,  0.5f, 0.0f,  // top right
-		0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
+		0.0f,1.0f,0.0f,
+		1.0f,1.0f,0.0f,
+		0.0f,0.0f,0.0f,
+		1.0f,0.0f,0.0f,
 	};
 	float color_vertex_data[] = {
 		1.0f, 0.0f, 0.0f, 1.0f,

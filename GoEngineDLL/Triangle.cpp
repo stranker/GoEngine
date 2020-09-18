@@ -3,6 +3,7 @@
 void Triangle::Draw() {
 	if (material) {
 		UseMaterial(); // Uso el material
+		material->SetMatrixProperty("transform", transform->GetTransform());
 	}
 	renderer->EnableBuffer(0);
 	renderer->EnableBuffer(1);

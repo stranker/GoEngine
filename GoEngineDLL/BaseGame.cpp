@@ -4,7 +4,6 @@ bool BaseGame::Init() {
 	window->Init();
 	renderer->Init();
 	triangle = new Triangle(renderer);
-	square = new Square(renderer);
 	material = new Material();
 	triangle->SetMaterial(material);
 	return true;
@@ -14,10 +13,6 @@ bool BaseGame::Destroy(){
 	if (triangle) {
 		triangle->Destroy();
 		delete triangle;
-	}
-	if (square) {
-		square->Destroy();
-		delete square;
 	}
 	if (material) {
 		material->Destroy();
@@ -41,8 +36,8 @@ void BaseGame::Loop(){
 		renderer->SetClearColor(0.5f, 0.0f, 0.5f, 1.0f);
 		renderer->ClearScreen();
 
+		triangle->SetRotation((float)glfwGetTime() * 20, glm::vec3(0.0f, 0.0f, 1.0f));
 		triangle->Draw();
-		square->Draw();
 	
 		renderer->SwapBuffers();
 		window->PoolEvents();

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class Renderer
+class ENGINEDLL_API Renderer
 {
 private:
 	Window* window;
