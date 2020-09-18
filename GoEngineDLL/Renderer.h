@@ -10,6 +10,10 @@ private:
 	Window* window;
 	GLuint vertexArrayId;
 public:
+	enum Primitive {
+		TRIANGLES = 0x0004,
+		TRIANGLE_STRIP = 0x0005,
+	};
 	bool Init();
 	bool Destroy();
 	GLuint CreateVertexBuffer(float *data, size_t dataSize);
@@ -20,7 +24,7 @@ public:
 	void EnableBuffer(size_t attributeID);
 	void DisableBuffer(size_t attributeID);
 	void DeleteBuffer(GLuint bufferID);
-	void Draw(int vertexCount);
+	void Draw(Primitive _primitive, int vertexCount);
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

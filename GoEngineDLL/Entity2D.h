@@ -6,6 +6,7 @@ class Entity2D :
 	public Entity
 {
 protected:
+	Renderer *renderer;
 	Transform *transform;
 	Material *material;
 	float *positionVertex;
@@ -15,7 +16,6 @@ protected:
 	size_t positionVertexCount;
 	size_t colorVertexCount;
 public:
-	string name;
 	void SetPosition(float x, float y, float z);
 	void SetRotation(float angle, glm::vec3 axis);
 	void SetScale(float x, float y, float z);

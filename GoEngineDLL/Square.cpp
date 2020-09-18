@@ -1,6 +1,7 @@
-#include "Triangle.h"
+#include "Square.h"
 
-void Triangle::Draw() {
+
+void Square::Draw() {
 	if (material) {
 		UseMaterial(); // Uso el material
 	}
@@ -13,22 +14,23 @@ void Triangle::Draw() {
 	renderer->DisableBuffer(1); // Deshabilito los atributos (color)
 }
 
-Triangle::Triangle(Renderer* _renderer) : Shape(_renderer) {
+Square::Square(Renderer *_renderer) : Shape(_renderer) {
 	float position_vertex_data[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
+		0.5f,  0.5f, 0.0f,  // top right
+		0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f   // top left 
 	};
 	float color_vertex_data[] = {
 		1.0f, 0.0f, 0.0f, 1.0f,
 		0.0f, 1.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f, 1.0f,
 	};
-	primitive = Renderer::TRIANGLES;
-	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 3);
-	SetColorVertex(color_vertex_data, sizeof(color_vertex_data), 4);
+	primitive = Renderer::TRIANGLE_STRIP;
+	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 4);
+	SetColorVertex(color_vertex_data,sizeof(color_vertex_data), 4);
 }
 
 
-Triangle::~Triangle() {
+Square::~Square() {
 }

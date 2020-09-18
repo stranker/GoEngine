@@ -4,6 +4,7 @@ bool BaseGame::Init() {
 	window->Init();
 	renderer->Init();
 	triangle = new Triangle(renderer);
+	square = new Square(renderer);
 	material = new Material();
 	triangle->SetMaterial(material);
 	return true;
@@ -13,6 +14,10 @@ bool BaseGame::Destroy(){
 	if (triangle) {
 		triangle->Destroy();
 		delete triangle;
+	}
+	if (square) {
+		square->Destroy();
+		delete square;
 	}
 	if (material) {
 		material->Destroy();
@@ -37,6 +42,7 @@ void BaseGame::Loop(){
 		renderer->ClearScreen();
 
 		triangle->Draw();
+		square->Draw();
 	
 		renderer->SwapBuffers();
 		window->PoolEvents();

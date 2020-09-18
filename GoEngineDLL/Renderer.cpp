@@ -57,8 +57,8 @@ void Renderer::DeleteBuffer(GLuint _buffer) {
 	glDeleteBuffers(1, &_buffer);
 }
 
-void Renderer::Draw(int vertexCount) {
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+void Renderer::Draw(Primitive _primitive, int vertexCount) {
+	glDrawArrays((GLenum)_primitive, 0, vertexCount);
 }
 
 Renderer::Renderer(Window* _window){

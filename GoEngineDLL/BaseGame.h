@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "Triangle.h"
+#include "Square.h"
 
 class ENGINEDLL_API BaseGame
 {
@@ -14,6 +15,7 @@ private:
 	Window *window;
 	Renderer *renderer;
 	Triangle *triangle;
+	Square *square;
 	Material *material;
 public:
 	bool Init();
