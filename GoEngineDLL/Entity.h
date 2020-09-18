@@ -1,14 +1,13 @@
 #include "Renderer.h"
+#include "Transform.h"
 
 class Entity
 {
 protected:
 	Renderer *renderer;
 public:
-	void SetRenderer(Renderer *_renderer);
-	Entity();
+	Entity(Renderer* _renderer);
 	~Entity();
-
 	virtual void Draw();
 };
 

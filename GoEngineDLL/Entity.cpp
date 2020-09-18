@@ -1,21 +1,11 @@
 #include "Entity.h"
 
-
-
-void Entity::SetRenderer(Renderer * _renderer)
-{
+Entity::Entity(Renderer* _renderer){
 	renderer = _renderer;
 }
 
-Entity::Entity()
-{
+Entity::~Entity(){
 }
 
-
-Entity::~Entity()
-{
-}
-
-void Entity::Draw()
-{
+void Entity::Draw(){
 }

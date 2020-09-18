@@ -6,14 +6,15 @@
 #include "Exports.h"
 #include "Window.h"
 #include "Renderer.h"
-#include "Material.h"
-#include "Shape.h"
+#include "Triangle.h"
 
 class ENGINEDLL_API BaseGame
 {
 private:
 	Window *window;
 	Renderer *renderer;
+	Triangle *triangle;
+	Material *material;
 public:
 	bool Init();
 	bool Destroy();

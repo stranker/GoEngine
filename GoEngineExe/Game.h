@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseGame.h"
+#include "Triangle.h"
 
 class Game :
 	public BaseGame

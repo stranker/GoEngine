@@ -28,9 +28,9 @@ GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize) {
 	return vertexBuffer;
 }
 
-void Renderer::BindBuffer(GLuint attributeId, uint8_t dataCount, uint8_t dataSize, uint8_t offset){
-	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataSize * sizeof(float), (void*)(offset * sizeof(float)));
-	glEnableVertexAttribArray(attributeId);
+void Renderer::BindBuffer(GLuint attributeId, GLuint bufferID,  size_t dataCount){
+	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
 }
 
 void Renderer::SetClearColor(float r, float g, float b, float a){
@@ -43,6 +43,22 @@ void Renderer::ClearScreen(){
 
 void Renderer::SwapBuffers(){
 	glfwSwapBuffers(window->GetWindowPtr());
+}
+
+void Renderer::EnableBuffer(size_t attributeID) {
+	glEnableVertexAttribArray(attributeID);
+}
+
+void Renderer::DisableBuffer(size_t attributeID) {
+	glDisableVertexAttribArray(attributeID);
+}
+
+void Renderer::DeleteBuffer(GLuint _buffer) {
+	glDeleteBuffers(1, &_buffer);
+}
+
+void Renderer::Draw(int vertexCount) {
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }
 
 Renderer::Renderer(Window* _window){

@@ -20,6 +20,7 @@ public:
 	bool Destroy();
 	void PoolEvents();
 	bool ShouldClose();
+	void ProcessInput();
 	GLFWwindow* GetWindowPtr();
 	Window(int _width, int _height, const char* _title);
 	~Window();

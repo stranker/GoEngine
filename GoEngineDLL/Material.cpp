@@ -4,6 +4,10 @@ void Material::Use(){
 	glUseProgram(ID);
 }
 
+void Material::Destroy() {
+	glDeleteProgram(ID);
+}
+
 void Material::LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
 	// Crear los shaders
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);

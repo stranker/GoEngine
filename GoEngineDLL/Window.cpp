@@ -41,6 +41,11 @@ bool Window::ShouldClose(){
 	return glfwWindowShouldClose(window);
 }
 
+void Window::ProcessInput() {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
 GLFWwindow* Window::GetWindowPtr(){
 	return window;
 }

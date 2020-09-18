@@ -12,7 +12,8 @@ private:
 	GLuint ID;
 public:
 	void Use();
-	void LoadShaders(const char * vertex_file_path, const char * fragment_file_path);
+	void Destroy();
+	void LoadShaders(const char *vertex_file_path, const char *fragment_file_path);
 	Material();
 	virtual ~Material();
 };

@@ -3,10 +3,21 @@
 bool BaseGame::Init() {
 	window->Init();
 	renderer->Init();
+	triangle = new Triangle(renderer);
+	material = new Material();
+	triangle->SetMaterial(material);
 	return true;
 }
 
 bool BaseGame::Destroy(){
+	if (triangle) {
+		triangle->Destroy();
+		delete triangle;
+	}
+	if (material) {
+		material->Destroy();
+		delete material;
+	}
 	if (renderer){
 		renderer->Destroy();
 		delete renderer;
@@ -19,18 +30,14 @@ bool BaseGame::Destroy(){
 }
 
 void BaseGame::Loop(){
-	Shape *shape = new Shape(renderer);
-	GLuint vertexBuffer = shape->CreateTriangleBuffer();
-
-	Material *material = new Material();
-	material->LoadShaders("SimpleVertexShader.vertexshader", "SimpleFragmentShader.fragmentshader");
-	material->Use();
 	while (!window->ShouldClose()){
+		window->ProcessInput();
+
 		renderer->SetClearColor(0.5f, 0.0f, 0.5f, 1.0f);
 		renderer->ClearScreen();
 
-		shape->Draw();
-
+		triangle->Draw();
+	
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}

@@ -13,10 +13,14 @@ public:
 	bool Init();
 	bool Destroy();
 	GLuint CreateVertexBuffer(float *data, size_t dataSize);
-	void BindBuffer(GLuint attributeId, uint8_t dataCount, uint8_t dataSize, uint8_t offset);
+	void BindBuffer(GLuint attributeId, GLuint bufferID, size_t dataCount);
 	void SetClearColor(float r, float g, float b, float a);
 	void ClearScreen();
 	void SwapBuffers();
+	void EnableBuffer(size_t attributeID);
+	void DisableBuffer(size_t attributeID);
+	void DeleteBuffer(GLuint bufferID);
+	void Draw(int vertexCount);
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

@@ -4,8 +4,7 @@ class Shape :
 	public Entity2D
 {
 public:
-	GLuint CreateTriangleBuffer();
-	void Draw();
+	virtual void Draw() = 0;
 	Shape(Renderer* _renderer);
 	~Shape();
 };
