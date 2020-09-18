@@ -6,7 +6,6 @@ class Entity2D :
 	public Entity
 {
 protected:
-	Renderer *renderer;
 	Transform *transform;
 	Material *material;
 	float *positionVertex;

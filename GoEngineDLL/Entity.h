@@ -3,9 +3,12 @@
 
 class Entity
 {
+protected:
+	Renderer *renderer;
 public:
 	string name;
-	Entity();
+	virtual void Draw() = 0;
+	Entity(Renderer *renderer);
 	~Entity();
 };
 
