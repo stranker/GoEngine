@@ -30,10 +30,10 @@ bool BaseGame::Destroy(){
 }
 
 void BaseGame::Loop(){
+	Color clr = Color().Purple();
 	while (!window->ShouldClose()){
 		window->ProcessInput();
-
-		renderer->SetClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+		renderer->SetClearColor(clr);
 		renderer->ClearScreen();
 
 		triangle->SetRotation((float)glfwGetTime() * 20, glm::vec3(0.0f, 0.0f, 1.0f));
