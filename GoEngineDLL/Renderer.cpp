@@ -17,6 +17,9 @@ bool Renderer::Init(){
 
 bool Renderer::Destroy(){
 	cout << "Renderer Destroy" << endl;
+	if (camera) {
+		delete camera;
+	}
 	return true;
 }
 
@@ -32,7 +35,6 @@ void Renderer::BindBuffer(GLuint attributeId, GLuint bufferID,  size_t dataCount
 	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(attributeId);
-
 }
 
 void Renderer::SetClearColor(float r, float g, float b, float a){
@@ -63,10 +65,14 @@ void Renderer::Draw(Primitive _primitive, int vertexCount) {
 	glDrawArrays((GLenum)_primitive, 0, vertexCount);
 }
 
-Renderer::Renderer(Window* _window){
-	window = _window;
+Camera * Renderer::GetCamera() {
+	return camera;
 }
 
+Renderer::Renderer(Window* _window){
+	window = _window;
+	camera = new Camera(window->GetWidth(), window->GetHeight());
+}
 
 Renderer::~Renderer(){
 }

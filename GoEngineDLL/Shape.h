@@ -2,8 +2,7 @@
 #include "Entity2D.h"
 
 class ENGINEDLL_API Shape :
-	public Entity2D
-{
+	public Entity2D {
 protected:
 	Renderer::Primitive primitive;
 public:

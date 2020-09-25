@@ -22,6 +22,8 @@ public:
 	void PoolEvents();
 	bool ShouldClose();
 	void CloseWindow();
+	float GetWidth() const;
+	float GetHeight() const;
 	GLFWwindow* GetWindowPtr();
 	Window(int _width, int _height, const char* _title);
 	~Window();

@@ -2,13 +2,18 @@
 
 #include "Window.h"
 #include "Color.h"
+#include "Camera.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
 
 class ENGINEDLL_API Renderer
 {
-private:
+protected:
 	Window* window;
+	Camera* camera;
 	GLuint vertexArrayId;
 public:
 	enum Primitive {
@@ -26,6 +31,7 @@ public:
 	void DisableBuffer(size_t attributeID);
 	void DeleteBuffer(GLuint bufferID);
 	void Draw(Primitive _primitive, int vertexCount);
+	Camera* GetCamera();
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

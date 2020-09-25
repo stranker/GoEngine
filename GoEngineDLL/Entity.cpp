@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(Renderer *renderer){
+Entity::Entity(Renderer *_renderer) : renderer(_renderer){
 }
 
 Entity::~Entity(){

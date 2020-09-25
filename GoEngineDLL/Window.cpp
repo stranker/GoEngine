@@ -45,6 +45,14 @@ void Window::CloseWindow() {
 	glfwSetWindowShouldClose(window, true);
 }
 
+float Window::GetWidth() const {
+	return width;
+}
+
+float Window::GetHeight() const {
+	return height;
+}
+
 GLFWwindow* Window::GetWindowPtr(){
 	return window;
 }

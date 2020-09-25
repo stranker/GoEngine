@@ -2,14 +2,14 @@
 
 
 void Square::Draw() {
-	if (material) {
+	/*if (material) {
 		UseMaterial(); // Uso el material
 	}
 	renderer->BindBuffer(0, positionBuffer, positionVertexCount); // Bindeo  y activo el atributo ID (pos), pos ID, 3 puntos
 	renderer->BindBuffer(1, colorBuffer, colorVertexCount); // bindeo y activo el atributo ID (color), color ID, 4 (RGBA)
 	renderer->Draw(primitive, positionVertexCount); // Dibujo el triangulo
 	renderer->DisableBuffer(0); // Deshabilito los atributos (pos)
-	renderer->DisableBuffer(1); // Deshabilito los atributos (color)
+	renderer->DisableBuffer(1); // Deshabilito los atributos (color)*/
 }
 
 Square::Square(Renderer *_renderer) : Shape(_renderer) {

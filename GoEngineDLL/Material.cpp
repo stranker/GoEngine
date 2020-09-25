@@ -1,6 +1,6 @@
 #include "Material.h"
 
-void Material::SetMatrix(const char *property, glm::mat4 matrix) const{
+void Material::SetMat4(const char *property, glm::mat4 matrix) const{
 	unsigned int location = glGetUniformLocation(ID, property);
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }

@@ -45,6 +45,10 @@ void Entity2D::SetColorVertex(float * _colorVertex, size_t dataSize, size_t vert
 	colorBuffer = renderer->CreateVertexBuffer(colorVertex, dataSize);
 }
 
+void Entity2D::Translate(float x, float y) {
+	transform->SetPosition(transform->GetPosition().x + x, transform->GetPosition().y + y, 0);
+}
+
 void Entity2D::Destroy() {
 	if (renderer) {
 		renderer->DeleteBuffer(positionBuffer);

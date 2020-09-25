@@ -31,12 +31,15 @@ bool BaseGame::Destroy(){
 
 void BaseGame::Loop(){
 	Color clr = Color().Purple();
-	glm::vec2 velocity = glm::vec2(0.0f);
-	float angle = 0;
-
+	
+	float angle = 0.0f;
+	float speed = 100.0f;
+	
 	double currentFrame = glfwGetTime();;
 	double lastFrame = currentFrame;
 	double deltaTime;
+
+	triangle->SetPosition(400, 300, 0);
 
 	while (!window->ShouldClose()){
 
@@ -44,40 +47,42 @@ void BaseGame::Loop(){
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		glm::vec2 velocity = glm::vec2(0.0f);
+
 		if (input->IsKeyPressed(Input::KEY_ESCAPE)) {
 			window->CloseWindow();
 		}
 		if (input->IsKeyPressed(Input::KEY_W)) {
-			velocity.y += deltaTime;
+			velocity.y += speed;
 		}
 		if (input->IsKeyPressed(Input::KEY_S)) {
-			velocity.y -= deltaTime;
+			velocity.y -= speed;
 		}
 		if (input->IsKeyPressed(Input::KEY_A)) {
-			velocity.x -= deltaTime;
+			velocity.x -= speed;
 		}
 		if (input->IsKeyPressed(Input::KEY_D)) {
-			velocity.x += deltaTime;
+			velocity.x += speed;
 		}
 		if (input->IsKeyPressed(Input::KEY_Q)) {
-			angle += deltaTime * 10;
+			angle += deltaTime * 20;
 		}
 		if (input->IsKeyPressed(Input::KEY_E)) {
-			angle -= deltaTime * 10;
+			angle -= deltaTime * 20;
 		}
 		if (input->IsKeyPressed(Input::KEY_1)) {
-			triangle->SetScale(0.2, 0.2, 0.2);
+			triangle->SetScale(50, 50, 1);
 		}
 		if (input->IsKeyPressed(Input::KEY_2)) {
-			triangle->SetScale(1, 1, 1);
+			triangle->SetScale(100, 100, 100);
 		}
 		if (input->IsKeyPressed(Input::KEY_3)) {
-			triangle->SetScale(2, 2, 2);
+			triangle->SetScale(200, 200, 200);
 		}
 		renderer->SetClearColor(clr);
 		renderer->ClearScreen();
 
-		triangle->SetPosition(velocity.x, velocity.y, 0);
+		triangle->Translate(velocity.x * deltaTime, velocity.y * deltaTime);
 		triangle->SetRotation(angle, glm::vec3(0.0f, 0.0f, 1.0f));
 		triangle->Draw();
 	

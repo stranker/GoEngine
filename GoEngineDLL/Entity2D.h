@@ -3,8 +3,7 @@
 #include "Material.h"
 
 class ENGINEDLL_API Entity2D :
-	public Entity
-{
+	public Entity{
 protected:
 	Transform *transform;
 	Material *material;
@@ -25,6 +24,7 @@ public:
 	void UseMaterial();
 	void SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount);
 	void SetColorVertex(float *_colorVertex, size_t dataSize, size_t vertexCount);
+	void Translate(float x, float y);
 	virtual void Draw() = 0;
 	void Destroy();
 	Entity2D(Renderer* _renderer);
