@@ -3,7 +3,7 @@
 void Triangle::Draw() {
 	if (material) {
 		UseMaterial(); // Uso el material
-		material->SetMatrixProperty("transform", transform->GetTransform());
+		material->SetMatrix("transform", transform->GetTransform()); // Seteo mi transform dentro del shader
 	}
 	renderer->BindBuffer(0, positionBuffer, positionVertexCount); // Bindeo  y activo el atributo ID (pos), pos ID, 3 puntos
 	renderer->BindBuffer(1, colorBuffer, colorVertexCount); // bindeo y activo el atributo ID (color), color ID, 4 (RGBA)
