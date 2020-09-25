@@ -23,7 +23,6 @@ public:
 	void SetClearColor(Color color);
 	void ClearScreen();
 	void SwapBuffers();
-	void EnableBuffer(size_t attributeID);
 	void DisableBuffer(size_t attributeID);
 	void DeleteBuffer(GLuint bufferID);
 	void Draw(Primitive _primitive, int vertexCount);

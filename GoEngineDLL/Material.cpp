@@ -1,8 +1,23 @@
 #include "Material.h"
 
-void Material::SetMatrixProperty(const char * property, glm::mat4 matrix) {
-	unsigned int transformLoc = glGetUniformLocation(ID, property);
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(matrix));
+void Material::SetMatrix(const char *property, glm::mat4 matrix) const{
+	unsigned int location = glGetUniformLocation(ID, property);
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Material::SetBool(const char *property, bool value) const {
+	unsigned int location = glGetUniformLocation(ID, property);
+	glUniform1i(location, (bool)value);
+}
+
+void Material::SetInt(const char *property, int value) const {
+	unsigned int location = glGetUniformLocation(ID, property);
+	glUniform1i(location, (int)value);
+}
+
+void Material::SetFloat(const char *property, float value) const {
+	unsigned int location = glGetUniformLocation(ID, property);
+	glUniform1i(location, (float)value);
 }
 
 void Material::Use(){

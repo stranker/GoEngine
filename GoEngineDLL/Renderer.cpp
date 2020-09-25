@@ -31,6 +31,8 @@ GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize) {
 void Renderer::BindBuffer(GLuint attributeId, GLuint bufferID,  size_t dataCount){
 	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
 	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(attributeId);
+
 }
 
 void Renderer::SetClearColor(float r, float g, float b, float a){
@@ -47,10 +49,6 @@ void Renderer::ClearScreen(){
 
 void Renderer::SwapBuffers(){
 	glfwSwapBuffers(window->GetWindowPtr());
-}
-
-void Renderer::EnableBuffer(size_t attributeID) {
-	glEnableVertexAttribArray(attributeID);
 }
 
 void Renderer::DisableBuffer(size_t attributeID) {

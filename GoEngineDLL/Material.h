@@ -14,7 +14,10 @@ class ENGINEDLL_API Material
 private:
 	GLuint ID;
 public:
-	void SetMatrixProperty(const char* property, glm::mat4 matrix);
+	void SetMatrix(const char* property, glm::mat4 matrix) const;
+	void SetBool(const char* property, bool value) const;
+	void SetInt(const char* property, int value) const;
+	void SetFloat(const char* property, float value) const;
 	void Use();
 	void Destroy();
 	void LoadShaders(const char *vertex_file_path, const char *fragment_file_path);
