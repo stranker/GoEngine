@@ -32,7 +32,7 @@ GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize) {
 }
 
 void Renderer::BindBuffer(GLuint attributeId, GLuint bufferID,  size_t dataCount){
-	glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferID);						//stride
 	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(attributeId);
 }

@@ -4,7 +4,7 @@
 
 class ENGINEDLL_API Camera {
 protected:
-	Transform* transform;
+	Transform* transform; // view
 	glm::mat4 projection;
 	float width;
 	float heigth;

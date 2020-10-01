@@ -16,7 +16,6 @@ protected:
 	glm::mat4 scale;
 
 	glm::mat4 transform;
-
 public:
 	void SetPosition(float x, float y, float z);
 	void SetScale(float x, float y, float z);

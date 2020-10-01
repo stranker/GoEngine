@@ -39,9 +39,8 @@ void Entity2D::SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexC
 	positionBuffer = renderer->CreateVertexBuffer(positionVertex, dataSize);
 }
 
-void Entity2D::SetColorVertex(float * _colorVertex, size_t dataSize, size_t vertexCount) {
+void Entity2D::SetColorVertex(float * _colorVertex, size_t dataSize) {
 	colorVertex = _colorVertex;
-	colorVertexCount = vertexCount;
 	colorBuffer = renderer->CreateVertexBuffer(colorVertex, dataSize);
 }
 

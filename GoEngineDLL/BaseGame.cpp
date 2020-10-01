@@ -22,6 +22,9 @@ bool BaseGame::Destroy(){
 		renderer->Destroy();
 		delete renderer;
 	}
+	if (input) {
+		delete input;
+	}
 	if (window){
 		window->Destroy();
 		delete window;
@@ -35,20 +38,26 @@ void BaseGame::Loop(){
 	float angle = 0.0f;
 	float speed = 100.0f;
 	
-	double currentFrame = glfwGetTime();;
+	double currentFrame = glfwGetTime();
 	double lastFrame = currentFrame;
 	double deltaTime;
 
 	triangle->SetPosition(400, 300, 0);
 
+	Square *square = new Square(renderer);
+	square->SetMaterial(material);
+	square->SetPosition(100, 100, 0);
+
 	while (!window->ShouldClose()){
 
+		// Calculo deltaTime
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
 		glm::vec2 velocity = glm::vec2(0.0f);
 
+		// Obtengo Input
 		if (input->IsKeyPressed(Input::KEY_ESCAPE)) {
 			window->CloseWindow();
 		}
@@ -84,6 +93,7 @@ void BaseGame::Loop(){
 
 		triangle->Translate(velocity.x * deltaTime, velocity.y * deltaTime);
 		triangle->SetRotation(angle, glm::vec3(0.0f, 0.0f, 1.0f));
+		square->Draw();
 		triangle->Draw();
 	
 		renderer->SwapBuffers();

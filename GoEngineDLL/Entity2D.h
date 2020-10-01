@@ -13,6 +13,7 @@ protected:
 	GLuint colorBuffer;
 	size_t positionVertexCount;
 	size_t colorVertexCount;
+	Renderer::Primitive primitive;
 public:
 	void SetPosition(float x, float y, float z);
 	void SetRotation(float angle, glm::vec3 axis);
@@ -23,7 +24,7 @@ public:
 	void SetMaterial(Material *_material);
 	void UseMaterial();
 	void SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount);
-	void SetColorVertex(float *_colorVertex, size_t dataSize, size_t vertexCount);
+	void SetColorVertex(float *_colorVertex, size_t dataSize);
 	void Translate(float x, float y);
 	virtual void Draw() = 0;
 	void Destroy();

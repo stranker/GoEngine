@@ -1,6 +1,5 @@
 #include "Camera.h"
 
-
 glm::mat4 Camera::GetProjection() {
 	return projection;
 }
