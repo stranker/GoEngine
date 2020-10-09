@@ -51,7 +51,13 @@ void BaseGame::Loop(){
 	triangle->SetPosition(400, 300, 0);
 	square->SetPosition(100, 100, 0);
 
+	//Virtual method
+	Start();
+
 	while (!window->ShouldClose()){
+
+		//Virtual method
+		Update();
 
 		// Calculo deltaTime
 		currentFrame = glfwGetTime();
@@ -102,6 +108,9 @@ void BaseGame::Loop(){
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}
+
+	//Virtual method
+	Stop();
 }
 
 BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title){

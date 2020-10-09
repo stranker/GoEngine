@@ -25,5 +25,9 @@ public:
 	void Loop();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
+
+	virtual void Start() = 0;
+	virtual void Update() = 0;
+	virtual void Stop() = 0;
 };
 
