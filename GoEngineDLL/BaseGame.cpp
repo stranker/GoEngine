@@ -4,8 +4,10 @@ bool BaseGame::Init() {
 	window->Init();
 	renderer->Init();
 	triangle = new Triangle(renderer);
+	square = new Square(renderer);
 	material = new Material();
 	triangle->SetMaterial(material);
+	square->SetMaterial(material);
 	return true;
 }
 
@@ -13,6 +15,10 @@ bool BaseGame::Destroy(){
 	if (triangle) {
 		triangle->Destroy();
 		delete triangle;
+	}
+	if (square) {
+		square->Destroy();
+		delete square;
 	}
 	if (material) {
 		material->Destroy();
@@ -43,9 +49,6 @@ void BaseGame::Loop(){
 	double deltaTime;
 
 	triangle->SetPosition(400, 300, 0);
-
-	Square *square = new Square(renderer);
-	square->SetMaterial(material);
 	square->SetPosition(100, 100, 0);
 
 	while (!window->ShouldClose()){
