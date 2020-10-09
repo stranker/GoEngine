@@ -6,38 +6,47 @@ void Square::Draw() {
 		UseMaterial(); // Uso el material
 		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
 	}
-	renderer->BindBuffer(0, positionBuffer, 3); // Bindeo  y activo el atributo ID (pos) del shader, pos buffer ID, 3 puntos
-	renderer->BindBuffer(1, colorBuffer, 4); // bindeo y activo el atributo ID (color), color buffer ID, 4 (RGBA)
-	renderer->Draw(primitive, positionVertexCount); // Dibujo el triangulo
-	renderer->DisableBuffer(0); // Deshabilito los atributos (pos)
-	renderer->DisableBuffer(1); // Deshabilito los atributos (color)
+
+	renderer->BindVertexArray(vertexArrayID);
+
+	renderer->BindBuffer(positionBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
+	renderer->SetAttributePointer(0, 3); // Seteo los atributos del vertice de posicion
+
+	renderer->BindBuffer(colorBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
+	renderer->SetAttributePointer(1, 4); // Seteo los atributos del vertice de color
+
+	renderer->BindBuffer(indexBuffer, Renderer::ELEMENT_BUFFER);
+
+	renderer->DrawElements(primitive, 6);
+
+	renderer->DisableBuffer(0); // Deshabilito el atributo (pos)
+	renderer->DisableBuffer(1); // Deshabilito el atributo (color)
 }
 
 Square::Square(Renderer *_renderer) : Shape(_renderer) {
 	float position_vertex_data[] = {
-		// first triangle
 		 0.5f,  0.5f, 0.0f,  // top right
 		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f,  0.5f, 0.0f,  // top left 
-		// second triangle
-		 0.5f, -0.5f, 0.0f,  // bottom right
 		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left
+		-0.5f,  0.5f, 0.0f   // top left 
 	};
 	float color_vertex_data[] = {
-		0.2f, 0.0f, 0.0f, 1.0f,
-		0.0f, 4.0f, 0.0f, 1.0f,
-		0.0f, 0.3f, 0.5f, 1.0f,
-		1.0f, 0.0f, 0.7f, 1.0f,
-		0.0f, 2.0f, 0.1f, 1.0f,
-		1.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
 	};
-	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 6);
+	unsigned int index_data[] = {  // note that we start from 0!
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
+	CreateVertexArrayID();
+	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 4);
 	SetColorVertex(color_vertex_data,sizeof(color_vertex_data));
+	SetIndex(index_data, sizeof(index_data));
 	primitive = Renderer::TRIANGLES;
 	SetScale(100, 100, 0);
 }
-
 
 Square::~Square() {
 }

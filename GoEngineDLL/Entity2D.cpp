@@ -33,15 +33,25 @@ void Entity2D::UseMaterial() {
 	material->Use();
 }
 
+void Entity2D::CreateVertexArrayID() {
+	glGenVertexArrays(1, (&vertexArrayID));
+	glBindVertexArray(vertexArrayID);
+}
+
 void Entity2D::SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount) {
 	positionVertex = _vertex;
 	positionVertexCount = vertexCount;
-	positionBuffer = renderer->CreateVertexBuffer(positionVertex, dataSize);
+	positionBuffer = renderer->CreateVertexBuffer(positionVertex, dataSize, Renderer::ARRAY_BUFFER);
+}
+
+void Entity2D::SetIndex(unsigned int *_index, size_t indexSize) {
+	index = _index;
+	indexBuffer = renderer->CreateVertexBuffer(index, indexSize, Renderer::ELEMENT_BUFFER);
 }
 
 void Entity2D::SetColorVertex(float * _colorVertex, size_t dataSize) {
 	colorVertex = _colorVertex;
-	colorBuffer = renderer->CreateVertexBuffer(colorVertex, dataSize);
+	colorBuffer = renderer->CreateVertexBuffer(colorVertex, dataSize, Renderer::ARRAY_BUFFER);
 }
 
 void Entity2D::Translate(float x, float y) {
@@ -63,6 +73,7 @@ void Entity2D::Destroy() {
 
 Entity2D::Entity2D(Renderer* _renderer) : Entity(_renderer){
 	transform = new Transform();
+	selfModulate = Color(1, 1, 1, 1);
 }
 
 Entity2D::~Entity2D(){

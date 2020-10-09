@@ -10,8 +10,8 @@ bool Renderer::Init(){
 		cout << "Failed to init Glew" << endl;
 		return false;
 	}
-	glGenVertexArrays(1, (&vertexArrayId));
-	glBindVertexArray(vertexArrayId);
+	//glGenVertexArrays(1, (&vertexArrayId));
+	//glBindVertexArray(vertexArrayId);
 	return true;
 }
 
@@ -23,16 +23,31 @@ bool Renderer::Destroy(){
 	return true;
 }
 
-GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize) {
+GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType) {
 	GLuint vertexBuffer;
 	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, dataSize, data, GL_STATIC_DRAW);
+	glBindBuffer((GLenum)bufferType, vertexBuffer);
+	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
 	return vertexBuffer;
 }
 
-void Renderer::BindBuffer(GLuint attributeId, GLuint bufferID,  size_t dataCount){
-	glBindBuffer(GL_ARRAY_BUFFER, bufferID);						//stride
+GLuint Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, BufferType bufferType) {
+	GLuint vertexBuffer;
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer((GLenum)bufferType, vertexBuffer);
+	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
+	return vertexBuffer;
+}
+
+void Renderer::BindBuffer(GLuint bufferID, BufferType bufferType){
+	glBindBuffer((GLenum)bufferType, bufferID);
+}
+
+void Renderer::BindVertexArray(GLuint vertexArrayID) {
+	glBindVertexArray(vertexArrayID);
+}
+
+void Renderer::SetAttributePointer(GLuint attributeId, size_t dataCount) {
 	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(attributeId);
 }
@@ -63,6 +78,10 @@ void Renderer::DeleteBuffer(GLuint _buffer) {
 
 void Renderer::Draw(Primitive _primitive, int vertexCount) {
 	glDrawArrays((GLenum)_primitive, 0, vertexCount);
+}
+
+void Renderer::DrawElements(Primitive _primitive, int vertexCount) {
+	glDrawElements((GLenum)_primitive, vertexCount, GL_UNSIGNED_INT, 0);
 }
 
 Camera * Renderer::GetCamera() {
