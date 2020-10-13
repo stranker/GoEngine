@@ -1,21 +1,19 @@
 #include "BaseGame.h"
 
 bool BaseGame::Init() {
+	entityList = new list<Entity*>();
+
 	window->Init();
 	renderer->Init();
-	triangle = new Triangle(renderer);
+
 	square = new Square(renderer);
 	material = new Material();
-	triangle->SetMaterial(material);
+
 	square->SetMaterial(material);
 	return true;
 }
 
-bool BaseGame::Destroy(){
-	if (triangle) {
-		triangle->Destroy();
-		delete triangle;
-	}
+bool BaseGame::Destroy() {
 	if (square) {
 		square->Destroy();
 		delete square;
@@ -24,37 +22,39 @@ bool BaseGame::Destroy(){
 		material->Destroy();
 		delete material;
 	}
-	if (renderer){
+	if (renderer) {
 		renderer->Destroy();
 		delete renderer;
 	}
 	if (input) {
 		delete input;
 	}
-	if (window){
+	if (window) {
 		window->Destroy();
 		delete window;
 	}
+
+	delete entityList;
 	return true;
 }
 
-void BaseGame::Loop(){
+void BaseGame::Loop() {
 	Color clr = Color().Purple();
-	
+
 	float angle = 0.0f;
 	float speed = 100.0f;
-	
+
 	double currentFrame = glfwGetTime();
 	double lastFrame = currentFrame;
 	double deltaTime;
 
-	triangle->SetPosition(400, 300, 0);
+
 	square->SetPosition(100, 100, 0);
 
 	//Virtual method
 	Start();
 
-	while (!window->ShouldClose()){
+	while (!window->ShouldClose()) {
 
 		//Virtual method
 		Update();
@@ -88,23 +88,19 @@ void BaseGame::Loop(){
 		if (input->IsKeyPressed(Input::KEY_E)) {
 			angle -= deltaTime * 20;
 		}
-		if (input->IsKeyPressed(Input::KEY_1)) {
-			triangle->SetScale(50, 50, 1);
-		}
-		if (input->IsKeyPressed(Input::KEY_2)) {
-			triangle->SetScale(100, 100, 100);
-		}
-		if (input->IsKeyPressed(Input::KEY_3)) {
-			triangle->SetScale(200, 200, 200);
-		}
 		renderer->SetClearColor(clr);
 		renderer->ClearScreen();
 
-		triangle->Translate(velocity.x * deltaTime, velocity.y * deltaTime);
-		triangle->SetRotation(angle, glm::vec3(0.0f, 0.0f, 1.0f));
+		//================================
+		for (eLIterator = entityList->begin(); eLIterator != entityList->end(); eLIterator++)
+		{
+			(*eLIterator)->Draw();
+		}
+		//===============================
+
 		square->Draw();
-		triangle->Draw();
-	
+
+
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}
@@ -113,11 +109,21 @@ void BaseGame::Loop(){
 	Stop();
 }
 
-BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title){
+BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title) {
 	window = new Window(_screen_width, _screen_height, _screen_title);
 	renderer = new Renderer(window);
 	input = new Input(window);
 }
 
-BaseGame::~BaseGame(){
+BaseGame::~BaseGame() {
+}
+
+void BaseGame::CreateTriangle(float _x, float _y)
+{
+	Triangle *triangle = new Triangle(renderer);
+	triangle->SetMaterial(material);
+
+	triangle->SetPosition(_x, _y, 0);
+
+	entityList->push_back(triangle);
 }

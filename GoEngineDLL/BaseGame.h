@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <list>
+#include <iterator>
 #include "Exports.h"
 #include "Window.h"
 #include "Renderer.h"
@@ -16,9 +18,12 @@ private:
 	Window *window;
 	Renderer *renderer;
 	Input *input;
-	Triangle *triangle;
+
 	Square *square;
 	Material *material;
+	std::list<Entity*> *entityList;
+	std::list<Entity*>::iterator eLIterator;
+
 public:
 	bool Init();
 	bool Destroy();
@@ -29,5 +34,8 @@ public:
 	virtual void Start() = 0;
 	virtual void Update() = 0;
 	virtual void Stop() = 0;
+
+	//=======================================
+	void CreateTriangle(float _x, float _y);
 };
 
