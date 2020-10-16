@@ -1,17 +1,15 @@
 #pragma once
 
 #include "BaseGame.h"
-#include "Triangle.h"
 
 class Game :
 	public BaseGame
 {
 public:
+	void Start() override;
+	void Update(float deltaTime) override;
+	void Stop() override;
 	Game(int _screen_width, int _screen_height, const char* _screen_title);
 	~Game();
-
-	void Start();
-	void Update();
-	void Stop();
 };
 

@@ -14,28 +14,28 @@
 
 class ENGINEDLL_API BaseGame
 {
+protected:
+	virtual void Start() = 0;
+	virtual void Update(float deltaTime) = 0;
+	virtual void Stop() = 0;
 private:
 	Window *window;
 	Renderer *renderer;
 	Input *input;
-
-	Square *square;
 	Material *material;
-	std::list<Entity*> *entityList;
-	std::list<Entity*>::iterator eLIterator;
-
+	list<Entity*> *entityList;
+	list<Entity*>::iterator entityIterator;
+	double currentFrame = glfwGetTime();
+	double lastFrame = currentFrame;
+	double deltaTime;
 public:
 	bool Init();
 	bool Destroy();
 	void Loop();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
-
-	virtual void Start() = 0;
-	virtual void Update() = 0;
-	virtual void Stop() = 0;
-
-	//=======================================
 	void CreateTriangle(float _x, float _y);
+	void UpdateEntities(float deltaTime);
+	void DrawEntities();
 };
 

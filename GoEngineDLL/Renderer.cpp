@@ -10,8 +10,6 @@ bool Renderer::Init(){
 		cout << "Failed to init Glew" << endl;
 		return false;
 	}
-	//glGenVertexArrays(1, (&vertexArrayId));
-	//glBindVertexArray(vertexArrayId);
 	return true;
 }
 

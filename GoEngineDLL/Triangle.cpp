@@ -20,6 +20,23 @@ void Triangle::Draw() {
 	renderer->DisableBuffer(1); // Deshabilito el atributo (color)
 }
 
+void Triangle::Update(float deltaTime) {
+	glm::vec2 velocity = glm::vec2(0.0f);
+	if (input->IsKeyPressed(Input::KEY_A)) {
+		velocity.x = -100;
+	}
+	if (input->IsKeyPressed(Input::KEY_D)) {
+		velocity.x = 100;
+	}
+	if (input->IsKeyPressed(Input::KEY_W)) {
+		velocity.y = 100;
+	}
+	if (input->IsKeyPressed(Input::KEY_S)) {
+		velocity.y = -100;
+	}
+	Translate(velocity.x * deltaTime, velocity.y * deltaTime);
+}
+
 Triangle::Triangle(Renderer* _renderer) : Shape(_renderer) {
 	float position_vertex_data[] = {
 		-0.5f, -0.5f, 0.0f,

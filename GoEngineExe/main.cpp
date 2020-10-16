@@ -2,9 +2,9 @@
 
 int main(){
 	Game *game = new Game(800, 600, "SKYRIM");
-	game->Init();
+	game->Start();
 	game->Loop();
-	game->Destroy();
+	game->Stop();
 	delete game;
 	return 0;
 }

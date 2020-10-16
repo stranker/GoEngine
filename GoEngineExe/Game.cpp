@@ -5,8 +5,20 @@ Game::Game(int _screen_width, int _screen_height, const char* _screen_title) : B
 }
 
 Game::~Game() {
+
 }
 
-void Game::Start() { CreateTriangle(100, 100); }
-void Game::Update() {}
-void Game::Stop() { printf("Game::Stop"); }
+void Game::Start() {
+	Init();
+	CreateTriangle(100, 100);
+}
+
+void Game::Update(float deltaTime) {
+	UpdateEntities(deltaTime);
+	DrawEntities();
+}
+
+void Game::Stop() { 
+	Destroy();
+	printf("Game::Stop");
+}
