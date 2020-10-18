@@ -1,6 +1,6 @@
 #include "BaseGame.h"
 
-bool BaseGame::Init() {
+bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
 	entityList = new list<Entity*>();
@@ -8,7 +8,7 @@ bool BaseGame::Init() {
 	return true;
 }
 
-bool BaseGame::Destroy() {
+bool BaseGame::DestroyEngine() {
 	delete entityList;
 	if (material) {
 		material->Destroy();
@@ -28,7 +28,7 @@ bool BaseGame::Destroy() {
 	return true;
 }
 
-void BaseGame::Loop() {
+void BaseGame::LoopEngine() {
 	Color clr = Color().Purple();
 
 	while (!window->ShouldClose()) {
@@ -59,6 +59,14 @@ BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_t
 }
 
 BaseGame::~BaseGame() {
+}
+
+void BaseGame::CreateSprite(float x, float y) {
+	Sprite *sprite = new Sprite(renderer);
+	sprite->SetTexture("container.jpg");
+	sprite->SetPosition(x, y, 0);
+	sprite->SetInput(input);
+	entityList->push_back(sprite);
 }
 
 void BaseGame::CreateTriangle(float _x, float _y)

@@ -11,6 +11,7 @@
 #include "Triangle.h"
 #include "Square.h"
 #include "Input.h"
+#include "Sprite.h"
 
 class ENGINEDLL_API BaseGame
 {
@@ -29,11 +30,12 @@ private:
 	double lastFrame = currentFrame;
 	double deltaTime;
 public:
-	bool Init();
-	bool Destroy();
-	void Loop();
+	bool InitEngine();
+	bool DestroyEngine();
+	void LoopEngine();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
+	void CreateSprite(float x, float y);
 	void CreateTriangle(float _x, float _y);
 	void UpdateEntities(float deltaTime);
 	void DrawEntities();

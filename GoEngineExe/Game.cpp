@@ -9,8 +9,8 @@ Game::~Game() {
 }
 
 void Game::Start() {
-	Init();
-	CreateTriangle(100, 100);
+	InitEngine();
+	CreateSprite(100, 100);
 }
 
 void Game::Update(float deltaTime) {
@@ -19,6 +19,5 @@ void Game::Update(float deltaTime) {
 }
 
 void Game::Stop() { 
-	Destroy();
-	printf("Game::Stop");
+	DestroyEngine();
 }

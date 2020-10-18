@@ -29,6 +29,10 @@ void Entity2D::SetMaterial(Material *_material) {
 	material->LoadShaders("SimpleVertexShader.shader", "SimpleFragmentShader.shader");
 }
 
+void Entity2D::UseMaterial() {
+	material->Use();
+}
+
 void Entity2D::CreateVertexArrayID() {
 	glGenVertexArrays(1, (&vertexArrayID));
 	glBindVertexArray(vertexArrayID);

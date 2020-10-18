@@ -3,7 +3,7 @@
 
 void Square::Draw() {
 	if (material) {
-		UseMaterial(); // Uso el material
+		material->Use(); // Uso el material
 		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
 	}
 

@@ -6,6 +6,7 @@ class ENGINEDLL_API Triangle :
 public:
 	void Draw() override;
 	void Update(float deltaTime) override;
+	void Destroy() override;
 	Triangle(Renderer* _renderer);
 	virtual ~Triangle();
 };

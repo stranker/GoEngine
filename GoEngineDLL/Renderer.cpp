@@ -37,8 +37,22 @@ GLuint Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, Buffer
 	return vertexBuffer;
 }
 
+GLuint Renderer::CreateTextureBuffer(unsigned char * data, int width, int height) {
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	return texture;
+}
+
 void Renderer::BindBuffer(GLuint bufferID, BufferType bufferType){
 	glBindBuffer((GLenum)bufferType, bufferID);
+}
+
+void Renderer::BindTexture(GLuint textureBuffer) {
+	glBindTexture(GL_TEXTURE_2D, textureBuffer);
 }
 
 void Renderer::BindVertexArray(GLuint vertexArrayID) {
@@ -48,6 +62,16 @@ void Renderer::BindVertexArray(GLuint vertexArrayID) {
 void Renderer::SetAttributePointer(GLuint attributeId, size_t dataCount) {
 	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(attributeId);
+}
+
+void Renderer::SetTextureParameters(unsigned char * data, int width, int height) {
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 }
 
 void Renderer::SetClearColor(float r, float g, float b, float a){

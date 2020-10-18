@@ -2,7 +2,7 @@
 
 void Triangle::Draw() {
 	if (material) {
-		UseMaterial(); // Uso el material
+		material->Use(); // Uso el material
 		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform())); // Seteo al material la propiedad mvp obtenida por la Camara al shader
 	}
 
@@ -35,6 +35,10 @@ void Triangle::Update(float deltaTime) {
 		velocity.y = -100;
 	}
 	Translate(velocity.x * deltaTime, velocity.y * deltaTime);
+}
+
+void Triangle::Destroy() {
+
 }
 
 Triangle::Triangle(Renderer* _renderer) : Shape(_renderer) {

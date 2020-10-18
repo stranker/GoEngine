@@ -1,0 +1,22 @@
+#pragma once
+#include "Entity2D.h"
+#include "Texture.h"
+
+class ENGINEDLL_API Sprite :
+	public Entity2D {
+private:
+	Texture *texture;
+	GLuint uvBuffer;
+	unsigned int textureBuffer;
+public:
+	void SetTexture(Texture *_texture);
+	void SetTexture(const char* filePath);
+	Texture *GetTexture();
+	void SetUVVertex(float *data, int dataSize);
+	void Draw() override;
+	void Update(float deltaTime) override;
+	void Destroy() override;
+	Sprite(Renderer *_renderer);
+	virtual ~Sprite();
+};
+

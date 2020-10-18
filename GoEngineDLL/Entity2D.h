@@ -26,14 +26,13 @@ public:
 	glm::vec3 GetRotation();
 	glm::vec3 GetScale();
 	void SetMaterial(Material *_material);
-	void UseMaterial();
 	void CreateVertexArrayID();
 	void SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount);
 	void SetIndex(unsigned int *_index, size_t indexSize);
 	void SetColorVertex(float *_colorVertex, size_t dataSize);
 	void Translate(float x, float y);
 	virtual void Draw() = 0;
-	void Destroy();
+	void Destroy() override;
 	Entity2D(Renderer* _renderer);
 	~Entity2D();
 };

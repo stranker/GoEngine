@@ -11,7 +11,7 @@
 
 class ENGINEDLL_API Material
 {
-private:
+protected:
 	GLuint ID;
 public:
 	void SetMat4(const char* property, glm::mat4 matrix) const;
