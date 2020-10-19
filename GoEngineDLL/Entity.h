@@ -1,19 +1,18 @@
 #include "Exports.h"
 #include "Renderer.h"
 #include "Transform.h"
-#include "Input.h"
 
 class ENGINEDLL_API Entity
 {
 protected:
+	Transform *transform;
 	Renderer *renderer;
-	Input *input;
 public:
 	string name;
-	virtual void Draw() = 0;
-	virtual void Update(float deltaTime) = 0;
-	virtual void Destroy() = 0;
-	void SetInput(Input *_input);
+	virtual void Draw() {};
+	virtual void Update(float deltaTime) {};
+	virtual void Destroy() {};
 	Entity(Renderer *_renderer);
 	~Entity();
+	void Translate(float x, float y, float z);
 };

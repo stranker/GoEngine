@@ -15,7 +15,6 @@ public:
 	Texture *GetTexture();
 	void SetUVVertex(float *data, int dataSize);
 	void Draw() override;
-	void Update(float deltaTime) override;
 	void Destroy() override;
 	Sprite(Renderer *_renderer);
 	virtual ~Sprite();

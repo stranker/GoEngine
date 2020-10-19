@@ -35,9 +35,19 @@ public:
 	void LoopEngine();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
-	void CreateSprite(float x, float y);
-	void CreateTriangle(float _x, float _y);
-	void UpdateEntities(float deltaTime);
+
+#pragma region UserMethods
+
+	//ENTITIES
+	Sprite* CreateSprite(float x, float y);
+	Triangle* CreateTriangle(float _x, float _y);
+
+	//INPUT
+	bool KeyPressed(Input::KeyCode _key);
+
+	//DRAWING
 	void DrawEntities();
+
+#pragma endregion
 };
 

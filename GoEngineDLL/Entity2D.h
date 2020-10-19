@@ -6,7 +6,6 @@
 class ENGINEDLL_API Entity2D :
 	public Entity{
 protected:
-	Transform *transform;
 	Material *material;
 	float *positionVertex;
 	float *colorVertex;
@@ -30,7 +29,6 @@ public:
 	void SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount);
 	void SetIndex(unsigned int *_index, size_t indexSize);
 	void SetColorVertex(float *_colorVertex, size_t dataSize);
-	void Translate(float x, float y);
 	virtual void Draw() = 0;
 	void Destroy() override;
 	Entity2D(Renderer* _renderer);

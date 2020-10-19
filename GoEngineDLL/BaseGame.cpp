@@ -61,32 +61,30 @@ BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_t
 BaseGame::~BaseGame() {
 }
 
-void BaseGame::CreateSprite(float x, float y) {
+#pragma region UserMethods
+
+Sprite* BaseGame::CreateSprite(float x, float y) {
 	Sprite *sprite = new Sprite(renderer);
 	sprite->SetTexture("player.png", TextureData::IT_PNG);
 	sprite->SetPosition(x, y, 0);
-	sprite->SetInput(input);
 	entityList->push_back(sprite);
+
+	return sprite;
 }
 
-void BaseGame::CreateTriangle(float _x, float _y)
+Triangle* BaseGame::CreateTriangle(float _x, float _y)
 {
 	Triangle *triangle = new Triangle(renderer);
-
 	triangle->SetMaterial(material);
-
 	triangle->SetPosition(_x, _y, 0);
-
-	triangle->SetInput(input);
-
 	entityList->push_back(triangle);
+
+	return triangle;
 }
 
-void BaseGame::UpdateEntities(float deltaTime) {
-	for (entityIterator = entityList->begin(); entityIterator != entityList->end(); entityIterator++) {
-		Entity *entity = *entityIterator;
-		entity->Update(deltaTime);
-	}
+bool BaseGame::KeyPressed(Input::KeyCode _key)
+{
+	return input->IsKeyPressed(_key);
 }
 
 void BaseGame::DrawEntities() {
@@ -95,3 +93,5 @@ void BaseGame::DrawEntities() {
 		entity->Draw();
 	}
 }
+
+#pragma endregion

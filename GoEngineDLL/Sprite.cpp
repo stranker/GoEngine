@@ -46,23 +46,6 @@ void Sprite::Draw() {
 	renderer->DisableBuffer(1); // Deshabilito el atributo (uv)
 }
 
-void Sprite::Update(float deltaTime) {
-	glm::vec2 velocity = glm::vec2(0.0f);
-	if (input->IsKeyPressed(Input::KEY_A)) {
-		velocity.x = -100;
-	}
-	if (input->IsKeyPressed(Input::KEY_D)) {
-		velocity.x = 100;
-	}
-	if (input->IsKeyPressed(Input::KEY_W)) {
-		velocity.y = 100;
-	}
-	if (input->IsKeyPressed(Input::KEY_S)) {
-		velocity.y = -100;
-	}
-	Translate(velocity.x * deltaTime, velocity.y * deltaTime);
-}
-
 void Sprite::Destroy() {
 	if (texture) {
 		texture->Destroy();

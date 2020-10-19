@@ -50,10 +50,6 @@ void Entity2D::SetColorVertex(float * _colorVertex, size_t dataSize) {
 	colorBuffer = renderer->CreateVertexBuffer(colorVertex, dataSize, Renderer::ARRAY_BUFFER);
 }
 
-void Entity2D::Translate(float x, float y) {
-	transform->SetPosition(transform->GetPosition().x + x, transform->GetPosition().y + y, 0);
-}
-
 void Entity2D::Destroy() {
 	if (renderer) {
 		renderer->DeleteBuffer(positionBuffer);
@@ -68,7 +64,6 @@ void Entity2D::Destroy() {
 }
 
 Entity2D::Entity2D(Renderer* _renderer) : Entity(_renderer){
-	transform = new Transform();
 	selfModulate = Color(1, 1, 1, 1);
 }
 
