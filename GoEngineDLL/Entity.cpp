@@ -36,3 +36,8 @@ void Entity::Rotate(float _angle, RotationAxis _axis)
 
 	transform->SetRotation(angle, axis);
 }
+
+void Entity::Scale(float x, float y, float z)
+{
+	transform->SetScale(transform->GetScale().x + x, transform->GetScale().y + y, transform->GetScale().z + z);
+}

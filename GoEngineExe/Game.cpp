@@ -25,9 +25,20 @@ void Game::Update(float deltaTime) {
 		nAKELS->Translate(0, -100 * deltaTime, 0);
 
 	if (KeyPressed(Input::KEY_0)) {
-	nAKELS->Rotate(100 * deltaTime, Entity::Z);
-	tri->Rotate(100 * deltaTime, Entity::Z);
-}
+		nAKELS->Rotate(100 * deltaTime, Entity::Z);
+		tri->Rotate(100 * deltaTime, Entity::Z);
+	}
+
+	if (KeyPressed(Input::KEY_1))
+	{
+		nAKELS->Scale(100 * deltaTime, 100 * deltaTime, 0);
+		tri->Scale(100 * deltaTime, 100 * deltaTime, 0);
+	}
+	if (KeyPressed(Input::KEY_2))
+	{
+		nAKELS->Scale(-100 * deltaTime, -100 * deltaTime, 0);
+		tri->Scale(-100 * deltaTime, -100 * deltaTime, 0);
+	}
 
 	if (KeyPressed(Input::KEY_LEFT))
 		tri->Translate(-100 * deltaTime, 0, 0);

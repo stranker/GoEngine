@@ -22,4 +22,5 @@ public:
 	~Entity();
 	void Translate(float x, float y, float z);
 	void Rotate(float angle, RotationAxis axis);
+	void Scale(float x, float y, float z);
 };
