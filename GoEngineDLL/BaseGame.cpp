@@ -63,7 +63,7 @@ BaseGame::~BaseGame() {
 
 void BaseGame::CreateSprite(float x, float y) {
 	Sprite *sprite = new Sprite(renderer);
-	sprite->SetTexture("container.jpg");
+	sprite->SetTexture("player.png", TextureData::IT_PNG);
 	sprite->SetPosition(x, y, 0);
 	sprite->SetInput(input);
 	entityList->push_back(sprite);

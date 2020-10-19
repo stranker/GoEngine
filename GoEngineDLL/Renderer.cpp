@@ -37,11 +37,11 @@ GLuint Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, Buffer
 	return vertexBuffer;
 }
 
-GLuint Renderer::CreateTextureBuffer(unsigned char * data, int width, int height) {
+GLuint Renderer::CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels) {
 	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, width, height, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	return texture;

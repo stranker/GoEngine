@@ -1,15 +1,20 @@
 #include "Sprite.h"
 
 
+glm::vec2 Sprite::GetSize() {
+	return glm::vec2(texture->GetWidth(), texture->GetHeight());
+}
+
 void Sprite::SetTexture(Texture * _texture) {
 	texture = _texture;
 }
 
-void Sprite::SetTexture(const char* filePath) {
+void Sprite::SetTexture(const char* filePath, TextureData::ImageType imageType) {
 	texture = new Texture();
 	texture->LoadShaders("TextureVertexShader.shader", "TextureFragmentShader.shader");
-	texture->LoadTexture(filePath);
-	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight());
+	texture->LoadTexture(filePath, imageType);
+	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
+	SetScale(GetSize().x, GetSize().y, 0);
 }
 
 Texture *Sprite::GetTexture() {
@@ -87,7 +92,7 @@ Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 	SetIndex(index_data, sizeof(index_data));
 	SetUVVertex(uv_vertex_data, sizeof(uv_vertex_data));
 	primitive = Renderer::TRIANGLES;
-	SetScale(64.0f, 64.0f, 0.0f);
+	SetScale(1, 1, 1);
 }
 
 Sprite::~Sprite() {

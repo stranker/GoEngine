@@ -1,23 +1,25 @@
 #include "Texture.h"
-#include "stb_image.h"
-#define STB_IMAGE_IMPLEMENTATION
 
 
 void Texture::Destroy() {
-	stbi_image_free(textureData);
+	TextureImporter::FreeTexture(textureData);
 	glDeleteProgram(ID);
 }
 
 int Texture::GetWidth() const {
-	return width;
+	return textureData.width;
 }
 
 int Texture::GetHeight() const {
-	return height;
+	return textureData.height;
+}
+
+int Texture::GetNrChannels() const {
+	return textureData.nrChannels;
 }
 
 unsigned char * Texture::GetData() const {
-	return textureData;
+	return textureData.data;
 }
 
 void Texture::SetTextureProperty(const char * property, unsigned int value) {
@@ -27,15 +29,8 @@ void Texture::SetTextureProperty(const char * property, unsigned int value) {
 	glUniform1i(location, 0);
 }
 
-void Texture::LoadTexture(const char * filePath) {
-	int nrChannels;
-	textureData = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
-	if (textureData) {
-		cout << "hay data" << endl;
-	}
-	else {
-		cout << "No se cargo" << endl;
-	}
+void Texture::LoadTexture(const char* filePath, TextureData::ImageType imageType) {
+	textureData = TextureImporter::LoadTexture(filePath, imageType);
 }
 
 Texture::Texture(){

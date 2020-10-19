@@ -9,8 +9,9 @@ private:
 	GLuint uvBuffer;
 	unsigned int textureBuffer;
 public:
+	glm::vec2 GetSize();
 	void SetTexture(Texture *_texture);
-	void SetTexture(const char* filePath);
+	void SetTexture(const char* filePath, TextureData::ImageType imageType);
 	Texture *GetTexture();
 	void SetUVVertex(float *data, int dataSize);
 	void Draw() override;

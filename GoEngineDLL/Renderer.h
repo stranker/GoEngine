@@ -28,7 +28,7 @@ public:
 	bool Destroy();
 	GLuint CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType);
 	GLuint CreateVertexBuffer(unsigned int *data, size_t dataSize, BufferType bufferType);
-	GLuint CreateTextureBuffer(unsigned char *data, int width, int height);
+	GLuint CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels);
 	void BindBuffer(GLuint bufferID, BufferType bufferType);
 	void BindTexture(GLuint textureBuffer);
 	void BindVertexArray(GLuint vertexArrayID);
