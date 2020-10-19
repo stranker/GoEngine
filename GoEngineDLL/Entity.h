@@ -8,6 +8,12 @@ protected:
 	Transform *transform;
 	Renderer *renderer;
 public:
+	enum RotationAxis
+	{
+		X,
+		Y,
+		Z
+	};
 	string name;
 	virtual void Draw() {};
 	virtual void Update(float deltaTime) {};
@@ -15,4 +21,5 @@ public:
 	Entity(Renderer *_renderer);
 	~Entity();
 	void Translate(float x, float y, float z);
+	void Rotate(float angle, RotationAxis axis);
 };

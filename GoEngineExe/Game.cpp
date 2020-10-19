@@ -24,6 +24,11 @@ void Game::Update(float deltaTime) {
 	if (KeyPressed(Input::KEY_S))
 		nAKELS->Translate(0, -100 * deltaTime, 0);
 
+	if (KeyPressed(Input::KEY_0)) {
+	nAKELS->Rotate(100 * deltaTime, Entity::Z);
+	tri->Rotate(100 * deltaTime, Entity::Z);
+}
+
 	if (KeyPressed(Input::KEY_LEFT))
 		tri->Translate(-100 * deltaTime, 0, 0);
 	if (KeyPressed(Input::KEY_RIGHT))
@@ -33,7 +38,6 @@ void Game::Update(float deltaTime) {
 	if (KeyPressed(Input::KEY_DOWN))
 		tri->Translate(0, -100 * deltaTime, 0);
 
-	//UpdateEntities(deltaTime);
 	DrawEntities();
 }
 
