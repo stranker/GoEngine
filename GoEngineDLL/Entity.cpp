@@ -18,22 +18,21 @@ void Entity::Rotate(float _angle, RotationAxis _axis)
 
 	switch (_axis)
 	{
-	case Entity::X:
+	case X:
 		axis = glm::vec3(1.0f, 0.0f, 0.0f);
 		angle = transform->GetRotation().x + _angle;
 		break;
-	case Entity::Y:
+	case Y:
 		axis = glm::vec3(0.0f, 1.0f, 0.0f);
 		angle = transform->GetRotation().y + _angle;
 		break;
-	case Entity::Z:
+	case Z:
 		axis = glm::vec3(0.0f, 0.0f, 1.0f);
 		angle = transform->GetRotation().z + _angle;
 		break;
 	default:
 		break;
 	}
-
 	transform->SetRotation(angle, axis);
 }
 

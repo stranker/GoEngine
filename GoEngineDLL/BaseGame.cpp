@@ -4,16 +4,11 @@ bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
 	entityList = new list<Entity*>();
-	material = new Material();
 	return true;
 }
 
 bool BaseGame::DestroyEngine() {
 	delete entityList;
-	if (material) {
-		material->Destroy();
-		delete material;
-	}
 	if (renderer) {
 		renderer->Destroy();
 		delete renderer;
@@ -55,7 +50,8 @@ void BaseGame::LoopEngine() {
 BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title) {
 	window = new Window(_screen_width, _screen_height, _screen_title);
 	renderer = new Renderer(window);
-	input = new Input(window);
+	input = new Input();
+	input->SetWindow(window);
 }
 
 BaseGame::~BaseGame() {
@@ -63,28 +59,12 @@ BaseGame::~BaseGame() {
 
 #pragma region UserMethods
 
-Sprite* BaseGame::CreateSprite(float x, float y) {
+Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType, float x, float y) {
 	Sprite *sprite = new Sprite(renderer);
-	sprite->SetTexture("player.png", TextureData::IT_PNG);
-	sprite->SetPosition(x, y, 0);
+	sprite->SetTexture(filePath, imageType);
+	sprite->SetPosition(x, y);
 	entityList->push_back(sprite);
-
 	return sprite;
-}
-
-Triangle* BaseGame::CreateTriangle(float _x, float _y)
-{
-	Triangle *triangle = new Triangle(renderer);
-	triangle->SetMaterial(material);
-	triangle->SetPosition(_x, _y, 0);
-	entityList->push_back(triangle);
-
-	return triangle;
-}
-
-bool BaseGame::KeyPressed(Input::KeyCode _key)
-{
-	return input->IsKeyPressed(_key);
 }
 
 void BaseGame::DrawEntities() {

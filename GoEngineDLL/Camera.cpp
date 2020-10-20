@@ -9,7 +9,7 @@ glm::mat4 Camera::GetMVPOf(glm::mat4 model) {
 }
 
 void Camera::SetSize(float _width, float _height) {
-	projection = glm::ortho(0.0f, _width, 0.0f, _height, 0.0f, 100.0f); // camara ortogonal con ancho alto near y el far
+	projection = glm::ortho(0.0f, _width, _height, 0.0f, 0.0f, 100.0f); // camara ortogonal con ancho alto near y el far
 }
 
 Camera::Camera(float _width, float _height) {

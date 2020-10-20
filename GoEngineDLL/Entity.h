@@ -1,6 +1,7 @@
 #include "Exports.h"
 #include "Renderer.h"
 #include "Transform.h"
+#include "Input.h"
 
 class ENGINEDLL_API Entity
 {

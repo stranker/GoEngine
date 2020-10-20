@@ -9,7 +9,7 @@ using namespace std;
 
 class ENGINEDLL_API Input {
 protected:
-	Window *window;
+	static Window *window;
 public:
 	enum KeyState {
 		KEY_RELEASED = 0,
@@ -34,8 +34,9 @@ public:
 		KEY_DOWN = 264,
 		KEY_UP = 265,
 	};
-	bool IsKeyPressed(KeyCode key);
-	Input(Window *window);
+	static bool IsKeyPressed(KeyCode key);
+	void SetWindow(Window* window);
+	Input();
 	virtual ~Input();
 };
 

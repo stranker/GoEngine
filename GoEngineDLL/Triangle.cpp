@@ -39,7 +39,6 @@ Triangle::Triangle(Renderer* _renderer) : Shape(_renderer) {
 	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 3);
 	SetColorVertex(color_vertex_data, sizeof(color_vertex_data));
 	primitive = Renderer::TRIANGLES;
-	SetScale(100.0f, 100.0f, 0.0f);
 }
 
 

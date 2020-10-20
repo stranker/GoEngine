@@ -1,6 +1,5 @@
 #include "Sprite.h"
 
-
 glm::vec2 Sprite::GetSize() {
 	return glm::vec2(texture->GetWidth(), texture->GetHeight());
 }
@@ -9,12 +8,12 @@ void Sprite::SetTexture(Texture * _texture) {
 	texture = _texture;
 }
 
-void Sprite::SetTexture(const char* filePath, TextureData::ImageType imageType) {
+void Sprite::SetTexture(const char* filePath, ImageType imageType) {
 	texture = new Texture();
 	texture->LoadShaders("TextureVertexShader.shader", "TextureFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
 	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
-	SetScale(GetSize().x, GetSize().y, 0);
+	Scale(GetSize().x, GetSize().y);
 }
 
 Texture *Sprite::GetTexture() {
@@ -30,14 +29,20 @@ void Sprite::Draw() {
 		texture->Use();
 		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
 		texture->SetTextureProperty("ourTexture", textureBuffer);
+		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
+		texture->SetBool("flipVertical", flipVertical);
+		texture->SetBool("flipHorizontal", flipHorizontal);
 	}
 	renderer->BindVertexArray(vertexArrayID);
 
 	renderer->BindBuffer(positionBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
 	renderer->SetAttributePointer(0, 3); // Seteo los atributos del vertice de posicion
 
+	renderer->BindBuffer(colorBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer Color del tipo GL_ARRAY_BUFFER
+	renderer->SetAttributePointer(1, 4); // Seteo los atributos del color
+
 	renderer->BindBuffer(uvBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer UV del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(1, 2); // Seteo los atributos del vertice de UV
+	renderer->SetAttributePointer(2, 2); // Seteo los atributos del vertice de UV
 
 	renderer->BindBuffer(indexBuffer, Renderer::ELEMENT_BUFFER);
 	renderer->DrawElements(primitive, 6);
@@ -53,6 +58,14 @@ void Sprite::Destroy() {
 	}
 }
 
+void Sprite::FlipVertical(bool value) {
+	flipVertical = value;
+}
+
+void Sprite::FlipHorizontal(bool value) {
+	flipHorizontal = value;
+}
+
 Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 	float position_vertex_data[] = {
 		 0.5f,  0.5f, 0.0f,  // top right
@@ -64,6 +77,7 @@ Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
+	float color_vertex_data[] = { selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a };
 	float uv_vertex_data[] = {
 		1.0f, 1.0f,
 		1.0f, 0.0f,
@@ -72,10 +86,10 @@ Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 	};
 	CreateVertexArrayID();
 	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 4);
+	SetColorVertex(color_vertex_data, sizeof(color_vertex_data));
 	SetIndex(index_data, sizeof(index_data));
 	SetUVVertex(uv_vertex_data, sizeof(uv_vertex_data));
 	primitive = Renderer::TRIANGLES;
-	SetScale(1, 1, 1);
 }
 
 Sprite::~Sprite() {

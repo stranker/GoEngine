@@ -3,7 +3,6 @@
 
 void Texture::Destroy() {
 	TextureImporter::FreeTexture(textureData);
-	glDeleteProgram(ID);
 }
 
 int Texture::GetWidth() const {
@@ -29,7 +28,7 @@ void Texture::SetTextureProperty(const char * property, unsigned int value) {
 	glUniform1i(location, 0);
 }
 
-void Texture::LoadTexture(const char* filePath, TextureData::ImageType imageType) {
+void Texture::LoadTexture(const char* filePath, ImageType imageType) {
 	textureData = TextureImporter::LoadTexture(filePath, imageType);
 }
 

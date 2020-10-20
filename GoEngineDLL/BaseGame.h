@@ -16,14 +16,13 @@
 class ENGINEDLL_API BaseGame
 {
 protected:
+	Window *window;
+	Renderer *renderer;
+	Input *input;
 	virtual void Start() = 0;
 	virtual void Update(float deltaTime) = 0;
 	virtual void Stop() = 0;
 private:
-	Window *window;
-	Renderer *renderer;
-	Input *input;
-	Material *material;
 	list<Entity*> *entityList;
 	list<Entity*>::iterator entityIterator;
 	double currentFrame = glfwGetTime();
@@ -39,11 +38,7 @@ public:
 #pragma region UserMethods
 
 	//ENTITIES
-	Sprite* CreateSprite(float x, float y);
-	Triangle* CreateTriangle(float _x, float _y);
-
-	//INPUT
-	bool KeyPressed(Input::KeyCode _key);
+	Sprite* CreateSprite(const char* filePath, ImageType imageType, float x, float y);
 
 	//DRAWING
 	void DrawEntities();

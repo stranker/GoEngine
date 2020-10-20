@@ -6,7 +6,6 @@
 class ENGINEDLL_API Entity2D :
 	public Entity{
 protected:
-	Material *material;
 	float *positionVertex;
 	float *colorVertex;
 	unsigned int *index;
@@ -17,20 +16,21 @@ protected:
 	size_t positionVertexCount;
 	Renderer::Primitive primitive;
 	Color selfModulate;
+	float rotationDegrees;
 public:
-	void SetPosition(float x, float y, float z);
-	void SetRotation(float angle, glm::vec3 axis);
-	void SetScale(float x, float y, float z);
-	glm::vec3 GetPosition();
-	glm::vec3 GetRotation();
-	glm::vec3 GetScale();
-	void SetMaterial(Material *_material);
+	void SetPosition(float x, float y);
+	void Translate(float x, float y);
+	void Rotate(float angle);
+	void Scale(float x, float y);
+	glm::vec2 GetPosition();
+	float GetRotation();
+	glm::vec2 GetScale();
 	void CreateVertexArrayID();
 	void SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount);
 	void SetIndex(unsigned int *_index, size_t indexSize);
 	void SetColorVertex(float *_colorVertex, size_t dataSize);
-	virtual void Draw() = 0;
 	void Destroy() override;
+	void SetModulate(Color _new_modulate);
 	Entity2D(Renderer* _renderer);
 	~Entity2D();
 };

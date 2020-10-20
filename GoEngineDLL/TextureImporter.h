@@ -4,9 +4,10 @@
 
 using namespace std;
 
+enum ImageType { IMAGETYPE_PNG, IMAGETYPE_JPG, IMAGETYPE_BMP };
+
 class ENGINEDLL_API TextureData {
 public:
-	enum ImageType { IT_PNG, IT_JPG, IT_BMP };
 	ImageType imageType;
 	int width;
 	int height;
@@ -18,7 +19,7 @@ public:
 
 class ENGINEDLL_API TextureImporter {
 public:
-	static TextureData LoadTexture(const char * filePath, TextureData::ImageType imageType);
+	static TextureData LoadTexture(const char * filePath, ImageType imageType);
 	static void FreeTexture(TextureData textureData);
 	TextureImporter();
 	~TextureImporter();

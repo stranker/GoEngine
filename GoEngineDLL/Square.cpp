@@ -45,7 +45,6 @@ Square::Square(Renderer *_renderer) : Shape(_renderer) {
 	SetColorVertex(color_vertex_data,sizeof(color_vertex_data));
 	SetIndex(index_data, sizeof(index_data));
 	primitive = Renderer::TRIANGLES;
-	SetScale(100, 100, 0);
 }
 
 Square::~Square() {

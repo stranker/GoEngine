@@ -15,7 +15,7 @@ public:
 	unsigned char * GetData() const;
 	void SetTextureProperty(const char* property, unsigned int value);
 	void Destroy();
-	void LoadTexture(const char* filePath, TextureData::ImageType imageType);
+	void LoadTexture(const char* filePath, ImageType imageType);
 	Texture();
 	virtual ~Texture();
 };
