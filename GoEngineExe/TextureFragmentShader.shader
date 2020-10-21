@@ -5,7 +5,8 @@ in vec2 TexCoord;
 
 uniform bool flipVertical;
 uniform bool flipHorizontal;
-uniform vec4 selfModulate;
+uniform vec4 selfModulate; // color que se aplica a la textura
+
 uniform sampler2D ourTexture;
 
 void main(){

@@ -16,13 +16,13 @@
 class ENGINEDLL_API BaseGame
 {
 protected:
-	Window *window;
-	Renderer *renderer;
-	Input *input;
 	virtual void Start() = 0;
 	virtual void Update(float deltaTime) = 0;
 	virtual void Stop() = 0;
 private:
+	Window *window;
+	Renderer *renderer;
+	Input *input;
 	list<Entity*> *entityList;
 	list<Entity*>::iterator entityIterator;
 	double currentFrame = glfwGetTime();

@@ -4,8 +4,9 @@
 class Player {
 private:
 	Sprite *sprite;
-	glm::vec2 velocity;
+	Vector2 velocity;
 	float movementSpeed = 100;
+	float testAlpha = 0;
 public:
 	void AddSprite(Sprite *sprite);
 	void SetModulate(Color modulate);
@@ -17,4 +18,3 @@ public:
 	Player();
 	~Player();
 };
-

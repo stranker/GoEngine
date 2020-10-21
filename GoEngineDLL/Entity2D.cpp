@@ -4,29 +4,40 @@ void Entity2D::SetPosition(float x, float y) {
 	transform->SetPosition(x, y, 0);
 }
 
+void Entity2D::SetPosition(Vector2 vec) {
+}
+
 void Entity2D::Translate(float x, float y) {
 	transform->SetPosition(GetPosition().x + x, GetPosition().y + y, 0);
 }
 
+void Entity2D::Translate(Vector2 vec) {
+	Translate(vec.x, vec.y);
+}
+
 void Entity2D::Rotate(float angle) {
 	rotationDegrees = angle;
-	transform->SetRotation(rotationDegrees, glm::vec3(0,0,1));
+	transform->SetRotation(rotationDegrees, Vector3(0,0,1));
 }
 
 void Entity2D::Scale(float x, float y) {
 	transform->SetScale(x, y, 0);
 }
 
-glm::vec2 Entity2D::GetPosition() {
-	return transform->GetPosition();
+void Entity2D::Scale(Vector2 vec) {
+	Scale(vec.x, vec.y);
+}
+
+Vector2 Entity2D::GetPosition() {
+	return Vector2(transform->GetPosition().x, transform->GetPosition().y);
 }
 
 float Entity2D::GetRotation() {
 	return rotationDegrees;
 }
 
-glm::vec2 Entity2D::GetScale() {
-	return transform->GetScale();
+Vector2 Entity2D::GetScale() {
+	return Vector2(transform->GetScale().x, transform->GetScale().y);
 }
 
 void Entity2D::CreateVertexArrayID() {
@@ -65,7 +76,7 @@ void Entity2D::Destroy() {
 }
 
 Entity2D::Entity2D(Renderer* _renderer) : Entity(_renderer){
-	selfModulate = Color(1, 1, 1);
+	selfModulate = Color();
 }
 
 Entity2D::~Entity2D(){

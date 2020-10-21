@@ -1,7 +1,7 @@
 #include "Sprite.h"
 
-glm::vec2 Sprite::GetSize() {
-	return glm::vec2(texture->GetWidth(), texture->GetHeight());
+Vector2 Sprite::GetSize() {
+	return Vector2(texture->GetWidth(), texture->GetHeight());
 }
 
 void Sprite::SetTexture(Texture * _texture) {

@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Material.h"
 #include "Color.h"
+#include "Vector2.h"
 
 class ENGINEDLL_API Entity2D :
 	public Entity{
@@ -19,12 +20,15 @@ protected:
 	float rotationDegrees;
 public:
 	void SetPosition(float x, float y);
+	void SetPosition(Vector2 vec);
 	void Translate(float x, float y);
+	void Translate(Vector2 vec);
 	void Rotate(float angle);
 	void Scale(float x, float y);
-	glm::vec2 GetPosition();
+	void Scale(Vector2 vec);
+	Vector2 GetPosition();
 	float GetRotation();
-	glm::vec2 GetScale();
+	Vector2 GetScale();
 	void CreateVertexArrayID();
 	void SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount);
 	void SetIndex(unsigned int *_index, size_t indexSize);

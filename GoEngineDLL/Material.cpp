@@ -5,9 +5,9 @@ void Material::SetMat4(const char *property, glm::mat4 matrix) const{
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Material::SetVec3(const char * property, glm::vec3 value) const {
+void Material::SetVec3(const char * property, Vector3 vec) const {
 	unsigned int location = glGetUniformLocation(ID, property);
-	glUniform3f(location, value.x, value.y, value.z);
+	glUniform3f(location, vec.x, vec.y, vec.z);
 }
 
 void Material::SetVec4(const char * property, glm::vec4 value) const {

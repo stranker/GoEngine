@@ -26,7 +26,7 @@ void Player::FlipV(bool value) {
 }
 
 void Player::Update(float deltaTime) {
-	velocity = glm::vec2(0);
+	velocity = Vector2().Zero();
 	if (Input::IsKeyPressed(Input::KEY_W)) {
 		velocity.y -= movementSpeed;
 	}
@@ -41,7 +41,7 @@ void Player::Update(float deltaTime) {
 		velocity.x += movementSpeed;
 		FlipV(true);
 	}
-	sprite->Translate(velocity.x * deltaTime, velocity.y * deltaTime);
+	sprite->Translate(velocity * deltaTime);
 }
 
 void Player::Destroy() {

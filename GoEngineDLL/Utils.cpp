@@ -10,10 +10,3 @@ float Utils::Clamp(float value, float min_value, float max_value) {
 	}
 	return new_value;
 }
-
-Utils::Utils() {
-}
-
-
-Utils::~Utils() {
-}

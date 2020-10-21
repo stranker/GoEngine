@@ -1,7 +1,5 @@
 #include "Color.h"
 
-
-
 Color::Color() {
 	r = 1.0f;
 	g = 1.0f;
@@ -23,38 +21,34 @@ Color::Color(float _r, float _g, float _b) {
 	a = 1.0f;
 }
 
-Color Color::Blue() {
-	return Color(0,0,1);
+Color Color::Blue() const {
+	return Color();
 }
 
-Color Color::Red() {
+Color Color::Red() const {
 	return Color(1, 0, 0);
 }
 
-Color Color::Green() {
+Color Color::Green() const {
 	return Color(0, 1, 0);
 }
 
-Color Color::Yellow() {
+Color Color::Yellow() const {
 	return Color(1, 1, 0);
 }
 
-Color Color::Black() {
+Color Color::Black() const {
 	return Color(1, 1, 1);
 }
 
-Color Color::Cyan() {
+Color Color::Cyan() const {
 	return Color(0, 1, 1);
 }
 
-Color Color::Magenta() {
+Color Color::Magenta() const {
 	return Color(1, 0, 1);
 }
 
-Color Color::Purple() {
-	return Color(0.4,0,0.4);
-}
-
-
-Color::~Color() {
+Color Color::Purple() const {
+	return Color(0.4, 0, 0.4);
 }

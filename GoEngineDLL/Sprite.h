@@ -11,7 +11,7 @@ private:
 	bool flipVertical = false;
 	bool flipHorizontal = false;
 public:
-	glm::vec2 GetSize();
+	Vector2 GetSize();
 	void SetTexture(Texture *_texture);
 	void SetTexture(const char* filePath, ImageType imageType);
 	Texture *GetTexture();

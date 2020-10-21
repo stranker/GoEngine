@@ -3,7 +3,6 @@
 #include <iostream>
 
 using namespace std;
-
 enum ImageType { IMAGETYPE_PNG, IMAGETYPE_JPG, IMAGETYPE_BMP };
 
 class ENGINEDLL_API TextureData {
