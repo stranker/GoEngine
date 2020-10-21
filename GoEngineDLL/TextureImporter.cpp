@@ -4,6 +4,7 @@
 
 TextureData TextureImporter::LoadTexture(const char * filePath, ImageType imageType) {
 	TextureData textureData;
+	textureData.imageType = imageType;
 	textureData.data = stbi_load(filePath, &textureData.width, &textureData.height, &textureData.nrChannels, imageType == IMAGETYPE_PNG ? STBI_rgb_alpha : STBI_rgb);
 	return textureData;
 }

@@ -5,15 +5,12 @@
 using namespace std;
 enum ImageType { IMAGETYPE_PNG, IMAGETYPE_JPG, IMAGETYPE_BMP };
 
-class ENGINEDLL_API TextureData {
-public:
+struct ENGINEDLL_API TextureData {
 	ImageType imageType;
 	int width;
 	int height;
 	int nrChannels;
 	unsigned char* data;
-	TextureData() {};
-	~TextureData() {};
 };
 
 class ENGINEDLL_API TextureImporter {

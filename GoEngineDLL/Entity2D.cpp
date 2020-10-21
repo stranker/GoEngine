@@ -65,6 +65,10 @@ void Entity2D::SetModulate(Color _new_modulate) {
 	selfModulate = _new_modulate;
 }
 
+Color Entity2D::GetModulate() const {
+	return selfModulate;
+}
+
 void Entity2D::Destroy() {
 	if (renderer) {
 		renderer->DeleteBuffer(positionBuffer);

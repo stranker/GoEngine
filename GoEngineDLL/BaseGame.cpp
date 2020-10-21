@@ -24,8 +24,6 @@ bool BaseGame::DestroyEngine() {
 }
 
 void BaseGame::LoopEngine() {
-	Color clr = Color().Purple();
-
 	while (!window->ShouldClose()) {
 
 		if (input->IsKeyPressed(Input::KEY_ESCAPE)) {
@@ -37,7 +35,7 @@ void BaseGame::LoopEngine() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		renderer->SetClearColor(clr);
+		renderer->SetClearColor(Color().Purple());
 		renderer->ClearScreen();
 
 		Update(deltaTime);

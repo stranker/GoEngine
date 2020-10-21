@@ -1,12 +1,13 @@
 #pragma once
 #include <Object.h>
 
-class Player : public Object {
+class Container : 
+	public Object {
 private:
 	Vector2 velocity;
-	float movementSpeed = 300;
+	float movementSpeed = 200;
+	int direction = 1;
 public:
 	void Update(float deltaTime) override;
-	Player();
-	~Player();
 };
+

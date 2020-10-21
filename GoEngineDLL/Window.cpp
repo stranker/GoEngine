@@ -53,14 +53,25 @@ float Window::GetHeight() const {
 	return height;
 }
 
+Vector2 Window::GetSize() const {
+	return Vector2(width, height);
+}
+
 GLFWwindow* Window::GetWindowPtr(){
 	return window;
+}
+
+Window* Window::singleton = NULL;
+
+Window * Window::GetSingleton() {
+	return singleton;
 }
 
 Window::Window(int _width, int _height, const char * _title){
 	width = _width;
 	height = _height;
 	title = _title;
+	singleton = this;
 }
 
 Window::~Window(){

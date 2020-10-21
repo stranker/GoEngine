@@ -136,11 +136,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Container.cpp" />
+    <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Container.h" />
+    <ClInclude Include="Dragon.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>

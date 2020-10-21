@@ -35,6 +35,7 @@ public:
 	void SetColorVertex(float *_colorVertex, size_t dataSize);
 	void Destroy() override;
 	void SetModulate(Color _new_modulate);
+	Color GetModulate() const;
 	Entity2D(Renderer* _renderer);
 	~Entity2D();
 };

@@ -9,12 +9,6 @@ protected:
 	Transform *transform;
 	Renderer *renderer;
 public:
-	enum RotationAxis
-	{
-		X,
-		Y,
-		Z
-	};
 	string name;
 	virtual void Draw() {};
 	virtual void Update(float deltaTime) {};
