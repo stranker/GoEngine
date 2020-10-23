@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprite.h"
 #include "Window.h"
+#include <vector>
 
 class ENGINEDLL_API Object {
 protected:
