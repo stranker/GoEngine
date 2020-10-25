@@ -14,6 +14,10 @@ public:
 	Color GetModulate() const;
 	void FlipH(bool value);
 	void FlipV(bool value);
+	void SetVerticalFrames(int value);
+	void SetHorizontalFrames(int value);
+	void SetCurrentFrame(int value);
+	void SetTotalFrames(int value);
 	virtual void Update(float deltaTime) = 0;
 	void Destroy();
 	Object();

@@ -33,6 +33,22 @@ void Object::FlipV(bool value) {
 	sprite->FlipVertical(value);
 }
 
+void Object::SetVerticalFrames(int value) {
+	sprite->SetVerticalFrames(value);
+}
+
+void Object::SetHorizontalFrames(int value) {
+	sprite->SetHorizontalFrames(value);
+}
+
+void Object::SetCurrentFrame(int value) {
+	sprite->SetCurrentFrame(value);
+}
+
+void Object::SetTotalFrames(int value) {
+	sprite->SetTotalFrames(value);
+}
+
 void Object::Destroy() {
 	if (sprite) {
 		sprite->Destroy();
