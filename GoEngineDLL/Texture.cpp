@@ -17,6 +17,10 @@ int Texture::GetNrChannels() const {
 	return textureData.nrChannels;
 }
 
+Vector2 Texture::GetSize() const {
+	return Vector2(textureData.width, textureData.height);
+}
+
 unsigned char * Texture::GetData() const {
 	return textureData.data;
 }

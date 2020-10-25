@@ -17,6 +17,10 @@ void Object::SetModulate(float r, float g, float b, float a) {
 	SetModulate(new_color);
 }
 
+void Object::SetPosition(Vector2 position) {
+	sprite->SetPosition(position);
+}
+
 Color Object::GetModulate() const {
 	return sprite->GetModulate();
 }

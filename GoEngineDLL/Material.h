@@ -2,7 +2,9 @@
 
 #include "Exports.h"
 #include "GL/glew.h"
+#include "Vector2.h"
 #include "Vector3.h"
+#include "Rect2.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -16,8 +18,10 @@ protected:
 	GLuint ID;
 public:
 	void SetMat4(const char* property, glm::mat4 matrix) const;
+	void SetVec2(const char* property, Vector2 vec) const;
 	void SetVec3(const char* property, Vector3 vec) const;
 	void SetVec4(const char* property, glm::vec4 value) const;
+	void SetVec4(const char* property, Rect2 value) const;
 	void SetBool(const char* property, bool value) const;
 	void SetInt(const char* property, int value) const;
 	void SetFloat(const char* property, float value) const;

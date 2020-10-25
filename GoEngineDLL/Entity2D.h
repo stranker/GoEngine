@@ -3,6 +3,7 @@
 #include "Material.h"
 #include "Color.h"
 #include "Vector2.h"
+#include "Rect2.h"
 
 class ENGINEDLL_API Entity2D :
 	public Entity{

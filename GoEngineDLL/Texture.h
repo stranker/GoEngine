@@ -12,6 +12,7 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 	int GetNrChannels() const;
+	Vector2 GetSize() const;
 	unsigned char * GetData() const;
 	void SetTextureProperty(const char* property, unsigned int value);
 	void Destroy();

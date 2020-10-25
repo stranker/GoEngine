@@ -5,6 +5,11 @@ void Material::SetMat4(const char *property, glm::mat4 matrix) const{
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Material::SetVec2(const char * property, Vector2 vec) const {
+	unsigned int location = glGetUniformLocation(ID, property);
+	glUniform2f(location, vec.x, vec.y);
+}
+
 void Material::SetVec3(const char * property, Vector3 vec) const {
 	unsigned int location = glGetUniformLocation(ID, property);
 	glUniform3f(location, vec.x, vec.y, vec.z);
@@ -13,6 +18,11 @@ void Material::SetVec3(const char * property, Vector3 vec) const {
 void Material::SetVec4(const char * property, glm::vec4 value) const {
 	unsigned int location = glGetUniformLocation(ID, property);
 	glUniform4f(location, value.x, value.y, value.z, value.w);
+}
+
+void Material::SetVec4(const char * property, Rect2 value) const {
+	unsigned int location = glGetUniformLocation(ID, property);
+	glUniform4f(location, value.x, value.y, value.width, value.height);
 }
 
 void Material::SetBool(const char *property, bool value) const {

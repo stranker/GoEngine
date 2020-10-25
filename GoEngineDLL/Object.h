@@ -10,6 +10,7 @@ public:
 	void AddSprite(Sprite *sprite);
 	void SetModulate(Color modulate);
 	void SetModulate(float r, float g, float b, float a);
+	void SetPosition(Vector2 position);
 	Color GetModulate() const;
 	void FlipH(bool value);
 	void FlipV(bool value);
