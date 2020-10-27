@@ -57,8 +57,8 @@ void Transform::UpdateModel() {
 }
 
 Transform::Transform() {
-	position = Vector3();
-	rotation = Vector3();
+	position = Vector3().Zero();
+	rotation = Vector3().Zero();
 	localScale = Vector3().One();
 	matTranslation = glm::mat4(1.0f);
 	matRotation = glm::mat4(1.0f);

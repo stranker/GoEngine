@@ -5,6 +5,7 @@ void Entity2D::SetPosition(float x, float y) {
 }
 
 void Entity2D::SetPosition(Vector2 vec) {
+	SetPosition(vec.x, vec.y);
 }
 
 void Entity2D::Translate(float x, float y) {

@@ -1,12 +1,13 @@
 #pragma once
-#include <Object.h>
+#include "BaseGame.h"
 
-class Player : public Object {
+class Player{
 private:
+	AnimatedSprite* animSprite;
 	Vector2 velocity;
 	float movementSpeed = 300;
 public:
-	void Update(float deltaTime) override;
+	void Update(float deltaTime);
 	Player();
 	~Player();
 };

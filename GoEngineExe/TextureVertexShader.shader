@@ -15,7 +15,6 @@ void main()
 {
     gl_Position = mvp * vec4(aPos, 1.0f);
 	ourColor = aColor;
-	TexCoord = aTexCoord;
-	TexCoord.x = (currentFrame + TexCoord.x) * (1.0 / horizontalFrames);
-	TexCoord.y = (currentFrame + TexCoord.y) * (1.0 / verticalFrames);
+	TexCoord.x = (mod(currentFrame, verticalFrames) + aTexCoord.x) * (1.0 / verticalFrames);
+	TexCoord.y = (floor(currentFrame / verticalFrames) + aTexCoord.y) * (1.0 / horizontalFrames);
 }

@@ -10,17 +10,21 @@ void Player::Update(float deltaTime) {
 	}
 	if (Input::IsKeyPressed(Input::KEY_A)) {
 		velocity.x -= movementSpeed;
-		FlipV(true);
+		animSprite->FlipVertical(true);
 	}
 	if (Input::IsKeyPressed(Input::KEY_D)) {
 		velocity.x += movementSpeed;
-		FlipV(false);
+		animSprite->FlipVertical(false);
 	}
-	sprite->Translate(velocity * deltaTime);
+	animSprite->Update(deltaTime);
+	animSprite->Translate(velocity * deltaTime);
 }
 
 Player::Player() {
-
+	animSprite = BaseGame::GetSingleton()->CreateAnimSprite("player.png", IMAGETYPE_PNG);
+	unsigned int idle[] = {0};
+	animSprite->AddAnimation("idle", idle, 1, true, 8);
+	animSprite->Play("idle");
 }
 
 Player::~Player() {

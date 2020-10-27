@@ -10,3 +10,11 @@ void Container::Update(float deltaTime) {
 	}
 	sprite->Translate(velocity * deltaTime);
 }
+
+Container::Container() {
+	sprite = BaseGame::GetSingleton()->CreateSprite("container.jpg", IMAGETYPE_JPG);
+	sprite->SetPosition(Vector2(100, 100));
+}
+
+Container::~Container() {
+}

@@ -45,24 +45,38 @@ void BaseGame::LoopEngine() {
 	}
 }
 
+BaseGame * BaseGame::GetSingleton(){
+	return singleton;
+}
+
+BaseGame* BaseGame::singleton = nullptr;
+
 BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title) {
 	window = new Window(_screen_width, _screen_height, _screen_title);
 	renderer = new Renderer(window);
 	input = new Input();
 	input->SetWindow(window);
+	singleton = this;
 }
 
 BaseGame::~BaseGame() {
+	singleton = NULL;
 }
 
 #pragma region UserMethods
 
-Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType, float x, float y) {
+Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType) {
 	Sprite *sprite = new Sprite(renderer);
 	sprite->SetTexture(filePath, imageType);
-	sprite->SetPosition(x, y);
 	entityList->push_back(sprite);
 	return sprite;
+}
+
+AnimatedSprite * BaseGame::CreateAnimSprite(const char * filePath, ImageType imageType) {
+	AnimatedSprite *animSprite = new AnimatedSprite(renderer);
+	animSprite->SetTexture(filePath, imageType);
+	entityList->push_back(animSprite);
+	return animSprite;
 }
 
 void BaseGame::DrawEntities() {

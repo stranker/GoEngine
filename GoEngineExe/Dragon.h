@@ -1,9 +1,11 @@
 #pragma once
-#include <Object.h>
-class Dragon :
-	public Object {
+#include "BaseGame.h"
+
+class Dragon{
+private:
+	AnimatedSprite* sprite;
 public:
-	void Update(float deltaTime) override;
+	void Update(float deltaTime);
 	Dragon();
 	~Dragon();
 };

@@ -72,13 +72,13 @@ void Sprite::FlipHorizontal(bool value) {
 
 void Sprite::SetVerticalFrames(int value) {
 	verticalFrames = value;
-	spriteSize.y = int(GetSize().y / verticalFrames);
+	spriteSize.x = int(GetSize().x / verticalFrames);
 	Scale(spriteSize.x, spriteSize.y);
 }
 
 void Sprite::SetHorizontalFrames(int value) {
 	horizontalFrames = value;
-	spriteSize.x = int(GetSize().x / horizontalFrames);
+	spriteSize.y = int(GetSize().y / horizontalFrames);
 	Scale(spriteSize.x, spriteSize.y);
 }
 
