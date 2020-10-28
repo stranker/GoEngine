@@ -17,7 +17,7 @@ public:
 	void SetTextureProperty(const char* property, unsigned int value);
 	void Destroy();
 	void LoadTexture(const char* filePath, ImageType imageType);
-	Texture();
-	virtual ~Texture();
+	TextureMaterial();
+	virtual ~TextureMaterial();
 };
 
