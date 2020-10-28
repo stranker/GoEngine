@@ -1,20 +1,31 @@
 #include "Sprite.h"
 
 Vector2 Sprite::GetSize() {
-	return Vector2(texture->GetWidth(), texture->GetHeight());
+	return spriteSize;
 }
 
-void Sprite::SetTexture(TextureMaterial * _texture) {
-	texture = _texture;
+void Sprite::AddFramesRect() {
+	for (size_t i = 0; i < totalFrames; i++) {
+		Rect2 frame;
+		frame.x = (i % verticalFrames) * spriteSize.x;
+		frame.y = floor(i / verticalFrames) * spriteSize.y;
+		frame.width = spriteSize.x;
+		frame.height = spriteSize.y;
+		framesRect.push_back(frame);
+	}
 }
 
-void Sprite::SetTexture(const char* filePath, ImageType imageType) {
+void Sprite::SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
 	texture = new TextureMaterial();
 	texture->LoadShaders("TextureVertexShader.shader", "TextureFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
 	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
-	spriteSize = GetSize();
+	verticalFrames = vFrames;
+	horizontalFrames = hFrames;
+	totalFrames = verticalFrames * hFrames;
+	spriteSize = Vector2(texture->GetSize().x / verticalFrames, texture->GetSize().y / horizontalFrames);
 	Scale(spriteSize.x, spriteSize.y);
+	AddFramesRect();
 }
 
 TextureMaterial *Sprite::GetTexture() {
@@ -67,20 +78,16 @@ void Sprite::FlipHorizontal(bool value) {
 	flipHorizontal = value;
 }
 
-void Sprite::SetVerticalFrames(int value) {
-	verticalFrames = value;
-	spriteSize.x = int(GetSize().x / verticalFrames);
-	Scale(spriteSize.x, spriteSize.y);
-}
-
-void Sprite::SetHorizontalFrames(int value) {
-	horizontalFrames = value;
-	spriteSize.y = int(GetSize().y / horizontalFrames);
-	Scale(spriteSize.x, spriteSize.y);
-}
-
-void Sprite::SetCurrentFrame(int value) {
+void Sprite::SetCurrentFrame(unsigned int value) {
 	currentFrame = value;
+	Rect2 frame = framesRect[currentFrame];
+	float uv_vertex_data[] = {
+		(frame.x + frame.width) / texture->GetSize().x, (frame.y + frame.height) / texture->GetSize().y,
+		(frame.x + frame.width) / texture->GetSize().x, frame.y / texture->GetSize().y,
+		frame.x / texture->GetSize().x, frame.y / texture->GetSize().y,
+		frame.x / texture->GetSize().x, (frame.y + frame.height) / texture->GetSize().y
+	};
+	SetUVVertex(uv_vertex_data, sizeof(uv_vertex_data));
 }
 
 void Sprite::SetTotalFrames(int value) {

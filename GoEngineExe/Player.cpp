@@ -21,7 +21,7 @@ void Player::Update(float deltaTime) {
 }
 
 Player::Player() {
-	animSprite = BaseGame::GetSingleton()->CreateAnimSprite("player.png", IMAGETYPE_PNG);
+	animSprite = BaseGame::GetSingleton()->CreateAnimSprite("player.png", IMAGETYPE_PNG, 1, 1);
 	unsigned int idle[] = {0};
 	animSprite->AddAnimation("idle", idle, 1, true, 8);
 	animSprite->Play("idle");

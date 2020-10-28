@@ -14,20 +14,19 @@ private:
 	int horizontalFrames = 1;
 	int currentFrame = 0;
 	int totalFrames = 1;
+	vector<Rect2> framesRect;
 	Vector2 spriteSize;
+	void AddFramesRect();
 public:
 	Vector2 GetSize();
-	void SetTexture(TextureMaterial *_texture);
-	void SetTexture(const char* filePath, ImageType imageType);
+	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	TextureMaterial *GetTexture();
 	void SetUVVertex(float *data, int dataSize);
 	void Draw() override;
 	void Destroy() override;
 	void FlipVertical(bool value);
 	void FlipHorizontal(bool value);
-	void SetVerticalFrames(int value);
-	void SetHorizontalFrames(int value);
-	void SetCurrentFrame(int value);
+	void SetCurrentFrame(unsigned int value);
 	void SetTotalFrames(int value);
 	Sprite(Renderer *_renderer);
 	virtual ~Sprite();
