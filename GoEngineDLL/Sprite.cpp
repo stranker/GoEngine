@@ -4,12 +4,12 @@ Vector2 Sprite::GetSize() {
 	return Vector2(texture->GetWidth(), texture->GetHeight());
 }
 
-void Sprite::SetTexture(Texture * _texture) {
+void Sprite::SetTexture(TextureMaterial * _texture) {
 	texture = _texture;
 }
 
 void Sprite::SetTexture(const char* filePath, ImageType imageType) {
-	texture = new Texture();
+	texture = new TextureMaterial();
 	texture->LoadShaders("TextureVertexShader.shader", "TextureFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
 	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
@@ -17,7 +17,7 @@ void Sprite::SetTexture(const char* filePath, ImageType imageType) {
 	Scale(spriteSize.x, spriteSize.y);
 }
 
-Texture *Sprite::GetTexture() {
+TextureMaterial *Sprite::GetTexture() {
 	return texture;
 }
 
@@ -33,9 +33,6 @@ void Sprite::Draw() {
 		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 		texture->SetBool("flipVertical", flipVertical);
 		texture->SetBool("flipHorizontal", flipHorizontal);
-		texture->SetInt("horizontalFrames", horizontalFrames);
-		texture->SetInt("verticalFrames", verticalFrames);
-		texture->SetInt("currentFrame", currentFrame);
 	}
 	renderer->BindVertexArray(vertexArrayID);
 

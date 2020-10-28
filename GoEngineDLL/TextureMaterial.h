@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "TextureImporter.h"
 
-class ENGINEDLL_API Texture : 
+class ENGINEDLL_API TextureMaterial : 
 	public Material {
 private:
 	TextureData textureData;

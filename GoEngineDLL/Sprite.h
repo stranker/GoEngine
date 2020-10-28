@@ -1,11 +1,11 @@
 #pragma once
 #include "Entity2D.h"
-#include "Texture.h"
+#include "TextureMaterial.h"
 
 class ENGINEDLL_API Sprite :
 	public Entity2D {
 private:
-	Texture *texture;
+	TextureMaterial *texture;
 	GLuint uvBuffer;
 	unsigned int textureBuffer;
 	bool flipVertical = false;
@@ -17,9 +17,9 @@ private:
 	Vector2 spriteSize;
 public:
 	Vector2 GetSize();
-	void SetTexture(Texture *_texture);
+	void SetTexture(TextureMaterial *_texture);
 	void SetTexture(const char* filePath, ImageType imageType);
-	Texture *GetTexture();
+	TextureMaterial *GetTexture();
 	void SetUVVertex(float *data, int dataSize);
 	void Draw() override;
 	void Destroy() override;
