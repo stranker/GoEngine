@@ -65,16 +65,16 @@ BaseGame::~BaseGame() {
 
 #pragma region UserMethods
 
-Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType) {
+Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
 	Sprite *sprite = new Sprite(renderer);
-	sprite->SetTexture(filePath, imageType);
+	sprite->SetTexture(filePath, imageType, vFrames, hFrames);
 	entityList->push_back(sprite);
 	return sprite;
 }
 
-AnimatedSprite * BaseGame::CreateAnimSprite(const char * filePath, ImageType imageType) {
+AnimatedSprite * BaseGame::CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
 	AnimatedSprite *animSprite = new AnimatedSprite(renderer);
-	animSprite->SetTexture(filePath, imageType);
+	animSprite->SetTexture(filePath, imageType, vFrames, hFrames);
 	entityList->push_back(animSprite);
 	return animSprite;
 }

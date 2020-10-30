@@ -41,8 +41,8 @@ public:
 #pragma region UserMethods
 
 	//ENTITIES
-	Sprite* CreateSprite(const char* filePath, ImageType imageType);
-	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType);
+	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
+	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	void DrawEntities();
 
 #pragma endregion

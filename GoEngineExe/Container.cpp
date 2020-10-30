@@ -12,7 +12,7 @@ void Container::Update(float deltaTime) {
 }
 
 Container::Container() {
-	sprite = BaseGame::GetSingleton()->CreateSprite("container.jpg", IMAGETYPE_JPG);
+	sprite = BaseGame::GetSingleton()->CreateSprite("container.jpg", IMAGETYPE_JPG, 1 , 1);
 	sprite->SetPosition(Vector2(100, 100));
 }
 
