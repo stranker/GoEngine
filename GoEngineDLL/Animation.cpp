@@ -8,12 +8,10 @@ void Animation::Update(float deltaTime) {
 	if (!isPlaying) {
 		return;
 	}
+	internalTimer += deltaTime;
 	if (internalTimer >= 1.0 / animSpeed) {
 		UpdateAnimation();
 		internalTimer = 0;
-	}
-	else {
-		internalTimer += deltaTime;
 	}
 }
 

@@ -6,12 +6,22 @@ Vector2 Sprite::GetSize() {
 
 void Sprite::AddFramesRect() {
 	for (size_t i = 0; i < totalFrames; i++) {
-		Rect2 frame;
-		frame.x = (i % verticalFrames) * spriteSize.x;
-		frame.y = floor(i / verticalFrames) * spriteSize.y;
-		frame.width = spriteSize.x;
-		frame.height = spriteSize.y;
-		framesRect.push_back(frame);
+		float frameX = (i % verticalFrames) * spriteSize.x;
+		float frameY = floor(i / verticalFrames) * spriteSize.y;
+
+		UVFrame uvFrame;
+		uvFrame.tr.x = (frameX + spriteSize.x) / texture->GetSize().x;
+		uvFrame.tr.y = (frameY + spriteSize.y) / texture->GetSize().y;
+
+		uvFrame.br.x = (frameX + spriteSize.x) / texture->GetSize().x;
+		uvFrame.br.y = frameY / texture->GetSize().y;
+
+		uvFrame.bl.x = frameX / texture->GetSize().x;
+		uvFrame.bl.y = frameY / texture->GetSize().y;
+
+		uvFrame.tl.x = frameX / texture->GetSize().x;
+		uvFrame.tl.y = (frameY + spriteSize.y) / texture->GetSize().y;
+		framesRect.push_back(uvFrame);
 	}
 }
 
@@ -80,12 +90,12 @@ void Sprite::FlipHorizontal(bool value) {
 
 void Sprite::SetCurrentFrame(unsigned int value) {
 	currentFrame = value;
-	Rect2 frame = framesRect[currentFrame];
+	UVFrame frame = framesRect[currentFrame];
 	float uv_vertex_data[] = {
-		(frame.x + frame.width) / texture->GetSize().x, (frame.y + frame.height) / texture->GetSize().y,
-		(frame.x + frame.width) / texture->GetSize().x, frame.y / texture->GetSize().y,
-		frame.x / texture->GetSize().x, frame.y / texture->GetSize().y,
-		frame.x / texture->GetSize().x, (frame.y + frame.height) / texture->GetSize().y
+		frame.tr.x, frame.tr.y,
+		frame.br.x, frame.br.y,
+		frame.bl.x, frame.bl.y,
+		frame.tl.x, frame.tl.y
 	};
 	SetUVVertex(uv_vertex_data, sizeof(uv_vertex_data));
 }

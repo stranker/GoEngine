@@ -5,6 +5,12 @@
 class ENGINEDLL_API Sprite :
 	public Entity2D {
 private:
+	struct UVFrame {
+		Vector2 tr;
+		Vector2 br;
+		Vector2 bl;
+		Vector2 tl;
+	};
 	TextureMaterial *texture;
 	GLuint uvBuffer;
 	unsigned int textureBuffer;
@@ -14,7 +20,7 @@ private:
 	int horizontalFrames = 1;
 	int currentFrame = 0;
 	int totalFrames = 1;
-	vector<Rect2> framesRect;
+	vector<UVFrame> framesRect;
 	Vector2 spriteSize;
 	void AddFramesRect();
 public:
