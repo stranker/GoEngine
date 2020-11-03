@@ -81,6 +81,14 @@ Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType, int vF
 	return sprite;
 }
 
+void BaseGame::SetPosition(Sprite* _entity, float _x, float _y)
+{
+	Vector2 pos;
+	pos.x = _x;
+	pos.y = _y;
+	_entity->SetPosition(pos);
+}
+
 AnimatedSprite * BaseGame::CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
 	AnimatedSprite *animSprite = new AnimatedSprite(renderer);
 	animSprite->SetTexture(filePath, imageType, vFrames, hFrames);

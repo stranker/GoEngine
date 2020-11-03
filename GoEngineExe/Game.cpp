@@ -10,6 +10,9 @@ Game::~Game() {
 
 void Game::Start() {
 	InitEngine();
+	Sprite* a = CreateSprite("player.png", IMAGETYPE_PNG, 1, 1);
+	SetPosition(a, 100, 100);
+
 	player = new Player();
 	container = new Container();
 	dragon = new Dragon();

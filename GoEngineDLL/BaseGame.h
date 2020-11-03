@@ -44,6 +44,7 @@ public:
 
 	//ENTITIES
 	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
+	void SetPosition(Sprite* _entity, float _x, float _y);
 	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	void DrawEntities();
 
