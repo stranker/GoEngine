@@ -6,13 +6,15 @@
 #include <list>
 #include <iterator>
 #include "Exports.h"
-#include "Window.h"
-#include "Renderer.h"
-#include "Triangle.h"
-#include "Square.h"
-#include "Input.h"
-#include "Sprite.h"
-#include "AnimatedSprite.h"
+
+class Window;
+class Renderer;
+class Input;
+class Sprite;
+class AnimatedSprite;
+class Entity;
+
+#include "TextureImporter.h"
 
 class ENGINEDLL_API BaseGame
 {
@@ -30,8 +32,8 @@ private:
 	Input *input;
 	list<Entity*> *entityList;
 	list<Entity*>::iterator entityIterator;
-	double currentFrame = glfwGetTime();
-	double lastFrame = currentFrame;
+	double currentFrame;
+	double lastFrame;
 	double deltaTime;
 public:
 	static BaseGame * GetSingleton();

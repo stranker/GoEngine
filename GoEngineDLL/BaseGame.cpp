@@ -1,9 +1,18 @@
 #include "BaseGame.h"
 
+#include "Window.h"
+#include "Renderer.h"
+#include "Input.h"
+#include "Sprite.h"
+#include "AnimatedSprite.h"
+
 bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
 	entityList = new list<Entity*>();
+
+	currentFrame = glfwGetTime();
+	lastFrame = currentFrame;
 	return true;
 }
 
