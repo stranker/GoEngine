@@ -35,7 +35,7 @@ bool BaseGame::DestroyEngine() {
 void BaseGame::LoopEngine() {
 	while (!window->ShouldClose()) {
 
-		if (input->IsKeyPressed(Input::KEY_ESCAPE)) {
+		if (input->IsKeyPressed(KEY_ESCAPE)) {
 			window->CloseWindow();
 		}
 
@@ -86,6 +86,52 @@ AnimatedSprite * BaseGame::CreateAnimSprite(const char* filePath, ImageType imag
 	animSprite->SetTexture(filePath, imageType, vFrames, hFrames);
 	entityList->push_back(animSprite);
 	return animSprite;
+}
+
+void BaseGame::UpdateAnimSprite(AnimatedSprite* _as, float _deltaTime)
+{
+	_as->Update(_deltaTime);
+}
+
+void BaseGame::AddAnimation(AnimatedSprite * _as, const char * animName, unsigned int * frames,
+							int framesSize, bool looped, float speed)
+{
+	_as->AddAnimation(animName, frames, framesSize, looped, speed);
+}
+
+void BaseGame::PlayAnimation(AnimatedSprite * _as, const char * animName)
+{
+	_as->Play(animName);
+}
+
+void BaseGame::FlipSpriteH(Sprite * _entity, bool _flip)
+{
+	_entity->FlipHorizontal(_flip);
+}
+
+void BaseGame::FlipSpriteH(AnimatedSprite * _entity, bool _flip)
+{
+	_entity->FlipHorizontal(_flip);
+}
+
+void BaseGame::FlipSpriteV(Sprite * _entity, bool _flip)
+{
+	_entity->FlipVertical(_flip);
+}
+
+void BaseGame::FlipSpriteV(AnimatedSprite * _entity, bool _flip)
+{
+	_entity->FlipVertical(_flip);
+}
+
+Vector2 BaseGame::GetSpriteSize(Sprite * _entity)
+{
+	return _entity->GetSize();
+}
+
+Vector2 BaseGame::GetSpriteSize(AnimatedSprite * _entity)
+{
+	return _entity->GetSize();
 }
 
 void BaseGame::DrawEntities() {
@@ -166,6 +212,16 @@ Vector2 BaseGame::GetScale(Sprite * _entity)
 Vector2 BaseGame::GetScale(AnimatedSprite * _entity)
 {
 	return _entity->GetScale();
+}
+
+bool BaseGame::KeyPressed(KeyCode _key)
+{
+	return input->IsKeyPressed(_key);
+}
+
+Vector2 BaseGame::GetWindowSize()
+{
+	return window->GetSize();
 }
 
 #pragma endregion

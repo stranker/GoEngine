@@ -16,6 +16,7 @@ class Entity;
 
 #include "TextureImporter.h"
 #include "Vector2.h"
+#include "KeyCode.h"
 
 class ENGINEDLL_API BaseGame
 {
@@ -46,6 +47,19 @@ public:
 	//ENTITIES
 	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
+	void UpdateAnimSprite(AnimatedSprite* _as, float _deltaTime);
+	void AddAnimation(AnimatedSprite* _as, const char* animName, unsigned int *frames,
+						int framesSize, bool looped, float speed);
+	void PlayAnimation(AnimatedSprite* _as, const char * animName);
+	//=====================================//
+	void FlipSpriteH(Sprite* _entity, bool _flip);
+	void FlipSpriteH(AnimatedSprite* _entity, bool _flip);
+	void FlipSpriteV(Sprite* _entity, bool _flip);
+	void FlipSpriteV(AnimatedSprite* _entity, bool _flip);
+	//=====================================//
+	Vector2 GetSpriteSize(Sprite* _entity);
+	Vector2 GetSpriteSize(AnimatedSprite* _entity);
+	//=====================================//
 	void DrawEntities();
 
 	//TRANSFORMATIONS
@@ -69,6 +83,12 @@ public:
 	//=====================================//
 	Vector2 GetScale(Sprite* _entity);
 	Vector2 GetScale(AnimatedSprite* _entity);
+
+	//INPUT
+	bool KeyPressed(KeyCode _key);
+
+	//WINDOW
+	Vector2 GetWindowSize();
 
 #pragma endregion
 };

@@ -151,6 +151,7 @@
     <ClInclude Include="Entity2D.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="KeyCode.h" />
     <ClInclude Include="Rect2.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Material.h" />
