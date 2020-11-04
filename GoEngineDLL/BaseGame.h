@@ -15,6 +15,7 @@ class AnimatedSprite;
 class Entity;
 
 #include "TextureImporter.h"
+#include "Vector2.h"
 
 class ENGINEDLL_API BaseGame
 {
@@ -44,9 +45,30 @@ public:
 
 	//ENTITIES
 	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
-	void SetPosition(Sprite* _entity, float _x, float _y);
 	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	void DrawEntities();
+
+	//TRANSFORMATIONS
+	void SetPosition(Sprite* _entity, float _x, float _y);
+	void SetPosition(AnimatedSprite* _entity, float _x, float _y);
+	//=====================================//
+	void Translate(Sprite* _entity, float _x, float _y);
+	void Translate(AnimatedSprite* _entity, float _x, float _y);
+	//=====================================//
+	void Rotate(Sprite* _entity, float angle);
+	void Rotate(AnimatedSprite* _entity, float angle);
+	//=====================================//
+	void Scale(Sprite* _entity, float _x, float _y);
+	void Scale(AnimatedSprite* _entity, float _x, float _y);
+	//=====================================//
+	Vector2 GetPosition(Sprite* _entity);
+	Vector2 GetPosition(AnimatedSprite* _entity);
+	//=====================================//
+	float GetRotation(Sprite* _entity);
+	float GetRotation(AnimatedSprite* _entity);
+	//=====================================//
+	Vector2 GetScale(Sprite* _entity);
+	Vector2 GetScale(AnimatedSprite* _entity);
 
 #pragma endregion
 };
