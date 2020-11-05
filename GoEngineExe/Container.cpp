@@ -1,11 +1,15 @@
 #include "Container.h"
 
+Sprite * Container::GetSprite() const {
+	return sprite;
+}
+
 void Container::Update(float deltaTime) {
 	velocity.x = direction * movementSpeed;
-	if (sprite->GetPosition().x > Window::GetSingleton()->GetSize().x - sprite->GetSize().x * 0.5) {
+	if (sprite->GetPosition().x >= Window::GetSingleton()->GetSize().x - sprite->GetSize().x) {
 		direction = -1;
 	}
-	else if (sprite->GetPosition().x < sprite->GetSize().x * 0.5) {
+	else if (sprite->GetPosition().x <= 0) {
 		direction = 1;
 	}
 	sprite->Translate(velocity * deltaTime);

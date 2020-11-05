@@ -7,6 +7,8 @@ private:
 	Vector2 velocity;
 	float movementSpeed = 300;
 public:
+	Sprite *GetSprite() const;
+	void ManageCollision(CollisionInfo collision);
 	void Update(float deltaTime);
 	Player();
 	~Player();

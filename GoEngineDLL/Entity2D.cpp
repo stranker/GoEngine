@@ -29,15 +29,15 @@ void Entity2D::Scale(Vector2 vec) {
 	Scale(vec.x, vec.y);
 }
 
-Vector2 Entity2D::GetPosition() {
+Vector2 Entity2D::GetPosition() const{
 	return Vector2(transform->GetPosition().x, transform->GetPosition().y);
 }
 
-float Entity2D::GetRotation() {
+float Entity2D::GetRotation() const{
 	return rotationDegrees;
 }
 
-Vector2 Entity2D::GetScale() {
+Vector2 Entity2D::GetScale() const{
 	return Vector2(transform->GetScale().x, transform->GetScale().y);
 }
 
@@ -68,6 +68,10 @@ void Entity2D::SetModulate(Color _new_modulate) {
 
 Color Entity2D::GetModulate() const {
 	return selfModulate;
+}
+
+Transform * Entity2D::GetTransform() {
+	return transform;
 }
 
 void Entity2D::Destroy() {
