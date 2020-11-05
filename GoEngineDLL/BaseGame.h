@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Exports.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -16,8 +15,7 @@ class Renderer;
 #include "AnimatedSprite.h"
 #include "CollisionManager.h"
 
-class ENGINEDLL_API BaseGame
-{
+class ENGINEDLL_API BaseGame{
 protected:
 	virtual void Start() = 0;
 	virtual void Update(float deltaTime) = 0;
@@ -37,7 +35,7 @@ private:
 	double lastFrame;
 	double deltaTime;
 public:
-	static BaseGame * GetSingleton();
+	static BaseGame *GetSingleton();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
 
@@ -52,4 +50,3 @@ public:
 
 #pragma endregion
 };
-
