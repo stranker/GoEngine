@@ -13,6 +13,7 @@
 #include "Input.h"
 #include "Sprite.h"
 #include "AnimatedSprite.h"
+#include "CollisionManager.h"
 
 class ENGINEDLL_API BaseGame
 {

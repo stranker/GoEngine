@@ -1,5 +1,9 @@
 #include "Dragon.h"
 
+Sprite * Dragon::GetSprite() const {
+	return sprite;
+}
+
 void Dragon::Update(float deltaTime) {
 	sprite->Update(deltaTime);
 }

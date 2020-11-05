@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-Vector2 Sprite::GetSize() {
+Vector2 Sprite::GetSize() const{
 	return spriteSize;
 }
 
@@ -70,7 +70,8 @@ void Sprite::Draw() {
 	renderer->DrawElements(primitive, 6);
 
 	renderer->DisableBuffer(0); // Deshabilito el atributo (pos)
-	renderer->DisableBuffer(1); // Deshabilito el atributo (uv)
+	renderer->DisableBuffer(1); // Deshabilito el atributo (color)
+	renderer->DisableBuffer(2); // Deshabilito el atributo (uv)
 }
 
 void Sprite::Destroy() {
@@ -106,10 +107,10 @@ void Sprite::SetTotalFrames(int value) {
 
 Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 	float position_vertex_data[] = {
-		 0.5f,  0.5f, 0.0f,  // top right
-		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
+		 1.0f,  1.0f, 0.0f,  // top right
+		 1.0f,  0.0f, 0.0f,  // bottom right
+		 0.0f,  0.0f, 0.0f,  // bottom left
+		 0.0f,  1.0f, 0.0f   // top left 
 	};
 	unsigned int index_data[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
