@@ -24,9 +24,9 @@ public:
 	void Rotate(float angle);
 	void Scale(float x, float y);
 	void Scale(Vector2 vec);
-	Vector2 GetPosition();
-	float GetRotation();
-	Vector2 GetScale();
+	Vector2 GetPosition() const;
+	float GetRotation() const;
+	Vector2 GetScale() const;
 	void CreateVertexArrayID();
 	void SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount);
 	void SetIndex(unsigned int *_index, size_t indexSize);
@@ -34,6 +34,7 @@ public:
 	void Destroy() override;
 	void SetModulate(Color _new_modulate);
 	Color GetModulate() const;
+	Transform *GetTransform();
 	Entity2D(Renderer* _renderer);
 	~Entity2D();
 };

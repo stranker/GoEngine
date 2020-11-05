@@ -14,7 +14,7 @@ class Renderer;
 #include "Utils.h"
 #include "Input.h"
 #include "AnimatedSprite.h"
-#include "TextureImporter.h"
+#include "CollisionManager.h"
 
 class ENGINEDLL_API BaseGame
 {

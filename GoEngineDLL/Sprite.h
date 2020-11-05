@@ -24,7 +24,7 @@ private:
 	Vector2 spriteSize;
 	void AddFramesRect();
 public:
-	Vector2 GetSize();
+	Vector2 GetSize() const;
 	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	TextureMaterial *GetTexture();
 	void SetUVVertex(float *data, int dataSize);

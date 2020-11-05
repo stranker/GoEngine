@@ -1,5 +1,14 @@
 #include "Player.h"
 
+Sprite * Player::GetSprite() const{
+	return animSprite;
+}
+
+void Player::ManageCollision(CollisionInfo collision) {
+	animSprite->Translate(collision.displacement);
+}
+
+
 void Player::Update(float deltaTime) {
 	velocity = Vector2().Zero();
 	if (Input::IsKeyPressed(Input::KEY_W)) {

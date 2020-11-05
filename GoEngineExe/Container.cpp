@@ -1,7 +1,12 @@
 #include "Container.h"
 
+Sprite * Container::GetSprite() const {
+	return sprite;
+}
+
 void Container::Update(float deltaTime) {
-	if (sprite->GetPosition().x >= BaseGame::GetSingleton()->GetWindowSize().x + sprite->GetSize().x) {
+	velocity.x = direction * movementSpeed;
+	if (sprite->GetPosition().x >= Window::GetSingleton()->GetSize().x - sprite->GetSize().x) {
 		direction = -1;
 	}
 	else if (sprite->GetPosition().x <= 0) {

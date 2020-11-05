@@ -8,6 +8,7 @@ private:
 	float movementSpeed = 200;
 	int direction = 1;
 public:
+	Sprite *GetSprite() const;
 	void Update(float deltaTime);
 	Container();
 	~Container();
