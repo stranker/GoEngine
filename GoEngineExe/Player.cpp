@@ -8,7 +8,6 @@ void Player::ManageCollision(CollisionInfo collision) {
 	animSprite->Translate(collision.displacement);
 }
 
-
 void Player::Update(float deltaTime) {
 	velocity = Vector2().Zero();
 	if (Input::IsKeyPressed(Input::KEY_W)) {
@@ -34,6 +33,7 @@ Player::Player() {
 	unsigned int idle[] = {0};
 	animSprite->AddAnimation("idle", idle, 1, true, 8);
 	animSprite->Play("idle");
+	animSprite->SetPosition(Vector2(100, 100));
 }
 
 Player::~Player() {

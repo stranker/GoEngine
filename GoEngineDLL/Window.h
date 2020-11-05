@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Exports.h"
-#include "GL/glew.h"
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
+#include "Utils.h"
 #include <iostream>
-#include "Vector2.h"
+
+class GLFWwindow;
 
 using namespace std;
 
@@ -27,7 +26,7 @@ public:
 	float GetWidth() const;
 	float GetHeight() const;
 	Vector2 GetSize() const;
-	GLFWwindow* GetWindowPtr();
+	void* GetWindowPtr();
 	static Window* GetSingleton();
 	Window(int _width, int _height, const char* _title);
 	~Window();

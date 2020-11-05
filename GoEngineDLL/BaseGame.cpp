@@ -1,9 +1,16 @@
 #include "BaseGame.h"
 
+#include "Window.h"
+#include "Renderer.h"
+#include "GlInclude.h"
+
 bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
 	entityList = new list<Entity*>();
+
+	currentFrame = glfwGetTime();
+	lastFrame = currentFrame;
 	return true;
 }
 
@@ -26,7 +33,7 @@ bool BaseGame::DestroyEngine() {
 void BaseGame::LoopEngine() {
 	while (!window->ShouldClose()) {
 
-		if (input->IsKeyPressed(Input::KEY_ESCAPE)) {
+		if (Input::IsKeyPressed(Input::KEY_ESCAPE)) {
 			window->CloseWindow();
 		}
 
@@ -45,6 +52,13 @@ void BaseGame::LoopEngine() {
 	}
 }
 
+void BaseGame::DrawEntities() {
+	for (entityIterator = entityList->begin(); entityIterator != entityList->end(); entityIterator++) {
+		Entity *entity = *entityIterator;
+		entity->Draw();
+	}
+}
+
 BaseGame * BaseGame::GetSingleton(){
 	return singleton;
 }
@@ -54,8 +68,7 @@ BaseGame* BaseGame::singleton = nullptr;
 BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title) {
 	window = new Window(_screen_width, _screen_height, _screen_title);
 	renderer = new Renderer(window);
-	input = new Input();
-	input->SetWindow(window);
+	input = new Input(window);
 	singleton = this;
 }
 
@@ -79,11 +92,8 @@ AnimatedSprite * BaseGame::CreateAnimSprite(const char* filePath, ImageType imag
 	return animSprite;
 }
 
-void BaseGame::DrawEntities() {
-	for (entityIterator = entityList->begin(); entityIterator != entityList->end(); entityIterator++) {
-		Entity *entity = *entityIterator;
-		entity->Draw();
-	}
+Vector2 BaseGame::GetWindowSize(){
+	return window->GetSize();
 }
 
 #pragma endregion

@@ -19,7 +19,8 @@ void Game::Update(float deltaTime) {
 	player->Update(deltaTime);
 	container->Update(deltaTime);
 	dragon->Update(deltaTime);
-	CollisionInfo collision = CollisionManager::CheckCollision(*player->GetSprite(), *dragon->GetSprite());
+	CollisionInfo collision;
+	collision = CollisionManager::CheckCollision(*player->GetSprite(), *dragon->GetSprite());
 	if (collision.isColliding) {
 		player->ManageCollision(collision);
 	}

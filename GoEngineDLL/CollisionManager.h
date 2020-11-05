@@ -12,4 +12,3 @@ class ENGINEDLL_API CollisionManager {
 public:
 	static CollisionInfo CheckCollision(const Sprite &s1, const Sprite &s2);
 };
-

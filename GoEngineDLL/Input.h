@@ -1,9 +1,8 @@
 #pragma once
 #include "Exports.h"
-#include "Window.h"
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
 #include <iostream>
+
+class Window;
 
 using namespace std;
 
@@ -16,6 +15,7 @@ public:
 		KEY_PRESSED = 1,
 		KEY_REPEAT = 2,
 	};
+
 	enum KeyCode {
 		KEY_0 = 48,
 		KEY_1 = 49,
@@ -34,9 +34,9 @@ public:
 		KEY_DOWN = 264,
 		KEY_UP = 265,
 	};
+
 	static bool IsKeyPressed(KeyCode key);
-	void SetWindow(Window* window);
-	Input();
+	Input(Window* window);
 	virtual ~Input();
 };
 

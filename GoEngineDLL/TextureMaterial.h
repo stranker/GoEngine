@@ -1,7 +1,6 @@
 #pragma once
 #include "Exports.h"
 #include "Material.h"
-#include "Renderer.h"
 #include "TextureImporter.h"
 
 class ENGINEDLL_API TextureMaterial : 

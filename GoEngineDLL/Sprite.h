@@ -12,7 +12,7 @@ private:
 		Vector2 tl;
 	};
 	TextureMaterial *texture;
-	GLuint uvBuffer;
+	unsigned int uvBuffer;
 	unsigned int textureBuffer;
 	bool flipVertical = false;
 	bool flipHorizontal = false;
