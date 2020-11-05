@@ -1,5 +1,6 @@
 #include "Window.h"
-#include "GlInclude.h"
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
 bool Window::Init()
 {
@@ -58,8 +59,8 @@ Vector2 Window::GetSize() const {
 	return Vector2(width, height);
 }
 
-GLFWwindow* Window::GetWindowPtr(){
-	return window;
+void* Window::GetWindowPtr(){
+	return (void*)window;
 }
 
 Window* Window::singleton = NULL;

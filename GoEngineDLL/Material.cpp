@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "GlInclude.h"
 
 void Material::SetMat4(const char *property, glm::mat4 matrix) const{
 	unsigned int location = glGetUniformLocation(ID, property);
@@ -50,8 +51,8 @@ void Material::Destroy() {
 
 void Material::LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
 	// Crear los shaders
-	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	unsigned int VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	unsigned int FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Leer el Vertex Shader desde archivo
 	std::string VertexShaderCode;
@@ -77,7 +78,7 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 		FragmentShaderStream.close();
 	}
 
-	GLint Result = GL_FALSE;
+	int Result = GL_FALSE;
 	int InfoLogLength;
 
 

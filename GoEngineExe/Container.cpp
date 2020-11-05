@@ -6,7 +6,7 @@ Sprite * Container::GetSprite() const {
 
 void Container::Update(float deltaTime) {
 	velocity.x = direction * movementSpeed;
-	if (sprite->GetPosition().x >= Window::GetSingleton()->GetSize().x - sprite->GetSize().x) {
+	if (sprite->GetPosition().x >= BaseGame::GetSingleton()->GetWindowSize().x - sprite->GetSize().x) {
 		direction = -1;
 	}
 	else if (sprite->GetPosition().x <= 0) {

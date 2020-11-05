@@ -2,7 +2,6 @@
 
 #include "Exports.h"
 #include "Utils.h"
-#include "GL/glew.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -13,7 +12,7 @@
 class ENGINEDLL_API Material
 {
 protected:
-	GLuint ID;
+	unsigned int ID;
 public:
 	void SetMat4(const char* property, glm::mat4 matrix) const;
 	void SetVec2(const char* property, Vector2 vec) const;

@@ -2,6 +2,7 @@
 
 #include "Window.h"
 #include "Renderer.h"
+#include "GlInclude.h"
 
 bool BaseGame::InitEngine() {
 	window->Init();

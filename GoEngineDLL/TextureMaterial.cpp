@@ -1,4 +1,5 @@
 #include "TextureMaterial.h"
+#include "GlInclude.h"
 
 
 void TextureMaterial::Destroy() {

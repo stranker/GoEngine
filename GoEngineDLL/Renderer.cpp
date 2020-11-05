@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "GlInclude.h"
 #include "Window.h"
 
 bool Renderer::Init(){
@@ -24,24 +25,24 @@ bool Renderer::Destroy(){
 	return true;
 }
 
-GLuint Renderer::CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType) {
-	GLuint vertexBuffer;
+unsigned int Renderer::CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType) {
+	unsigned int vertexBuffer;
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer((GLenum)bufferType, vertexBuffer);
 	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
 	return vertexBuffer;
 }
 
-GLuint Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, BufferType bufferType) {
-	GLuint vertexBuffer;
+unsigned int Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, BufferType bufferType) {
+	unsigned int vertexBuffer;
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer((GLenum)bufferType, vertexBuffer);
 	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
 	return vertexBuffer;
 }
 
-GLuint Renderer::CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels) {
-	GLuint texture;
+unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels) {
+	unsigned int texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, width, height, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -50,19 +51,26 @@ GLuint Renderer::CreateTextureBuffer(unsigned char * data, int width, int height
 	return texture;
 }
 
-void Renderer::BindBuffer(GLuint bufferID, BufferType bufferType){
+unsigned int Renderer::CreateVertexArrayID() {
+	unsigned int vao;
+	glGenVertexArrays(1, (&vao));
+	glBindVertexArray(vao);
+	return vao;
+}
+
+void Renderer::BindBuffer(unsigned int bufferID, BufferType bufferType){
 	glBindBuffer((GLenum)bufferType, bufferID);
 }
 
-void Renderer::BindTexture(GLuint textureBuffer) {
+void Renderer::BindTexture(unsigned int textureBuffer) {
 	glBindTexture(GL_TEXTURE_2D, textureBuffer);
 }
 
-void Renderer::BindVertexArray(GLuint vertexArrayID) {
+void Renderer::BindVertexArray(unsigned int vertexArrayID) {
 	glBindVertexArray(vertexArrayID);
 }
 
-void Renderer::SetAttributePointer(GLuint attributeId, size_t dataCount) {
+void Renderer::SetAttributePointer(unsigned int attributeId, size_t dataCount) {
 	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(attributeId);
 }
@@ -90,14 +98,14 @@ void Renderer::ClearScreen(){
 }
 
 void Renderer::SwapBuffers(){
-	glfwSwapBuffers(window->GetWindowPtr());
+	glfwSwapBuffers((GLFWwindow*)window->GetWindowPtr());
 }
 
 void Renderer::DisableBuffer(size_t attributeID) {
 	glDisableVertexAttribArray(attributeID);
 }
 
-void Renderer::DeleteBuffer(GLuint _buffer) {
+void Renderer::DeleteBuffer(unsigned int _buffer) {
 	glDeleteBuffers(1, &_buffer);
 }
 

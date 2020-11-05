@@ -2,8 +2,9 @@
 
 #include "Exports.h"
 #include "Utils.h"
-#include "GlInclude.h"
 #include <iostream>
+
+class GLFWwindow;
 
 using namespace std;
 
@@ -25,7 +26,7 @@ public:
 	float GetWidth() const;
 	float GetHeight() const;
 	Vector2 GetSize() const;
-	GLFWwindow* GetWindowPtr();
+	void* GetWindowPtr();
 	static Window* GetSingleton();
 	Window(int _width, int _height, const char* _title);
 	~Window();

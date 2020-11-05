@@ -8,10 +8,10 @@ protected:
 	float *positionVertex;
 	float *colorVertex;
 	unsigned int *index;
-	GLuint vertexArrayID;
-	GLuint positionBuffer;
-	GLuint indexBuffer;
-	GLuint colorBuffer;
+	unsigned int vertexArrayID;
+	unsigned int positionBuffer;
+	unsigned int indexBuffer;
+	unsigned int colorBuffer;
 	size_t positionVertexCount;
 	Renderer::Primitive primitive;
 	Color selfModulate;

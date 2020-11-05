@@ -42,8 +42,8 @@ Vector2 Entity2D::GetScale() const{
 }
 
 void Entity2D::CreateVertexArrayID() {
-	glGenVertexArrays(1, (&vertexArrayID));
-	glBindVertexArray(vertexArrayID);
+	vertexArrayID = renderer->CreateVertexArrayID();
+
 }
 
 void Entity2D::SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount) {
