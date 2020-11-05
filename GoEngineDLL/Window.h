@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Exports.h"
-#include "GL/glew.h"
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
+#include "Utils.h"
+#include "GlInclude.h"
 #include <iostream>
-#include "Vector2.h"
 
 using namespace std;
 

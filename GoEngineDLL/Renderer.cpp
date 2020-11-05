@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Window.h"
 
 bool Renderer::Init(){
 	cout << "Renderer Init" << endl;

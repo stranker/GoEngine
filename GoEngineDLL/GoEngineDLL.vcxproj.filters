@@ -87,7 +87,7 @@
     <ClInclude Include="TextureMaterial.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="KeyCode.h">
+    <ClInclude Include="GlInclude.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

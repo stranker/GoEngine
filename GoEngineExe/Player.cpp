@@ -2,31 +2,30 @@
 
 void Player::Update(float deltaTime) {
 	velocity = Vector2().Zero();
-	if (BaseGame::GetSingleton()->KeyPressed(KEY_W)) {
+	if (Input::IsKeyPressed(Input::KEY_W)) {
 		velocity.y -= movementSpeed;
 	}
-	if (BaseGame::GetSingleton()->KeyPressed(KEY_S)) {
+	if (Input::IsKeyPressed(Input::KEY_S)) {
 		velocity.y += movementSpeed;
 	}
-	if (BaseGame::GetSingleton()->KeyPressed(KEY_A)) {
+	if (Input::IsKeyPressed(Input::KEY_A)) {
 		velocity.x -= movementSpeed;
-		BaseGame::GetSingleton()->FlipSpriteV(animSprite, true);
+		animSprite->FlipVertical(true);
 	}
-	if (BaseGame::GetSingleton()->KeyPressed(KEY_D)) {
+	if (Input::IsKeyPressed(Input::KEY_D)) {
 		velocity.x += movementSpeed;
-		BaseGame::GetSingleton()->FlipSpriteV(animSprite, false);
+		animSprite->FlipVertical(false);
 	}
-	BaseGame::GetSingleton()->UpdateAnimSprite(animSprite, deltaTime);
-	BaseGame::GetSingleton()->Translate(animSprite, velocity.x * deltaTime, velocity.y * deltaTime);
+	animSprite->Update(deltaTime);
+	animSprite->Translate(velocity * deltaTime);
 }
 
 Player::Player() {
 	animSprite = BaseGame::GetSingleton()->CreateAnimSprite("player.png", IMAGETYPE_PNG, 1, 1);
 	unsigned int idle[] = {0};
-	BaseGame::GetSingleton()->AddAnimation(animSprite, "idle", idle, 1, true, 8);
-	BaseGame::GetSingleton()->PlayAnimation(animSprite, "idle");
-
-	BaseGame::GetSingleton()->SetPosition(animSprite, 100, 100);
+	animSprite->AddAnimation("idle", idle, 1, true, 8);
+	animSprite->Play("idle");
+	animSprite->SetPosition(Vector2(100, 100));
 }
 
 Player::~Player() {

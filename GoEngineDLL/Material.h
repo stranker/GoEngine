@@ -1,10 +1,8 @@
 #pragma once
 
 #include "Exports.h"
+#include "Utils.h"
 #include "GL/glew.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Rect2.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>

@@ -3,6 +3,8 @@
 #include "Exports.h"
 #include "Vector2.h"
 #include "Vector3.h"
+#include "Rect2.h"
+#include "Color.h"
 
 using namespace std;
 

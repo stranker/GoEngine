@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "GlInclude.h"
 
 bool Window::Init()
 {
