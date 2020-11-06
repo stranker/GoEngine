@@ -15,7 +15,7 @@ public:
 		Particle();
 	};
 private:
-	ParticleMaterial *material;
+	TextureMaterial *material;
 	uint32_t particleCount;
 	vector<Particle> particles;
 	Vector2 direction = Vector2().Up();
