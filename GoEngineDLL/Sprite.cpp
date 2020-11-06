@@ -132,4 +132,5 @@ Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 }
 
 Sprite::~Sprite() {
+	Destroy();
 }

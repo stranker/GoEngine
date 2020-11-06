@@ -1,6 +1,6 @@
 #include "TextureMaterial.h"
 #include "GlInclude.h"
-
+#include "Sprite.h"
 
 void TextureMaterial::Destroy() {
 	TextureImporter::FreeTexture(textureData);

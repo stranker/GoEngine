@@ -10,12 +10,14 @@ struct ENGINEDLL_API Color {
 	Color();
 	Color(float _r, float _g, float _b, float _a);
 	Color(float _r, float _g, float _b);
-	Color Blue() const;
 	Color Red() const;
 	Color Green() const;
+	Color Blue() const;
 	Color Yellow() const;
 	Color Black() const;
+	Color White() const;
 	Color Cyan() const;
 	Color Magenta() const;
 	Color Purple() const;
+	Color Interpolate(const Color& color2, float weight);
 };

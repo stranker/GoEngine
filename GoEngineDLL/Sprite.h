@@ -4,6 +4,9 @@
 
 class ENGINEDLL_API Sprite :
 	public Entity2D {
+protected:
+	unsigned int uvBuffer;
+	unsigned int textureBuffer;
 private:
 	struct UVFrame {
 		Vector2 tr;
@@ -12,8 +15,6 @@ private:
 		Vector2 tl;
 	};
 	TextureMaterial *texture;
-	unsigned int uvBuffer;
-	unsigned int textureBuffer;
 	bool flipVertical = false;
 	bool flipHorizontal = false;
 	int verticalFrames = 1;

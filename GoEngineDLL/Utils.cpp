@@ -10,3 +10,11 @@ float Utils::Clamp(float value, float min_value, float max_value) {
 	}
 	return new_value;
 }
+
+float Utils::RadToDeg(float value) {
+	return value * (180.0f / PI);
+}
+
+float Utils::DegToRad(float value) {
+	return value * (PI / 180.0f);
+}

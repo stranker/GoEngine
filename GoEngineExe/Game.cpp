@@ -13,6 +13,7 @@ void Game::Start() {
 	player = new Player();
 	container = new Container();
 	dragon = new Dragon();
+	dragon->SetPlayer(player);
 }
 
 void Game::Update(float deltaTime) {

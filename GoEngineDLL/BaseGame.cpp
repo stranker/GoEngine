@@ -92,6 +92,14 @@ AnimatedSprite * BaseGame::CreateAnimSprite(const char* filePath, ImageType imag
 	return animSprite;
 }
 
+ParticleSystem * BaseGame::CreateParticleSystem(const char * filePath, ImageType imageType, size_t particleCount) {
+	ParticleSystem *ps = new ParticleSystem(renderer);
+	ps->SetTexture(filePath, imageType);
+	ps->SetParticleCount(particleCount);
+	entityList->push_back(ps);
+	return ps;
+}
+
 Vector2 BaseGame::GetWindowSize(){
 	return window->GetSize();
 }
