@@ -2,7 +2,7 @@
 #include "Exports.h"
 #include "Sprite.h"
 #include "Utils.h"
-#include "ParticleMaterial.h"
+#include "TextureMaterial.h"
 #include <vector>
 
 class ENGINEDLL_API ParticleSystem  : public Sprite {
@@ -15,7 +15,7 @@ public:
 		Particle();
 	};
 private:
-	ParticleMaterial *material;
+	TextureMaterial *material;
 	uint32_t particleCount;
 	vector<Particle> particles;
 	Vector2 direction = Vector2().Up();

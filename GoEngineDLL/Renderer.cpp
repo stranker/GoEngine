@@ -51,6 +51,18 @@ unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int 
 	return texture;
 }
 
+void Renderer::UpdateVertexBuffer(unsigned int vbo, float * data, size_t dataSize, BufferType bufferType) {
+	glGenBuffers(1, &vbo);
+	glBindBuffer((GLenum)bufferType, vbo);
+	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
+}
+
+void Renderer::UpdateVertexBuffer(unsigned int vbo, unsigned int * data, size_t dataSize, BufferType bufferType) {
+	glGenBuffers(1, &vbo);
+	glBindBuffer((GLenum)bufferType, vbo);
+	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
+}
+
 unsigned int Renderer::CreateVertexArrayID() {
 	unsigned int vao;
 	glGenVertexArrays(1, (&vao));
@@ -62,17 +74,28 @@ void Renderer::BindBuffer(unsigned int bufferID, BufferType bufferType){
 	glBindBuffer((GLenum)bufferType, bufferID);
 }
 
+void Renderer::SetAttributePointer(unsigned int attributeId, size_t dataCount) {
+	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(attributeId);
+}
+
+void Renderer::BindBufferWithAttribute(unsigned int bufferID, BufferType bufferType, int attributeID, unsigned int vertexCount) {
+	BindBuffer(bufferID, bufferType);
+	if (attributeID != -1) { // Es un buffer que debo setearle atributos? /* NOTA: Index buffer no necesita setear atributos */
+		SetAttributePointer(attributeID, vertexCount);
+	}
+}
+
+void Renderer::BindVertexData(VertexData vertexData) {
+	BindBufferWithAttribute(vertexData.vbo, vertexData.bufferType, vertexData.attributeID, vertexData.dataCount);
+}
+
 void Renderer::BindTexture(unsigned int textureBuffer) {
 	glBindTexture(GL_TEXTURE_2D, textureBuffer);
 }
 
 void Renderer::BindVertexArray(unsigned int vertexArrayID) {
 	glBindVertexArray(vertexArrayID);
-}
-
-void Renderer::SetAttributePointer(unsigned int attributeId, size_t dataCount) {
-	glVertexAttribPointer(attributeId, dataCount, GL_FLOAT, GL_FALSE, dataCount * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(attributeId);
 }
 
 void Renderer::SetTextureParameters(unsigned char * data, int width, int height) {
@@ -107,6 +130,11 @@ void Renderer::DisableBuffer(size_t attributeID) {
 
 void Renderer::DeleteBuffer(unsigned int _buffer) {
 	glDeleteBuffers(1, &_buffer);
+}
+
+void Renderer::Draw(unsigned int vao, Primitive _primitive, size_t drawVertexCount) {
+	BindVertexArray(vao);
+	DrawElements(_primitive, drawVertexCount);
 }
 
 void Renderer::Draw(Primitive _primitive, int vertexCount) {
