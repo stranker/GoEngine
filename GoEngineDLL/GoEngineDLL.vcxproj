@@ -153,7 +153,6 @@
     <ClInclude Include="Exports.h" />
     <ClInclude Include="GlInclude.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="ParticleMaterial.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Rect2.h" />
     <ClInclude Include="Renderer.h" />
@@ -181,7 +180,6 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Entity2D.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="ParticleMaterial.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Rect2.cpp" />
     <ClCompile Include="Renderer.cpp" />
