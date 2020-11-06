@@ -28,7 +28,7 @@ Dragon::Dragon() {
 	fire->SetPosition(Vector2(480, 220));
 	fire->SetSpread(90);
 	fire->SetInitialVelocity(10);
-	fire->SetVelocityRandom(0.3);
+	fire->SetVelocityRandom(0.8);
 	fire->SetFinalColor(Color(1, 1, 1, 0));
 }
 

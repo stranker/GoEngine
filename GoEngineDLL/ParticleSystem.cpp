@@ -96,7 +96,7 @@ void ParticleSystem::Draw() {
 				material->SetVec2("offset", particle.position);
 				material->SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
 			}
-			renderer->Draw(GetVertexArrayID(), primitive, 4);
+			renderer->Draw(GetVertexArrayID(), primitive, 6);
 		}
 	}
 }
