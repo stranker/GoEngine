@@ -5,7 +5,6 @@
 class ENGINEDLL_API Sprite :
 	public Entity2D {
 protected:
-	unsigned int uvBuffer;
 	unsigned int textureBuffer;
 private:
 	struct UVFrame {
@@ -28,7 +27,6 @@ public:
 	Vector2 GetSize() const;
 	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	TextureMaterial *GetTexture();
-	void SetUVVertex(float *data, int dataSize);
 	void Draw() override;
 	void Destroy() override;
 	void FlipVertical(bool value);

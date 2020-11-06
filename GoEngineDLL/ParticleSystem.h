@@ -2,7 +2,7 @@
 #include "Exports.h"
 #include "Sprite.h"
 #include "Utils.h"
-#include "ParticleMaterial.h"
+#include "TextureMaterial.h"
 #include <vector>
 
 class ENGINEDLL_API ParticleSystem  : public Sprite {

@@ -6,21 +6,7 @@ void Square::Draw() {
 		material->Use(); // Uso el material
 		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
 	}
-
-	renderer->BindVertexArray(vertexArrayID);
-
-	renderer->BindBuffer(positionBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(0, 3); // Seteo los atributos del vertice de posicion
-
-	renderer->BindBuffer(colorBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(1, 4); // Seteo los atributos del vertice de color
-
-	renderer->BindBuffer(indexBuffer, Renderer::ELEMENT_BUFFER);
-
-	renderer->DrawElements(primitive, 6);
-
-	renderer->DisableBuffer(0); // Deshabilito el atributo (pos)
-	renderer->DisableBuffer(1); // Deshabilito el atributo (color)
+	renderer->Draw(GetVertexArrayID(), primitive, 6);
 }
 
 Square::Square(Renderer *_renderer) : Shape(_renderer) {
@@ -41,9 +27,9 @@ Square::Square(Renderer *_renderer) : Shape(_renderer) {
 		1, 2, 3    // second triangle
 	};
 	CreateVertexArrayID();
-	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 4);
-	SetColorVertex(color_vertex_data,sizeof(color_vertex_data));
-	SetIndex(index_data, sizeof(index_data));
+	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
+	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1);
+	CreateVertexData(index_data, sizeof(index_data), 2, Renderer::ELEMENT_BUFFER, -1);
 	primitive = Renderer::TRIANGLES;
 }
 
