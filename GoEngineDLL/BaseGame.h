@@ -13,6 +13,7 @@ class Renderer;
 #include "Utils.h"
 #include "Input.h"
 #include "AnimatedSprite.h"
+#include "ParticleSystem.h"
 #include "CollisionManager.h"
 
 class ENGINEDLL_API BaseGame{
@@ -44,7 +45,7 @@ public:
 	//ENTITIES
 	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
-
+	ParticleSystem* CreateParticleSystem(const char* filePath, ImageType imageType, size_t particleCount);
 	//WINDOW
 	Vector2 GetWindowSize();
 

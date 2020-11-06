@@ -5,7 +5,16 @@ Sprite * Dragon::GetSprite() const {
 }
 
 void Dragon::Update(float deltaTime) {
+	if (player) {
+		Vector2 dirToPlayer = player->GetSprite()->GetPosition() - sprite->GetPosition();
+		fire->SetDirection(dirToPlayer.Normalize());
+	}
 	sprite->Update(deltaTime);
+	fire->Update(deltaTime);
+}
+
+void Dragon::SetPlayer(Player * p) {
+	player = p;
 }
 
 Dragon::Dragon() {
@@ -14,6 +23,13 @@ Dragon::Dragon() {
 	sprite->AddAnimation("idle", idle, 4, true, 8);
 	sprite->Play("idle");
 	sprite->SetPosition(Vector2(500, 200));
+
+	fire = BaseGame::GetSingleton()->CreateParticleSystem("fire.png", IMAGETYPE_PNG, 15);
+	fire->SetPosition(Vector2(480, 220));
+	fire->SetSpread(90);
+	fire->SetInitialVelocity(10);
+	fire->SetVelocityRandom(0.3);
+	fire->SetFinalColor(Color(1, 1, 1, 0));
 }
 
 Dragon::~Dragon() {
