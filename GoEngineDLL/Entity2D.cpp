@@ -43,23 +43,49 @@ Vector2 Entity2D::GetScale() const{
 
 void Entity2D::CreateVertexArrayID() {
 	vertexArrayID = renderer->CreateVertexArrayID();
-
 }
 
-void Entity2D::SetPositionVertex(float *_vertex, size_t dataSize, size_t vertexCount) {
-	positionVertex = _vertex;
-	positionVertexCount = vertexCount;
-	positionBuffer = renderer->CreateVertexBuffer(positionVertex, dataSize, Renderer::ARRAY_BUFFER);
+unsigned int Entity2D::GetVertexArrayID() const {
+	return vertexArrayID;
 }
 
-void Entity2D::SetIndex(unsigned int *_index, size_t indexSize) {
-	index = _index;
-	indexBuffer = renderer->CreateVertexBuffer(index, indexSize, Renderer::ELEMENT_BUFFER);
+vector<Renderer::VertexData> Entity2D::GetVectorVertexData() const {
+	return vectorVertexData;
 }
 
-void Entity2D::SetColorVertex(float * _colorVertex, size_t dataSize) {
-	colorVertex = _colorVertex;
-	colorBuffer = renderer->CreateVertexBuffer(colorVertex, dataSize, Renderer::ARRAY_BUFFER);
+void Entity2D::CreateVertexData(float *_vertex, size_t dataSize, size_t vertexCount, Renderer::BufferType bufferType, size_t attributeID) {
+	Renderer::VertexData vertexData;
+	vertexData.dataCount = vertexCount;
+	vertexData.vbo = renderer->CreateVertexBuffer(_vertex, dataSize, bufferType);
+	vertexData.bufferType = bufferType;
+	vertexData.attributeID = attributeID;
+	vectorVertexData.push_back(vertexData);
+}
+
+void Entity2D::CreateVertexData(unsigned int * _vertex, size_t dataSize, size_t vertexCount, Renderer::BufferType bufferType, size_t attributeID) {
+	Renderer::VertexData vertexData;
+	vertexData.dataCount = vertexCount;
+	vertexData.vbo = renderer->CreateVertexBuffer(_vertex, dataSize, bufferType);
+	vertexData.bufferType = bufferType;
+	vertexData.attributeID = attributeID;
+	vectorVertexData.push_back(vertexData);
+}
+
+void Entity2D::UpdateVertexData(float * _vertex, size_t dataSize, size_t attributeID) {
+	for (Renderer::VertexData vertexData : vectorVertexData) {
+		if (vertexData.attributeID == attributeID) {
+			renderer->BindVertexArray(vertexArrayID);
+			vertexData.vbo = renderer->CreateVertexBuffer(_vertex, dataSize, vertexData.bufferType);
+			renderer->BindVertexData(vertexData);
+			break;
+		}
+	}
+}
+
+void Entity2D::BindVertexObjects() {
+	for (Renderer::VertexData vertexData : vectorVertexData) {
+		renderer->BindVertexData(vertexData);
+	}
 }
 
 void Entity2D::SetModulate(Color _new_modulate) {
@@ -76,8 +102,9 @@ Transform * Entity2D::GetTransform() {
 
 void Entity2D::Destroy() {
 	if (renderer) {
-		renderer->DeleteBuffer(positionBuffer);
-		renderer->DeleteBuffer(colorBuffer);
+		for (Renderer::VertexData vertexData : vectorVertexData) {
+			renderer->DeleteBuffer(vertexData.vbo);
+		}
 	}
 	if (transform) {
 		delete transform;

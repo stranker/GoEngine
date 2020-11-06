@@ -5,19 +5,7 @@ void Triangle::Draw() {
 		material->Use(); // Uso el material
 		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform())); // Seteo al material la propiedad mvp obtenida por la Camara al shader
 	}
-
-	renderer->BindVertexArray(vertexArrayID);
-
-	renderer->BindBuffer(positionBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(0, 3); // Seteo los atributos del vertice de posicion
-	
-	renderer->BindBuffer(colorBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(1, 4); // Seteo los atributos del vertice de color
-
-	renderer->Draw(primitive, positionVertexCount); // Dibujo el triangulo
-
-	renderer->DisableBuffer(0); // Deshabilito el atributo (pos)
-	renderer->DisableBuffer(1); // Deshabilito el atributo (color)
+	renderer->Draw(GetVertexArrayID(), primitive, 3);
 }
 
 void Triangle::Destroy() {
@@ -36,8 +24,8 @@ Triangle::Triangle(Renderer* _renderer) : Shape(_renderer) {
 		0.0f, 0.0f, 1.0f, 1.0f,
 	};
 	CreateVertexArrayID();
-	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 3);
-	SetColorVertex(color_vertex_data, sizeof(color_vertex_data));
+	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
+	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1);
 	primitive = Renderer::TRIANGLES;
 }
 

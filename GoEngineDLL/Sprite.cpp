@@ -42,10 +42,6 @@ TextureMaterial *Sprite::GetTexture() {
 	return texture;
 }
 
-void Sprite::SetUVVertex(float * data, int dataSize) {
-	uvBuffer = renderer->CreateVertexBuffer(data, dataSize, Renderer::ARRAY_BUFFER);
-}
-
 void Sprite::Draw() {
 	if (texture) {
 		texture->Use();
@@ -55,23 +51,7 @@ void Sprite::Draw() {
 		texture->SetBool("flipVertical", flipVertical);
 		texture->SetBool("flipHorizontal", flipHorizontal);
 	}
-	renderer->BindVertexArray(vertexArrayID);
-
-	renderer->BindBuffer(positionBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer posicion del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(0, 3); // Seteo los atributos del vertice de posicion
-
-	renderer->BindBuffer(colorBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer Color del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(1, 4); // Seteo los atributos del color
-
-	renderer->BindBuffer(uvBuffer, Renderer::ARRAY_BUFFER); // Bindeo el buffer UV del tipo GL_ARRAY_BUFFER
-	renderer->SetAttributePointer(2, 2); // Seteo los atributos del vertice de UV
-
-	renderer->BindBuffer(indexBuffer, Renderer::ELEMENT_BUFFER);
-	renderer->DrawElements(primitive, 6);
-
-	renderer->DisableBuffer(0); // Deshabilito el atributo (pos)
-	renderer->DisableBuffer(1); // Deshabilito el atributo (color)
-	renderer->DisableBuffer(2); // Deshabilito el atributo (uv)
+	renderer->Draw(GetVertexArrayID(), primitive, 6);
 }
 
 void Sprite::Destroy() {
@@ -98,7 +78,7 @@ void Sprite::SetCurrentFrame(unsigned int value) {
 		frame.bl.x, frame.bl.y,
 		frame.tl.x, frame.tl.y
 	};
-	SetUVVertex(uv_vertex_data, sizeof(uv_vertex_data));
+	UpdateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2);
 }
 
 void Sprite::SetTotalFrames(int value) {
@@ -124,13 +104,13 @@ Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 		0.0f, 1.0f
 	};
 	CreateVertexArrayID();
-	SetPositionVertex(position_vertex_data, sizeof(position_vertex_data), 4);
-	SetColorVertex(color_vertex_data, sizeof(color_vertex_data));
-	SetIndex(index_data, sizeof(index_data));
-	SetUVVertex(uv_vertex_data, sizeof(uv_vertex_data));
+	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
+	CreateVertexData(index_data, sizeof(index_data), 2, Renderer::ELEMENT_BUFFER, -1);
+	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1);
+	CreateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2, Renderer::ARRAY_BUFFER, 2);
+	BindVertexObjects();
 	primitive = Renderer::TRIANGLES;
 }
 
 Sprite::~Sprite() {
-	Destroy();
 }
