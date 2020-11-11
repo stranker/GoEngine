@@ -15,6 +15,7 @@ private:
 	bool isPlaying;
 	float internalTimer;
 	float animSpeed;
+	float animFrameLenght;
 	vector<int> animationFrames;
 	int totalFrames;
 public:
