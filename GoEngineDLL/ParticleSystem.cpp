@@ -47,11 +47,11 @@ void ParticleSystem::SetEmitting(bool val) {
 }
 
 void ParticleSystem::SetTexture(const char * filePath, ImageType imageType) {
-	material = new TextureMaterial();
-	material->LoadShaders("ParticleVertexShader.shader", "ParticleFragmentShader.shader");
-	material->LoadTexture(filePath, imageType);
-	textureBuffer = renderer->CreateTextureBuffer(material->GetData(), material->GetWidth(), material->GetHeight(), material->GetNrChannels());
-	Scale(material->GetSize().x, material->GetSize().y);
+	texture = new TextureMaterial();
+	texture->LoadShaders("ParticleVertexShader.shader", "ParticleFragmentShader.shader");
+	texture->LoadTexture(filePath, imageType);
+	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
+	Scale(texture->GetSize());
 }
 
 void ParticleSystem::SetFinalColor(Color col) {
@@ -89,12 +89,12 @@ void ParticleSystem::Draw() {
 	}
 	for (Particle particle : particles) {
 		if (particle.lifeTime > 0) {
-			if (material) {
-				material->Use();
-				material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
-				material->SetTextureProperty("sprite", textureBuffer);
-				material->SetVec2("offset", particle.position);
-				material->SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
+			if (texture) {
+				texture->Use();
+				texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
+				texture->SetTextureProperty("sprite", textureBuffer);
+				texture->SetVec2("offset", particle.position);
+				texture->SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
 			}
 			renderer->Draw(GetVertexArrayID(), primitive, 6);
 		}
@@ -102,9 +102,9 @@ void ParticleSystem::Draw() {
 }
 
 void ParticleSystem::Destroy() {
-	if (material) {
-		material->Destroy();
-		delete material;
+	if (texture) {
+		texture->Destroy();
+		delete texture;
 	}
 }
 

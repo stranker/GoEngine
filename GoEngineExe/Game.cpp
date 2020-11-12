@@ -10,6 +10,8 @@ Game::~Game() {
 
 void Game::Start() {
 	InitEngine();
+	tilemap = BaseGame::GetSingleton()->CreateTilemap("ForestMap.json");
+	tilemap->SetTexture("tileset.png", IMAGETYPE_PNG, 21, 23);
 	player = new Player();
 	container = new Container();
 	dragon = new Dragon();
@@ -21,15 +23,18 @@ void Game::Update(float deltaTime) {
 	container->Update(deltaTime);
 	dragon->Update(deltaTime);
 	CollisionInfo collision;
-	collision = CollisionManager::CheckCollision(*player->GetSprite(), *dragon->GetSprite());
+	collision = CollisionManager::CheckCollision(player->GetSprite()->GetAABB(), dragon->GetSprite()->GetAABB());
 	if (collision.isColliding) {
 		player->ManageCollision(collision);
 	}
-	collision = CollisionManager::CheckCollision(*player->GetSprite(), *container->GetSprite());
+	collision = CollisionManager::CheckCollision(player->GetSprite()->GetAABB(), container->GetSprite()->GetAABB());
 	if (collision.isColliding) {
 		player->ManageCollision(collision);
 	}
-	DrawEntities();
+	vector<CollisionInfo> tilemapCollisions = CollisionManager::CheckCollision(player->GetSprite()->GetAABB(), *tilemap);
+	if (!tilemapCollisions.empty()) {
+		player->ManageCollision(tilemapCollisions);
+	}
 }
 
 void Game::Stop() {
@@ -41,6 +46,9 @@ void Game::Stop() {
 	}
 	if (dragon) {
 		delete dragon;
+	}
+	if (tilemap) {
+		delete tilemap;
 	}
 	DestroyEngine();
 }

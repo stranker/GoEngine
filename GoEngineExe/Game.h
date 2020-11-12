@@ -12,6 +12,7 @@ private:
 	Player* player;
 	Container* container;
 	Dragon* dragon;
+	Tilemap* tilemap;
 public:
 	void Start() override;
 	void Update(float deltaTime) override;

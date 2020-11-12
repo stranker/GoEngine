@@ -8,6 +8,12 @@ void Player::ManageCollision(CollisionInfo collision) {
 	animSprite->Translate(collision.displacement);
 }
 
+void Player::ManageCollision(vector<CollisionInfo> collisions) {
+	for (CollisionInfo colInfo : collisions) {
+		ManageCollision(colInfo);
+	}
+}
+
 void Player::Update(float deltaTime) {
 	velocity = Vector2().Zero();
 	if (Input::IsKeyPressed(Input::KEY_W)) {

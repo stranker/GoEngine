@@ -23,6 +23,7 @@ struct ENGINEDLL_API Vector2 {
 	Vector2 Right();
 	Vector2 Left();
 	float Angle();
+	float Lenght();
 	Vector2() {};
 	Vector2(float x, float y);
 };

@@ -9,6 +9,7 @@ private:
 public:
 	Sprite *GetSprite() const;
 	void ManageCollision(CollisionInfo collision);
+	void ManageCollision(vector<CollisionInfo> collisions);
 	void Update(float deltaTime);
 	Player();
 	~Player();
