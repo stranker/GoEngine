@@ -1,6 +1,9 @@
 #pragma once
 #include "Exports.h"
-#include "Sprite.h"
+#include "Utils.h"
+#include "Tilemap.h"
+
+#define MAX_COLLISIONS 4
 
 struct CollisionInfo {
 	bool isColliding = false;
@@ -10,5 +13,6 @@ struct CollisionInfo {
 
 class ENGINEDLL_API CollisionManager {
 public:
-	static CollisionInfo CheckCollision(const Sprite &s1, const Sprite &s2);
+	static CollisionInfo CheckCollision(const AABB &a, const AABB &ab);
+	static vector<CollisionInfo> CheckCollision(const AABB &a, const Tilemap& tilemap);
 };

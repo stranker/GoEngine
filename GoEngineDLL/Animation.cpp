@@ -9,22 +9,26 @@ void Animation::Update(float deltaTime) {
 		return;
 	}
 	internalTimer += deltaTime;
-	if (internalTimer >= 1.0 / animSpeed) {
+	if (internalTimer >= animFrameLenght) {
 		UpdateAnimation();
-		internalTimer = 0;
+		internalTimer -= animFrameLenght;
 	}
 }
 
 void Animation::UpdateAnimation() {
 	if (sprite) {
-		if (currentFrame == totalFrames) {
+		currentFrame++;
+		if (currentFrame >= totalFrames) {
 			if (isLooped) {
 				currentFrame = 0;
+				sprite->SetCurrentFrame(animationFrames[currentFrame]);
+			}
+			else {
+				isPlaying = false;
 			}
 		}
 		else {
 			sprite->SetCurrentFrame(animationFrames[currentFrame]);
-			currentFrame++;
 		}
 	}
 }
@@ -48,8 +52,9 @@ void Animation::CreateAnimation(const char * animName, unsigned int * frames, in
 	}
 	isLooped = looped;
 	animSpeed = _animSpeed;
+	animFrameLenght = 1.0 / animSpeed;
 	if (sprite) {
-		sprite->SetCurrentFrame(animationFrames[0]);
+		sprite->SetCurrentFrame(animationFrames[currentFrame]);
 	}
 }
 
