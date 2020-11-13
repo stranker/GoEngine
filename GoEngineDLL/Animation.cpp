@@ -9,9 +9,9 @@ void Animation::Update(float deltaTime) {
 		return;
 	}
 	internalTimer += deltaTime;
-	if (internalTimer >= animFrameLenght) {
-		UpdateAnimation();
+	while (internalTimer > animFrameLenght) {
 		internalTimer -= animFrameLenght;
+		UpdateAnimation();
 	}
 }
 
