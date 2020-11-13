@@ -26,5 +26,6 @@ public:
 	static float Clamp(float value, float min_value, float max_value);
 	static float RadToDeg(float value);
 	static float DegToRad(float value);
+	static float RandRange(float minValue, float maxValue);
 };
 

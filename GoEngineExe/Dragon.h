@@ -1,15 +1,13 @@
 #pragma once
-#include "BaseGame.h"
+#include "Enemy.h"
 #include "Player.h"
 
-class Dragon{
+class Dragon : public Enemy{
 private:
-	AnimatedSprite* sprite;
 	ParticleSystem* fire;
 	Player *player;
 public:
-	Sprite *GetSprite() const;
-	void Update(float deltaTime);
+	void Update(float deltaTime) override;
 	void SetPlayer(Player *p);
 	Dragon();
 	~Dragon();

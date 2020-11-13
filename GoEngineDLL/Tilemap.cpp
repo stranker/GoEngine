@@ -36,13 +36,25 @@ void Tilemap::HandleTileLayer(const Value & tilesData, const Value& tilesPropert
 			if (tile.isCollider) {
 				colliderTiles.push_back(tile);
 			}
-			tiles.push_back(tile);
+			mapTiles.push_back(tile);
 		}
 		column++;
 		if (column % width == 0 && column != 0) {
 			column = 0;
 			row++;
 		}
+	}
+}
+
+void Tilemap::HandleObjectsGroup(const Value & objects) {
+	assert(objects.IsArray());
+	for (Value::ConstValueIterator itr = objects.GetArray().Begin(); itr != objects.GetArray().End(); ++itr) {
+		const Value& object = *itr;
+		TileObject tileObject;
+		tileObject.id = object["id"].GetInt();
+		tileObject.position = Vector2(object["x"].GetFloat(), object["y"].GetFloat());
+		tileObject.attribute = object["properties"].GetArray()[0]["value"].GetInt();
+		mapObjects.push_back(tileObject);
 	}
 }
 
@@ -79,6 +91,10 @@ void Tilemap::LoadFromFile(const char * filePath) {
 	SetTexture(tilesetFilePath, IMAGETYPE_PNG, tileset["columns"].GetInt(), tileset["imageheight"].GetInt() / tileset["tileheight"].GetInt());
 }
 
+vector<Tilemap::TileObject> Tilemap::GetMapObjects() const {
+	return mapObjects;
+}
+
 void Tilemap::SetTexture(const char * filePath, ImageType imageType, int vFrames, int hFrames) {
 	texture = new TextureMaterial();
 	texture->LoadShaders("TilemapVertexShader.shader", "TilemapFragmentShader.shader");
@@ -98,7 +114,7 @@ void Tilemap::Draw() {
 		texture->SetTextureProperty("sprite", textureBuffer);
 		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 	}
-	for (Tile tile : tiles) {
+	for (Tile tile : mapTiles) {
 		if (texture) {
 			texture->SetInt("tileId", tile.id);
 			texture->SetInt("tileRows", horizontalFrames);

@@ -22,6 +22,11 @@ protected:
 
 		AABB GetAABB() const;
 	};
+	struct TileObject {
+		int id;
+		int attribute;
+		Vector2 position;
+	};
 private:
 	enum LayerType {
 		TILE_LAYER,
@@ -29,7 +34,8 @@ private:
 		LAST
 	};
 	vector<Tile> colliderTiles;
-	vector<Tile> tiles;
+	vector<Tile> mapTiles;
+	vector<TileObject> mapObjects;
 	int width;
 	int height;
 	int tileWidth;
@@ -39,9 +45,10 @@ private:
 	void HandleTileLayer(const Value& tilesData, const Value& tilesProperties);
 	void HandleObjectsGroup(const Value& objects);
 	bool IsColliderTile(int tileId, const Value& tileSet);
+	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 public:
 	void LoadFromFile(const char* filePath);
-	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
+	vector<TileObject> GetMapObjects() const;
 	void Draw() override;
 	void Destroy() override;
 	vector<Tile> GetColliderTiles() const;
