@@ -91,7 +91,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GoEngineDLL;$(SolutionDir)lib\glew-2.1.0\include;$(SolutionDir)lib\glfw-3.3.2\include;$(SolutionDir)lib\glm-9.9.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GoEngineDLL;$(SolutionDir)lib\glew-2.1.0\include;$(SolutionDir)lib\glfw-3.3.2\include;$(SolutionDir)lib\glm-9.9.8\include;$(SolutionDir)lib\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -136,15 +136,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Container.cpp" />
+    <ClCompile Include="Bat.cpp" />
     <ClCompile Include="Dragon.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Container.h" />
+    <ClInclude Include="Bat.h" />
     <ClInclude Include="Dragon.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>

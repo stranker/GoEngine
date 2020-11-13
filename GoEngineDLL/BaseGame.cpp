@@ -47,6 +47,8 @@ void BaseGame::LoopEngine() {
 
 		Update(deltaTime);
 
+		DrawEntities();
+
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}
@@ -98,6 +100,13 @@ ParticleSystem * BaseGame::CreateParticleSystem(const char * filePath, ImageType
 	ps->SetParticleCount(particleCount);
 	entityList->push_back(ps);
 	return ps;
+}
+
+Tilemap * BaseGame::CreateTilemap(const char * filePath) {
+	Tilemap *tilemap = new Tilemap(renderer);
+	tilemap->LoadFromFile(filePath);
+	entityList->push_back(tilemap);
+	return tilemap;
 }
 
 Vector2 BaseGame::GetWindowSize(){

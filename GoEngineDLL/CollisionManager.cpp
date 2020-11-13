@@ -1,17 +1,10 @@
 #include "CollisionManager.h"
 
-CollisionInfo CollisionManager::CheckCollision(const Sprite & s1, const Sprite & s2) {
+CollisionInfo CollisionManager::CheckCollision(const AABB & a, const AABB & b) {
 	CollisionInfo colInfo;
-	
-	// AABB
-	bool collisionX = s1.GetPosition().x + s1.GetSize().x >= s2.GetPosition().x &&
-		s2.GetPosition().x + s2.GetSize().x >= s1.GetPosition().x;
-
-	bool collisionY = s1.GetPosition().y + s1.GetSize().y >= s2.GetPosition().y &&
-		s2.GetPosition().y + s2.GetSize().y >= s1.GetPosition().y;
-
+	bool collisionX = (a.min.x < b.max.x) && (a.max.x > b.min.x);
+	bool collisionY = (a.min.y < b.max.y) && (a.max.y > b.min.y);
 	colInfo.isColliding = collisionX && collisionY;
-
 	if (!colInfo.isColliding) {
 		return colInfo;
 	}
@@ -20,33 +13,33 @@ CollisionInfo CollisionManager::CheckCollision(const Sprite & s1, const Sprite &
 	Vector2 displacement = Vector2().Zero();
 
 	// Calculo la profundidad
-	if (s1.GetPosition().x < s2.GetPosition().x) { // Vengo por izquierda
-		diff.x = s2.GetPosition().x - (s1.GetPosition().x + s1.GetSize().x);
+	if (a.min.x < b.min.x) { // Vengo por izquierda
+		diff.x = b.min.x - a.max.x;
 	}
-	else if (s1.GetPosition().x > s2.GetPosition().x) { // Vengo por derecha
-		diff.x = s1.GetPosition().x - (s2.GetPosition().x + s2.GetSize().x);
+	else if (a.min.x > b.min.x) { // Vengo por derecha
+		diff.x = a.min.x - b.max.x;
 	}
-	if (s1.GetPosition().y < s2.GetPosition().y) { // Vengo por arriba
-		diff.y = s2.GetPosition().y - (s1.GetPosition().y + s1.GetSize().y);
+	if (a.min.y < b.min.y) { // Vengo por arriba
+		diff.y = b.min.y - a.max.y;
 	}
-	else if (s1.GetPosition().y > s2.GetPosition().y) { // Vengo por abajo
-		diff.y = s1.GetPosition().y - (s2.GetPosition().y + s2.GetSize().y);
+	else if (a.min.y > b.min.y) { // Vengo por abajo
+		diff.y = a.min.y - b.max.y;
 	}
 
 	// Calculo el displacement
 	if (abs(diff.x) < abs(diff.y)) {
-		if (s1.GetPosition().x < s2.GetPosition().x) { // vengo por izquierda
+		if (a.min.x < b.min.x) { // vengo por izquierda
 			displacement.x = diff.x;
 		}
-		else if(s1.GetPosition().x > s2.GetPosition().x){ // vengo por derecha
+		else if (a.min.x > b.min.x) { // vengo por derecha
 			displacement.x = -diff.x;
 		}
 	}
 	else if (abs(diff.x) > abs(diff.y)) {
-		if (s1.GetPosition().y < s2.GetPosition().y) { // vengo por arriba
+		if (a.min.y < b.min.y) { // vengo por arriba
 			displacement.y = diff.y;
 		}
-		else if (s1.GetPosition().y > s2.GetPosition().y) { // vengo por abajo
+		else if (a.min.y > b.min.y) { // vengo por abajo
 			displacement.y = -diff.y;
 		}
 	}
@@ -54,3 +47,30 @@ CollisionInfo CollisionManager::CheckCollision(const Sprite & s1, const Sprite &
 	colInfo.displacement = displacement;
 	return colInfo;
 }
+
+bool SortCollisionsByDiff(CollisionInfo c1, CollisionInfo c2) {
+	return c1.displacement.Lenght() > c2.displacement.Lenght();
+}
+
+vector<CollisionInfo> CollisionManager::CheckCollision(const AABB &a, const Tilemap& tilemap) {
+	vector<CollisionInfo> collisions;
+	int max_collisions = 4;
+	for (size_t i = 0; i < tilemap.GetColliderTiles().size(); i++) {
+		CollisionInfo colInfo;
+		AABB aabbTile = tilemap.GetColliderTiles()[i].GetAABB();
+		colInfo = CheckCollision(a, aabbTile);
+		if (colInfo.isColliding) {
+			collisions.push_back(colInfo);
+			max_collisions--;
+		}
+		if (max_collisions <= 0) {
+			break;
+		}
+	}
+	if (!collisions.empty()) {
+		sort(collisions.begin(), collisions.end(), SortCollisionsByDiff);
+	}
+	return collisions;
+}
+
+

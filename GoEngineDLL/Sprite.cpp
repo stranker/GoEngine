@@ -34,7 +34,7 @@ void Sprite::SetTexture(const char* filePath, ImageType imageType, int vFrames, 
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
 	spriteSize = Vector2(texture->GetSize().x / verticalFrames, texture->GetSize().y / horizontalFrames);
-	Scale(spriteSize.x, spriteSize.y);
+	Scale(spriteSize);
 	AddFramesRect();
 }
 
@@ -46,7 +46,7 @@ void Sprite::Draw() {
 	if (texture) {
 		texture->Use();
 		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
-		texture->SetTextureProperty("ourTexture", textureBuffer);
+		texture->SetTextureProperty("sprite", textureBuffer);
 		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 		texture->SetBool("flipVertical", flipVertical);
 		texture->SetBool("flipHorizontal", flipHorizontal);
@@ -83,6 +83,10 @@ void Sprite::SetCurrentFrame(unsigned int value) {
 
 void Sprite::SetTotalFrames(int value) {
 	totalFrames = value;
+}
+
+AABB Sprite::GetAABB() const {
+	return AABB(GetPosition(), GetPosition() + GetSize());
 }
 
 Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {

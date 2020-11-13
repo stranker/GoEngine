@@ -12,6 +12,7 @@ class Renderer;
 
 #include "Utils.h"
 #include "Input.h"
+#include "Tilemap.h"
 #include "AnimatedSprite.h"
 #include "ParticleSystem.h"
 #include "CollisionManager.h"
@@ -46,6 +47,7 @@ public:
 	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	ParticleSystem* CreateParticleSystem(const char* filePath, ImageType imageType, size_t particleCount);
+	Tilemap* CreateTilemap(const char* filePath);
 	//WINDOW
 	Vector2 GetWindowSize();
 
