@@ -4,7 +4,7 @@ ParticleSystem::Particle::Particle() {
 	position = Vector2().Zero();
 	velocity = Vector2().Zero();
 	color = Color();
-	lifeTime = 1.0f;
+	lifeTime = 0;
 }
 
 void ParticleSystem::SetParticleCount(uint32_t value) {
@@ -13,13 +13,13 @@ void ParticleSystem::SetParticleCount(uint32_t value) {
 	for (unsigned int i = 0; i < particleCount; i++) {
 		Particle p;
 		p.position = Vector2().Zero();
-		float randNumber = (rand() % 100) / 100.0; // entre 0 y 1
+		float randNumber = Utils::RandRange(0, 1.0); // entre 0 y 1
 		float minAngle = Utils::RadToDeg(direction.Angle()) - spread * 0.5;
 		float maxAngle = Utils::RadToDeg(direction.Angle()) + spread * 0.5;
-		float newAngle = minAngle + rand() % (int(maxAngle - minAngle));
+		float newAngle = Utils::RandRange(minAngle, maxAngle);
 		float randVelocity = randNumber < velocityRandom ? initialVelocity * (1.0 - randNumber) : initialVelocity;
 		p.velocity = Vector2(glm::cos(Utils::DegToRad(newAngle)), glm::sin(Utils::DegToRad(newAngle))).Normalize() * randVelocity;
-		p.lifeTime = 1.0;
+		p.lifeTime = randNumber <= explosiveness ? particleLifetime : Utils::RandRange(0, 1);
 		p.color.a = 1.0f;
 		particles.push_back(p);
 	}
@@ -34,6 +34,10 @@ void ParticleSystem::SetVelocityRandom(float velocity) {
 	velocityRandom = Utils::Clamp(velocityRandom, 0.0, 1.0);
 }
 
+void ParticleSystem::SetExplosiveness(float explo) {
+	explosiveness = explo;
+}
+
 void ParticleSystem::SetDirection(Vector2 dir) {
 	direction = dir;
 }
@@ -44,6 +48,7 @@ void ParticleSystem::SetSpread(float angle) {
 
 void ParticleSystem::SetEmitting(bool val) {
 	isEmitting = val;
+	SetParticleCount(particleCount);
 }
 
 void ParticleSystem::SetTexture(const char * filePath, ImageType imageType) {
@@ -77,7 +82,7 @@ void ParticleSystem::Update(float deltaTime) {
 			float newAngle = minAngle + rand() % (int(maxAngle - minAngle));
 			float randVelocity = randNumber < velocityRandom ? initialVelocity * (1.0 - randNumber) : initialVelocity;
 			p.velocity = Vector2(glm::cos(Utils::DegToRad(newAngle)), glm::sin(Utils::DegToRad(newAngle))).Normalize() * randVelocity;
-			p.lifeTime = particleLifetime;
+			p.lifeTime = randNumber < explosiveness ? particleLifetime : Utils::RandRange(0, 1);
 			p.color = Color().White();
 		}
 	}
