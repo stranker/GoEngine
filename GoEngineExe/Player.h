@@ -6,6 +6,7 @@ private:
 	AnimatedSprite* animSprite;
 	Vector2 velocity;
 	float movementSpeed = 300;
+	Vector2 initialPos;
 public:
 	Sprite *GetSprite() const;
 	void ManageCollision(CollisionInfo collision);

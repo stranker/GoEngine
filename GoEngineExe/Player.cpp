@@ -30,6 +30,9 @@ void Player::Update(float deltaTime) {
 		velocity.x += movementSpeed;
 		animSprite->FlipVertical(false);
 	}
+	if (Input::IsKeyPressed(Input::KEY_1)) {
+		animSprite->SetPosition(initialPos);
+	}
 	animSprite->Update(deltaTime);
 	animSprite->Translate(velocity * deltaTime);
 }
@@ -40,6 +43,7 @@ Player::Player() {
 	animSprite->AddAnimation("idle", idle, 1, true, 8);
 	animSprite->Play("idle");
 	animSprite->SetPosition(Vector2(100, 100));
+	initialPos = animSprite->GetPosition();
 }
 
 Player::~Player() {
