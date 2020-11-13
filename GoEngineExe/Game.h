@@ -12,6 +12,8 @@ private:
 	Player* player;
 	Tilemap* tilemap;
 	vector<Enemy*> enemies;
+	CollisionInfo collision;
+	vector<CollisionInfo> tilemapCollisions;
 public:
 	void Start() override;
 	void Update(float deltaTime) override;

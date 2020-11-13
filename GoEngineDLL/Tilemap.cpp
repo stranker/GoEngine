@@ -32,9 +32,10 @@ void Tilemap::HandleTileLayer(const Value & tilesData, const Value& tilesPropert
 			tile.size = Vector2(tileWidth, tileHeight);
 			tile.tilemapPosition = Vector2(column, row);
 			tile.position = Vector2(column * tileWidth, row * tileHeight);
-			tile.isCollider = IsColliderTile(tile.id, tilesProperties);
+			tile.isCollider = CheckColliderTileProperty(tile.id, tilesProperties);
 			if (tile.isCollider) {
-				colliderTiles.push_back(tile);
+				colliderTiles[row][column] = 1;
+				colliderMapTiles.push_back(tile);
 			}
 			mapTiles.push_back(tile);
 		}
@@ -58,7 +59,7 @@ void Tilemap::HandleObjectsGroup(const Value & objects) {
 	}
 }
 
-bool Tilemap::IsColliderTile(int tileId, const Value & tileSet) {
+bool Tilemap::CheckColliderTileProperty(int tileId, const Value & tileSet) {
 	assert(tileSet.IsArray());
 	for (Value::ConstValueIterator itr = tileSet.GetArray().Begin(); itr != tileSet.GetArray().End(); ++itr) {
 		const Value& tileProperty = *itr;
@@ -67,6 +68,20 @@ bool Tilemap::IsColliderTile(int tileId, const Value & tileSet) {
 		}
 	}
 	return false;
+}
+
+bool Tilemap::IsColliderTile(Vector2 pos) const{
+	return colliderTiles[pos.y][pos.x] == 1;
+}
+
+Tilemap::Tile Tilemap::GetColliderTileAt(Vector2 pos) const{
+	Tile tile;
+	for (Tile t : colliderMapTiles) {
+		if (t.tilemapPosition == pos) {
+			tile = t;
+		}
+	}
+	return tile;
 }
 
 void Tilemap::LoadFromFile(const char * filePath) {
@@ -83,6 +98,10 @@ void Tilemap::LoadFromFile(const char * filePath) {
 	height = d["height"].GetInt();
 	tileWidth = d["tileheight"].GetInt();
 	tileHeight = d["tilewidth"].GetInt();
+
+	vector<vector<int>> colliderTilemap(height, vector<int>(width));
+
+	colliderTiles = colliderTilemap;
 
 	Value& layers = d["layers"];
 	Value& tileset = d["tilesets"].GetArray()[0];
@@ -132,16 +151,12 @@ void Tilemap::Destroy() {
 	}
 }
 
-vector<Tilemap::Tile> Tilemap::GetColliderTiles() const {
-	return colliderTiles;
+Vector2 Tilemap::GetMapSize() const {
+	return Vector2(width, height);
 }
 
 Tilemap::Tilemap(Renderer *_renderer) : Sprite(_renderer) {
 }
 
 Tilemap::~Tilemap() {
-}
-
-AABB Tilemap::Tile::GetAABB() const {
-	return AABB(position, position + size);
 }

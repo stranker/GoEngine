@@ -55,20 +55,26 @@ bool SortCollisionsByDiff(CollisionInfo c1, CollisionInfo c2) {
 vector<CollisionInfo> CollisionManager::CheckCollision(const AABB &a, const Tilemap& tilemap) {
 	vector<CollisionInfo> collisions;
 	int maxCollisions = MAX_COLLISIONS;
-	for (size_t i = 0; i < tilemap.GetColliderTiles().size(); i++) {
-		CollisionInfo colInfo;
-		AABB aabbTile = tilemap.GetColliderTiles()[i].GetAABB();
-		colInfo = CheckCollision(a, aabbTile);
-		if (colInfo.isColliding) {
-			collisions.push_back(colInfo);
-			maxCollisions--;
+
+	int left_tile = a.min.x / tilemap.GetSize().x;
+	int right_tile = a.max.x / tilemap.GetSize().x;
+	int top_tile = a.min.y / tilemap.GetSize().y;
+	int bottom_tile = a.max.y / tilemap.GetSize().y;
+
+	if (left_tile < 0) left_tile = 0;
+	if (right_tile > tilemap.GetSize().x) right_tile = tilemap.GetSize().x;
+	if (top_tile < 0) top_tile = 0;
+	if (bottom_tile > tilemap.GetSize().y) bottom_tile = tilemap.GetSize().y;
+
+	for (int i = left_tile; i <= right_tile; i++) {
+		for (int j = top_tile; j <= bottom_tile; j++) {
+			if (tilemap.IsColliderTile(Vector2(i, j))) {
+				CollisionInfo colInfo = CheckCollision(a, tilemap.GetColliderTileAt(Vector2(i, j)).GetAABB());
+				if (colInfo.isColliding) {
+					collisions.push_back(colInfo);
+				}
+			}
 		}
-		if (maxCollisions <= 0) {
-			break;
-		}
-	}
-	if (!collisions.empty()) {
-		sort(collisions.begin(), collisions.end(), SortCollisionsByDiff);
 	}
 	return collisions;
 }
