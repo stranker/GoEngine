@@ -7,22 +7,30 @@ ParticleSystem::Particle::Particle() {
 	lifeTime = 0;
 }
 
+void ParticleSystem::SetLifetime(float lifetime) {
+	particleLifetime = lifetime;
+}
+
 void ParticleSystem::SetParticleCount(uint32_t value) {
 	particleCount = value;
 	particles.clear();
 	for (unsigned int i = 0; i < particleCount; i++) {
 		Particle p;
-		p.position = Vector2().Zero();
-		float randNumber = Utils::RandRange(0, 1.0); // entre 0 y 1
-		float minAngle = Utils::RadToDeg(direction.Angle()) - spread * 0.5;
-		float maxAngle = Utils::RadToDeg(direction.Angle()) + spread * 0.5;
-		float newAngle = Utils::RandRange(minAngle, maxAngle);
-		float randVelocity = randNumber < velocityRandom ? initialVelocity * (1.0 - randNumber) : initialVelocity;
-		p.velocity = Vector2(glm::cos(Utils::DegToRad(newAngle)), glm::sin(Utils::DegToRad(newAngle))).Normalize() * randVelocity;
-		p.lifeTime = randNumber <= explosiveness ? particleLifetime : Utils::RandRange(0, 1);
-		p.color.a = 1.0f;
+		RandomizeParticle(p);
 		particles.push_back(p);
 	}
+}
+
+void ParticleSystem::RandomizeParticle(Particle& p) {
+	p.position = Vector2().Zero();
+	float randNumber = Utils::RandRange(0, 1.0); // entre 0 y 1
+	float minAngle = Utils::RadToDeg(direction.Angle()) - spread * 0.5;
+	float maxAngle = Utils::RadToDeg(direction.Angle()) + spread * 0.5;
+	float newAngle = Utils::RandRange(minAngle, maxAngle);
+	float randVelocity = randNumber < velocityRandom ? initialVelocity * (1.0 - randNumber) : initialVelocity;
+	p.velocity = Vector2(glm::cos(Utils::DegToRad(newAngle)), glm::sin(Utils::DegToRad(newAngle))).Normalize() * randVelocity;
+	p.lifeTime = randNumber < explosiveness ? particleLifetime : Utils::RandRange(0, 1);
+	p.color.a = 1.0;
 }
 
 void ParticleSystem::SetInitialVelocity(float velocity) {
@@ -75,15 +83,7 @@ void ParticleSystem::Update(float deltaTime) {
 			p.color = initialColor.Interpolate(finalColor,  1 - (p.lifeTime / particleLifetime));
 		}
 		if (p.lifeTime <= 0.0f) {
-			p.position = Vector2().Zero();
-			float randNumber = (rand() % 100) / 100.0; // entre 0 y 1
-			float minAngle = Utils::RadToDeg(direction.Angle()) - spread * 0.5;
-			float maxAngle = Utils::RadToDeg(direction.Angle()) + spread * 0.5;
-			float newAngle = minAngle + rand() % (int(maxAngle - minAngle));
-			float randVelocity = randNumber < velocityRandom ? initialVelocity * (1.0 - randNumber) : initialVelocity;
-			p.velocity = Vector2(glm::cos(Utils::DegToRad(newAngle)), glm::sin(Utils::DegToRad(newAngle))).Normalize() * randVelocity;
-			p.lifeTime = randNumber < explosiveness ? particleLifetime : Utils::RandRange(0, 1);
-			p.color = Color().White();
+			RandomizeParticle(p);
 		}
 	}
 }
