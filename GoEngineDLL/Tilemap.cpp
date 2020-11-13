@@ -71,6 +71,9 @@ bool Tilemap::CheckColliderTileProperty(int tileId, const Value & tileSet) {
 }
 
 bool Tilemap::IsColliderTile(Vector2 pos) const{
+	if (pos.x >= width || pos.y >= height) {
+		return false;
+	}
 	return colliderTiles[pos.y][pos.x] == 1;
 }
 

@@ -54,7 +54,6 @@ bool SortCollisionsByDiff(CollisionInfo c1, CollisionInfo c2) {
 
 vector<CollisionInfo> CollisionManager::CheckCollision(const AABB &a, const Tilemap& tilemap) {
 	vector<CollisionInfo> collisions;
-	int maxCollisions = MAX_COLLISIONS;
 
 	int left_tile = a.min.x / tilemap.GetSize().x;
 	int right_tile = a.max.x / tilemap.GetSize().x;

@@ -3,8 +3,6 @@
 #include "Utils.h"
 #include "Tilemap.h"
 
-#define MAX_COLLISIONS 4
-
 struct CollisionInfo {
 	bool isColliding = false;
 	Vector2 diff = Vector2().Zero();
