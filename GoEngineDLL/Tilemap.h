@@ -28,8 +28,8 @@ private:
 		OBJECT_GROUP,
 		LAST
 	};
-	vector<Tile> tiles;
 	vector<Tile> colliderTiles;
+	vector<Tile> tiles;
 	int width;
 	int height;
 	int tileWidth;

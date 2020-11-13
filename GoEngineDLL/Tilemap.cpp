@@ -16,7 +16,7 @@ void Tilemap::HandleLayer(const Value & layer, Value& tilesets) {
 		HandleTileLayer(layer["data"], tilesets["tiles"]);
 	}
 	else if (layerType == "objectgroup") {
-		//HandleObjectsGroup(layer["objects"]);
+		HandleObjectsGroup(layer["objects"]);
 	}
 }
 
@@ -43,22 +43,6 @@ void Tilemap::HandleTileLayer(const Value & tilesData, const Value& tilesPropert
 			column = 0;
 			row++;
 		}
-	}
-}
-
-void Tilemap::HandleObjectsGroup(const Value & objects) {
-	assert(objects.IsArray());
-	for (Value::ConstValueIterator itr = objects.GetArray().Begin(); itr != objects.GetArray().End(); ++itr) {
-		const Value& object = *itr;
-		assert(object.IsObject());
-		Tile tile;
-		tile.id = object["gid"].GetInt() - 1;
-		tile.position = Vector2(object["x"].GetFloat(), object["y"].GetFloat() - tileHeight);
-		tile.tilemapPosition = Vector2(tile.position.x / tileWidth, tile.position.y / tileHeight);
-		tile.isCollider = true;
-		tile.size = Vector2(tileWidth, tileHeight);
-		tiles.push_back(tile);
-		colliderTiles.push_back(tile);
 	}
 }
 
@@ -90,7 +74,9 @@ void Tilemap::LoadFromFile(const char * filePath) {
 
 	Value& layers = d["layers"];
 	Value& tileset = d["tilesets"].GetArray()[0];
+	const char *tilesetFilePath = tileset["image"].GetString();
 	ProcessLayers(layers, tileset);
+	SetTexture(tilesetFilePath, IMAGETYPE_PNG, tileset["columns"].GetInt(), tileset["imageheight"].GetInt() / tileset["tileheight"].GetInt());
 }
 
 void Tilemap::SetTexture(const char * filePath, ImageType imageType, int vFrames, int hFrames) {
@@ -106,12 +92,14 @@ void Tilemap::SetTexture(const char * filePath, ImageType imageType, int vFrames
 }
 
 void Tilemap::Draw() {
+	if (texture) {
+		texture->Use();
+		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
+		texture->SetTextureProperty("sprite", textureBuffer);
+		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
+	}
 	for (Tile tile : tiles) {
 		if (texture) {
-			texture->Use();
-			texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
-			texture->SetTextureProperty("sprite", textureBuffer);
-			texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 			texture->SetInt("tileId", tile.id);
 			texture->SetInt("tileRows", horizontalFrames);
 			texture->SetInt("tileColumns", verticalFrames);
