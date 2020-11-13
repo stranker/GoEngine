@@ -23,12 +23,15 @@ private:
 	float initialVelocity = 1;
 	float velocityRandom = 0;
 	float particleLifetime = 1;
+	float explosiveness;
 	float spread = 5;
-	bool isEmitting = true;
+	bool isEmitting = false;
 public:
+	void SetLifetime(float lifeTime);
 	void SetParticleCount(uint32_t value);
 	void SetInitialVelocity(float velocity);
 	void SetVelocityRandom(float velocity);
+	void SetExplosiveness(float explo);
 	void SetDirection(Vector2 dir);
 	void SetSpread(float angle);
 	void SetEmitting(bool val);
@@ -37,6 +40,7 @@ public:
 	void Update(float deltaTime);
 	void Draw() override;
 	void Destroy() override;
+	void RandomizeParticle(Particle& p);
 	ParticleSystem(Renderer *rend);
 	virtual ~ParticleSystem();
 };
