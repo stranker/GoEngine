@@ -14,8 +14,8 @@ private:
 	bool isLooped;
 	bool isPlaying;
 	float internalTimer;
-	float animSpeed;
-	float animFrameLenght;
+	float animSpeed; // 8
+	float animFrameLenght; // 1 / animSpeed. Tiempo que dura un frame de animacion
 	vector<int> animationFrames;
 	int totalFrames;
 public:

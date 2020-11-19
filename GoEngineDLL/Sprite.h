@@ -6,10 +6,10 @@ class ENGINEDLL_API Sprite :
 	public Entity2D {
 protected:
 	struct UVFrame {
-		Vector2 tr;
-		Vector2 br;
-		Vector2 bl;
-		Vector2 tl;
+		Vector2 tr; // top right
+		Vector2 br; // bottom right
+		Vector2 bl; // bottom left
+		Vector2 tl; // top left
 	};
 	unsigned int textureBuffer;
 	TextureMaterial *texture;

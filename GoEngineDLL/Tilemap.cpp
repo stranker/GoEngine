@@ -103,7 +103,6 @@ void Tilemap::LoadFromFile(const char * filePath) {
 	tileHeight = d["tilewidth"].GetInt();
 
 	vector<vector<int>> colliderTilemap(height, vector<int>(width));
-
 	colliderTiles = colliderTilemap;
 
 	Value& layers = d["layers"];
@@ -134,13 +133,13 @@ void Tilemap::Draw() {
 		texture->Use();
 		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
 		texture->SetTextureProperty("sprite", textureBuffer);
+		texture->SetInt("tileRows", horizontalFrames);
+		texture->SetInt("tileColumns", verticalFrames);
 		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 	}
 	for (Tile tile : mapTiles) {
 		if (texture) {
 			texture->SetInt("tileId", tile.id);
-			texture->SetInt("tileRows", horizontalFrames);
-			texture->SetInt("tileColumns", verticalFrames);
 			texture->SetVec2("offset", tile.tilemapPosition);
 		}
 		renderer->Draw(GetVertexArrayID(), primitive, 6);
@@ -156,6 +155,10 @@ void Tilemap::Destroy() {
 
 Vector2 Tilemap::GetMapSize() const {
 	return Vector2(width, height);
+}
+
+Vector2 Tilemap::GetTileSize() const {
+	return Vector2(tileWidth, tileHeight);
 }
 
 Tilemap::Tilemap(Renderer *_renderer) : Sprite(_renderer) {

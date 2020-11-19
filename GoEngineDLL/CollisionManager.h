@@ -11,6 +11,6 @@ struct CollisionInfo {
 
 class ENGINEDLL_API CollisionManager {
 public:
-	static CollisionInfo CheckCollision(const AABB &a, const AABB &ab);
+	static CollisionInfo CheckCollision(const AABB &a, const AABB &b);
 	static vector<CollisionInfo> CheckCollision(const AABB &a, const Tilemap& tilemap);
 };

@@ -9,6 +9,7 @@ void Sprite::AddFramesRect() {
 		float frameX = (i % verticalFrames) * spriteSize.x;
 		float frameY = floor(i / verticalFrames) * spriteSize.y;
 
+		// Calculan la esquina de la imagen ya invertida. TR <-> BR, TL <-> BL
 		UVFrame uvFrame;
 		uvFrame.tr.x = (frameX + spriteSize.x) / texture->GetSize().x;
 		uvFrame.tr.y = (frameY + spriteSize.y) / texture->GetSize().y;
@@ -21,6 +22,7 @@ void Sprite::AddFramesRect() {
 
 		uvFrame.tl.x = frameX / texture->GetSize().x;
 		uvFrame.tl.y = (frameY + spriteSize.y) / texture->GetSize().y;
+
 		framesRect.push_back(uvFrame);
 	}
 }
@@ -51,7 +53,7 @@ void Sprite::Draw() {
 		texture->SetBool("flipVertical", flipVertical);
 		texture->SetBool("flipHorizontal", flipHorizontal);
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, 6);
+	renderer->Draw(GetVertexArrayID(), primitive, 6); // VAO => VBO VBO VBO
 }
 
 void Sprite::Destroy() {
@@ -78,7 +80,7 @@ void Sprite::SetCurrentFrame(unsigned int value) {
 		frame.bl.x, frame.bl.y,
 		frame.tl.x, frame.tl.y
 	};
-	UpdateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2);
+	UpdateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2); // 2 es el ID del atributo en el shader
 }
 
 void Sprite::SetTotalFrames(int value) {
@@ -86,7 +88,7 @@ void Sprite::SetTotalFrames(int value) {
 }
 
 AABB Sprite::GetAABB() const {
-	return AABB(GetPosition(), GetPosition() + GetSize());
+	return AABB(GetPosition(), GetSize());
 }
 
 Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
@@ -102,17 +104,17 @@ Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 	};
 	float color_vertex_data[] = { selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a };
 	float uv_vertex_data[] = {
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-		0.0f, 0.0f,
-		0.0f, 1.0f
+		1.0f, 1.0f, // tr
+		1.0f, 0.0f, // br
+		0.0f, 0.0f, // bl
+		0.0f, 1.0f // tl
 	};
-	CreateVertexArrayID();
-	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
-	CreateVertexData(index_data, sizeof(index_data), 2, Renderer::ELEMENT_BUFFER, -1);
-	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1);
-	CreateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2, Renderer::ARRAY_BUFFER, 2);
-	BindVertexObjects();
+	CreateVertexArrayID(); //crea el VAO
+	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0); // VBO
+	CreateVertexData(index_data, sizeof(index_data), 2, Renderer::ELEMENT_BUFFER, -1); // VBO
+	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1); // VBO
+	CreateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2, Renderer::ARRAY_BUFFER, 2); // VBO
+	BindVertexObjects(); // Bindeo
 	primitive = Renderer::TRIANGLES;
 }
 

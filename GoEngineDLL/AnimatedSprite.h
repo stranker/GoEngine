@@ -18,4 +18,3 @@ public:
 	AnimatedSprite(Renderer *_renderer);
 	~AnimatedSprite();
 };
-

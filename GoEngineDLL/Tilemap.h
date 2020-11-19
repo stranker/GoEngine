@@ -20,7 +20,7 @@ protected:
 		Vector2 size;
 		bool isCollider;
 
-		AABB GetAABB() const { return AABB(position, position + size); };
+		AABB GetAABB() const { return AABB(position, size); };
 		bool IsValid() { return id >= 0; };
 	};
 	struct TileObject {
@@ -34,10 +34,10 @@ private:
 		OBJECT_GROUP,
 		LAST
 	};
-	vector<vector<int>> colliderTiles;
-	vector<Tile> colliderMapTiles;
-	vector<Tile> mapTiles;
-	vector<TileObject> mapObjects;
+	vector<vector<int>> colliderTiles; // Matriz de los tiles que colisionan
+	vector<Tile> colliderMapTiles; // Tiles que son colisionables
+	vector<Tile> mapTiles; // Todos los tiles
+	vector<TileObject> mapObjects; // Todos los objetos
 	int width;
 	int height;
 	int tileWidth;
@@ -54,6 +54,7 @@ public:
 	void Draw() override;
 	void Destroy() override;
 	Vector2 GetMapSize() const;
+	Vector2 GetTileSize() const;
 	bool IsColliderTile(Vector2 pos) const;
 	Tile GetColliderTileAt(Vector2 pos) const;
 	Tilemap(Renderer *_renderer);
