@@ -53,7 +53,7 @@ void Sprite::Draw() {
 		texture->SetBool("flipVertical", flipVertical);
 		texture->SetBool("flipHorizontal", flipHorizontal);
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, 6); // VAO => VBO VBO VBO
+	renderer->Draw(GetVertexArrayID(), primitive, draw_vertices); // VAO => VBO VBO VBO
 }
 
 void Sprite::Destroy() {
@@ -114,7 +114,7 @@ Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
 	CreateVertexData(index_data, sizeof(index_data), 2, Renderer::ELEMENT_BUFFER, -1); // VBO
 	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1); // VBO
 	CreateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2, Renderer::ARRAY_BUFFER, 2); // VBO
-	BindVertexObjects(); // Bindeo
+	BindVertexObjects(); // Bindeo VAO
 	primitive = Renderer::TRIANGLES;
 }
 

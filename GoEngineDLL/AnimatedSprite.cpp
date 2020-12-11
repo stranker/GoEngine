@@ -32,6 +32,15 @@ void AnimatedSprite::Stop() {
 	}
 }
 
+void AnimatedSprite::Resume() {
+	for (animIt = animations.begin(); animIt != animations.end(); animIt++) {
+		if (animIt->first == currentAnimName) {
+			animIt->second->Play();
+			break;
+		}
+	}
+}
+
 void AnimatedSprite::Update(float deltaTime) {
 	if (!animations.empty()) {
 		if (currentAnimation) {

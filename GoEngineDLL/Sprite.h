@@ -23,7 +23,7 @@ protected:
 	bool flipVertical = false;
 	bool flipHorizontal = false;
 private:
-
+	const int draw_vertices = 6;
 public:
 	Vector2 GetSize() const;
 	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
