@@ -1,22 +1,33 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
+#include "Exports.h"
+#include "Utils.h"
 #include <iostream>
 
-class Window
+class GLFWwindow;
+
+using namespace std;
+
+class ENGINEDLL_API Window
 {
 private:
 	GLFWwindow* window;
+	static Window* singleton;
 protected:
 	int width;
 	int height;
 	const char* title;
 public:
-	bool init();
-	bool free();
-	void pool_events();
+	bool Init();
+	bool Destroy();
+	void PoolEvents();
+	bool ShouldClose();
+	void CloseWindow();
+	float GetWidth() const;
+	float GetHeight() const;
+	Vector2 GetSize() const;
+	void* GetWindowPtr();
+	static Window* GetSingleton();
 	Window(int _width, int _height, const char* _title);
 	~Window();
 };

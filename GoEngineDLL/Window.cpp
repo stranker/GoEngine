@@ -1,10 +1,13 @@
 #include "Window.h"
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
-bool Window::init()
+bool Window::Init()
 {
+	cout << "Windows Init" << endl;
 	/* Initialize the library */
 	if (!glfwInit()) {
-		fprintf(stderr, "Falla al inicialiar GLFW\n");
+		cout << "Falla al inicialiar GLFW" << endl;
 		getchar();
 		return false;
 	}
@@ -12,22 +15,19 @@ bool Window::init()
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(width, height, title, NULL, NULL);
 	if (!window){
-		fprintf(stderr, "Falla al crear Window\n");
+		cout << "Falla al crear Window" << endl;
 		getchar();
 		glfwTerminate();
 		return false;
 	}
-	return true;
-
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-	
-
+	return true;
 }
 
-bool Window::free()
-{
-	if (window != NULL) {
+bool Window::Destroy(){
+	cout << "Windows Destroy" << endl;
+	if (window) {
 		glfwDestroyWindow((GLFWwindow*)window);
 	}
 	window = NULL;
@@ -35,25 +35,45 @@ bool Window::free()
 	return true;
 }
 
-void Window::pool_events(){
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
-	{
-		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+void Window::PoolEvents(){
+	glfwPollEvents();
+}
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+bool Window::ShouldClose(){
+	return glfwWindowShouldClose(window);
+}
 
-		/* Poll for and process events */
-		glfwPollEvents();
-	}
+void Window::CloseWindow() {
+	glfwSetWindowShouldClose(window, true);
+}
+
+float Window::GetWidth() const {
+	return width;
+}
+
+float Window::GetHeight() const {
+	return height;
+}
+
+Vector2 Window::GetSize() const {
+	return Vector2(width, height);
+}
+
+void* Window::GetWindowPtr(){
+	return (void*)window;
+}
+
+Window* Window::singleton = NULL;
+
+Window * Window::GetSingleton() {
+	return singleton;
 }
 
 Window::Window(int _width, int _height, const char * _title){
 	width = _width;
 	height = _height;
 	title = _title;
+	singleton = this;
 }
 
 Window::~Window(){
