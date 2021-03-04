@@ -33,15 +33,18 @@ void Player::Update(float deltaTime) {
 	if (Input::IsKeyPressed(Input::KEY_1)) {
 		animSprite->SetPosition(initialPos);
 	}
-	animSprite->Update(deltaTime);
+	//animSprite->Update(deltaTime);
 	animSprite->Translate(velocity.Normalize() * movementSpeed * deltaTime);
+	float posX = Utils::Clamp(animSprite->GetPosition().x, 0, BaseGame::GetSingleton()->GetWindowSize().x - GetSprite()->GetSize().x);
+	float posY = Utils::Clamp(animSprite->GetPosition().y, 0, BaseGame::GetSingleton()->GetWindowSize().y - GetSprite()->GetSize().y);
+	animSprite->SetPosition(posX, posY);
 }
 
 Player::Player() {
-	animSprite = BaseGame::GetSingleton()->CreateAnimSprite("player.png", IMAGETYPE_PNG, 1, 1);
-	unsigned int idle[] = {0};
-	animSprite->AddAnimation("idle", idle, 1, true, 8);
-	animSprite->Play("idle");
+	animSprite = BaseGame::GetSingleton()->CreateSprite("player.png", IMAGETYPE_PNG, 1, 1);
+	//unsigned int idle[] = {0};
+	//animSprite->AddAnimation("idle", idle, 1, true, 8);
+	//animSprite->Play("idle");
 	animSprite->SetPosition(Vector2(100, 100));
 	initialPos = animSprite->GetPosition();
 }

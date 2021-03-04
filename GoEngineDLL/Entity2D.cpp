@@ -72,11 +72,12 @@ void Entity2D::CreateVertexData(unsigned int * _vertex, size_t dataSize, size_t 
 }
 
 void Entity2D::UpdateVertexData(float * _vertex, size_t dataSize, size_t attributeID) {
+	// Posicion, Color, UV
 	for (Renderer::VertexData vertexData : vectorVertexData) {
 		if (vertexData.attributeID == attributeID) {
-			renderer->BindVertexArray(vertexArrayID);
-			vertexData.vbo = renderer->CreateVertexBuffer(_vertex, dataSize, vertexData.bufferType);
-			renderer->BindVertexData(vertexData);
+			renderer->BindVertexArray(vertexArrayID); // Bindeo el VAO
+			vertexData.vbo = renderer->CreateVertexBuffer(_vertex, dataSize, vertexData.bufferType); // Update el VBO
+			renderer->BindVertexData(vertexData); // Bindeo el VBO
 			break;
 		}
 	}

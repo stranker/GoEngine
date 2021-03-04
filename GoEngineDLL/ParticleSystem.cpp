@@ -92,12 +92,14 @@ void ParticleSystem::Draw() {
 	if (!isEmitting) {
 		return;
 	}
+	if (texture) {
+		texture->Use();
+		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
+		texture->SetTextureProperty("sprite", textureBuffer);
+	}
 	for (Particle particle : particles) {
 		if (particle.lifeTime > 0) {
 			if (texture) {
-				texture->Use();
-				texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
-				texture->SetTextureProperty("sprite", textureBuffer);
 				texture->SetVec2("offset", particle.position);
 				texture->SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
 			}

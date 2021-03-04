@@ -3,7 +3,7 @@
 
 class Player{
 private:
-	AnimatedSprite* animSprite;
+	Sprite* animSprite;
 	Vector2 velocity;
 	float movementSpeed = 300;
 	Vector2 initialPos;

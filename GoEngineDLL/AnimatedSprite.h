@@ -14,8 +14,8 @@ public:
 	void AddAnimation(const char* animName, unsigned int *frames, int framesSize, bool looped, float speed);
 	void Play(const char* animName);
 	void Stop();
+	void Resume();
 	void Update(float deltaTime) override;
 	AnimatedSprite(Renderer *_renderer);
 	~AnimatedSprite();
 };
-

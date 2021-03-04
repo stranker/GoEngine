@@ -25,10 +25,10 @@ float Utils::RandRange(float minValue, float maxValue) {
 
 AABB::AABB(Rect2 rect) {
 	min = Vector2(rect.x, rect.y);
-	max = Vector2(rect.width, rect.height);
+	max = min + Vector2(rect.width, rect.height);
 }
 
 AABB::AABB(Vector2 pos, Vector2 size) {
 	min = Vector2(pos.x, pos.y);
-	max = Vector2(size.x, size.y);
+	max = min + Vector2(size.x, size.y);
 }

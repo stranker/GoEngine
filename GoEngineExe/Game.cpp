@@ -44,14 +44,13 @@ void Game::CreateEnemy(int attribute, Vector2 position) {
 }
 
 void Game::UpdateCollisions() {
-	CollisionInfo collision;
 	for (Enemy *enemy : enemies) {
 		collision = CollisionManager::CheckCollision(player->GetSprite()->GetAABB(), enemy->GetSprite()->GetAABB());
 		if (collision.isColliding) {
 			player->ManageCollision(collision);
 		}
 	}
-	vector<CollisionInfo> tilemapCollisions = CollisionManager::CheckCollision(player->GetSprite()->GetAABB(), *tilemap);
+	tilemapCollisions = CollisionManager::CheckCollision(player->GetSprite()->GetAABB(), *tilemap);
 	if (!tilemapCollisions.empty()) {
 		player->ManageCollision(tilemapCollisions);
 	}
