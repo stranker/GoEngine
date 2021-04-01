@@ -9,14 +9,33 @@ glm::mat4 Camera::GetMVPOf(glm::mat4 model) {
 }
 
 void Camera::SetSize(float _width, float _height) {
-	projection = glm::ortho(0.0f, _width, _height, 0.0f, 0.0f, 100.0f); // camara ortogonal con ancho alto near y el far
+	projection = glm::ortho(0.0f, _width, _height, 0.0f, -0.1f, 100.0f); // camara ortogonal con ancho alto near y el far
 }
 
 Vector2 Camera::GetSize() const {
 	return Vector2(width, heigth);
 }
 
+void Camera::Destroy() {
+	if (transform){
+		delete transform;
+	}
+}
+
+void Camera::LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector) {
+	transform->LookAt(_position, _target, _upVector);
+}
+
+void Camera::LookAt(Vector3 _target, Vector3 _upVector) {
+	transform->LookAt(_target, _upVector);
+}
+
+void Camera::LookAt(Vector3 _target) {
+	transform->LookAt(_target);
+}
+
 Camera::Camera(float _width, float _height) {
+	name = "Camera";
 	transform = new Transform();
 	SetSize(_width, _height);
 }
