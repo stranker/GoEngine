@@ -13,14 +13,22 @@ bool Renderer::Init(){
 		return false;
 	}
 	glEnable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return true;
 }
 
 bool Renderer::Destroy(){
 	cout << "Renderer Destroy" << endl;
+	if (firstCamera){
+		firstCamera->Destroy();
+		delete firstCamera;
+		firstCamera = NULL;
+	}
 	if (camera) {
+		camera->Destroy();
 		delete camera;
+		camera = NULL;
 	}
 	return true;
 }
@@ -108,12 +116,8 @@ void Renderer::SetTextureParameters(unsigned char * data, int width, int height)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 }
 
-void Renderer::SetClearColor(float r, float g, float b, float a){
-	glClearColor(r, g, b, a);
-}
-
 void Renderer::SetClearColor(Color color) {
-	SetClearColor(color.r, color.g, color.b, color.a);
+	glClearColor(color.r, color.g, color.b, color.a);
 }
 
 void Renderer::ClearScreen(){
@@ -132,11 +136,6 @@ void Renderer::DeleteBuffer(unsigned int _buffer) {
 	glDeleteBuffers(1, &_buffer);
 }
 
-void Renderer::Draw(unsigned int vao, Primitive _primitive, size_t drawVertexCount) {
-	BindVertexArray(vao);
-	DrawElements(_primitive, drawVertexCount);
-}
-
 void Renderer::Draw(Primitive _primitive, int vertexCount) {
 	glDrawArrays((GLenum)_primitive, 0, vertexCount);
 }
@@ -145,13 +144,36 @@ void Renderer::DrawElements(Primitive _primitive, int vertexCount) {
 	glDrawElements((GLenum)_primitive, vertexCount, GL_UNSIGNED_INT, 0);
 }
 
+void Renderer::EnableClientState() {
+	glEnableClientState(GL_VERTEX_ARRAY);
+}
+
+void Renderer::DisableClientState() {
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw) {
+	BindVertexArray(vao);
+	if (elementDraw){
+		DrawElements(_primitive, vertexCount);
+	}
+	else{
+		Draw(_primitive, vertexCount);
+	}
+}
+
 Camera * Renderer::GetCamera() {
 	return camera;
 }
 
+void Renderer::SetCurrentCamera(Camera* _camera){
+	camera = _camera;
+}
+
 Renderer::Renderer(Window* _window){
 	window = _window;
-	camera = new Camera(window->GetWidth(), window->GetHeight());
+	firstCamera = new Camera(window->GetWidth(), window->GetHeight());
+	camera = firstCamera;
 }
 
 Renderer::~Renderer(){

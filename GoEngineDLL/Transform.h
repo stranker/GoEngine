@@ -20,9 +20,16 @@ protected:
 public:
 	void SetPosition(float x, float y, float z);
 	void SetPosition(Vector3 _position);
+	void Translate(Vector3 _position);
 	void SetScale(float x, float y, float z);
 	void SetScale(Vector3 _scale);
 	void SetRotation(float angle, Vector3 axis);
+	void RotateX(float angle);
+	void RotateY(float angle);
+	void RotateZ(float angle);
+	void LookAt(Vector3 _target);
+	void LookAt(Vector3 _target, Vector3 _upVector);
+	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
 	Vector3 GetPosition();
 	Vector3 GetRotation();
 	Vector3 GetScale();

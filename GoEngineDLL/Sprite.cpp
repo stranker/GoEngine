@@ -29,7 +29,7 @@ void Sprite::AddFramesRect() {
 
 void Sprite::SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
 	texture = new TextureMaterial();
-	texture->LoadShaders("TextureVertexShader.shader", "TextureFragmentShader.shader");
+	texture->LoadShaders("Shaders/TextureVertexShader.shader", "Shaders/TextureFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
 	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	verticalFrames = vFrames;
@@ -53,7 +53,7 @@ void Sprite::Draw() {
 		texture->SetBool("flipVertical", flipVertical);
 		texture->SetBool("flipHorizontal", flipHorizontal);
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, draw_vertices); // VAO => VBO VBO VBO
+	renderer->Draw(GetVertexArrayID(), primitive, draw_vertices, true); // VAO => VBO VBO VBO
 }
 
 void Sprite::Destroy() {

@@ -61,7 +61,7 @@ void ParticleSystem::SetEmitting(bool val) {
 
 void ParticleSystem::SetTexture(const char * filePath, ImageType imageType) {
 	texture = new TextureMaterial();
-	texture->LoadShaders("ParticleVertexShader.shader", "ParticleFragmentShader.shader");
+	texture->LoadShaders("Shaders/ParticleVertexShader.shader", "Shaders/ParticleFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
 	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	Scale(texture->GetSize());
@@ -78,7 +78,7 @@ void ParticleSystem::Update(float deltaTime) {
 	for (unsigned int i = 0; i < particleCount; ++i) {
 		Particle &p = particles[i];
 		p.lifeTime -= deltaTime;
-		if (p.lifeTime > 0.0f) {	// particle is alive, thus update
+		if (p.lifeTime > 0.0f) {
 			p.position = p.position + p.velocity * deltaTime;
 			p.color = initialColor.Interpolate(finalColor,  1 - (p.lifeTime / particleLifetime));
 		}
@@ -103,7 +103,7 @@ void ParticleSystem::Draw() {
 				texture->SetVec2("offset", particle.position);
 				texture->SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
 			}
-			renderer->Draw(GetVertexArrayID(), primitive, 6);
+			renderer->Draw(GetVertexArrayID(), primitive, 6, true);
 		}
 	}
 }

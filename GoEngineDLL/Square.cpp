@@ -6,7 +6,7 @@ void Square::Draw() {
 		material->Use(); // Uso el material
 		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, draw_vertices);
+	renderer->Draw(GetVertexArrayID(), primitive, draw_vertices, true);
 }
 
 Square::Square(Renderer *_renderer) : Shape(_renderer) {

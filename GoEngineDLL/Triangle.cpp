@@ -5,7 +5,7 @@ void Triangle::Draw() {
 		material->Use(); // Uso el material
 		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform())); // Seteo al material la propiedad mvp obtenida por la Camara al shader
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, 3);
+	renderer->Draw(GetVertexArrayID(), primitive, 3, false);
 }
 
 void Triangle::Destroy() {
