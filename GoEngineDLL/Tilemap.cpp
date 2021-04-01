@@ -118,7 +118,7 @@ vector<Tilemap::TileObject> Tilemap::GetMapObjects() const {
 
 void Tilemap::SetTexture(const char * filePath, ImageType imageType, int vFrames, int hFrames) {
 	texture = new TextureMaterial();
-	texture->LoadShaders("TilemapVertexShader.shader", "TilemapFragmentShader.shader");
+	texture->LoadShaders("Shaders/TilemapVertexShader.shader", "Shaders/TilemapFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
 	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	verticalFrames = vFrames;
@@ -142,7 +142,7 @@ void Tilemap::Draw() {
 			texture->SetInt("tileId", tile.id);
 			texture->SetVec2("offset", tile.tilemapPosition);
 		}
-		renderer->Draw(GetVertexArrayID(), primitive, 6);
+		renderer->Draw(GetVertexArrayID(), primitive, 6, true);
 	}
 }
 
