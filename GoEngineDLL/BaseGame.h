@@ -16,12 +16,16 @@ class Renderer;
 #include "AnimatedSprite.h"
 #include "ParticleSystem.h"
 #include "CollisionManager.h"
+#include "Camera3D.h"
+#include "Cube.h"
+#include "Line3D.h"
 
 class ENGINEDLL_API BaseGame{
 protected:
 	virtual void Start() = 0;
 	virtual void Update(float deltaTime) = 0;
 	virtual void Stop() = 0;
+	virtual void Test();
 	bool InitEngine();
 	bool DestroyEngine();
 	void LoopEngine();
@@ -47,6 +51,9 @@ public:
 	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
 	ParticleSystem* CreateParticleSystem(const char* filePath, ImageType imageType, size_t particleCount);
+	Camera3D* CreateCamera3D(float width, float height);
+	Cube* CreateCube();
+	Line3D* CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor);
 	Tilemap* CreateTilemap(const char* filePath);
 	//WINDOW
 	Vector2 GetWindowSize();

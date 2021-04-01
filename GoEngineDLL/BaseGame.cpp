@@ -4,6 +4,10 @@
 #include "Renderer.h"
 #include "GlInclude.h"
 
+void BaseGame::Test(){
+	printf("Banana");
+}
+
 bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
@@ -42,13 +46,15 @@ void BaseGame::LoopEngine() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		renderer->SetClearColor(Color().Purple());
+		renderer->SetClearColor(Color().Magenta());
 		renderer->ClearScreen();
+		renderer->EnableClientState();
 
 		Update(deltaTime);
 
 		DrawEntities();
 
+		renderer->DisableClientState();
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}
@@ -100,6 +106,25 @@ ParticleSystem * BaseGame::CreateParticleSystem(const char * filePath, ImageType
 	ps->SetParticleCount(particleCount);
 	entityList->push_back(ps);
 	return ps;
+}
+
+Camera3D* BaseGame::CreateCamera3D(float width, float height) {
+	Camera3D* camera = new Camera3D(width, height);
+	renderer->SetCurrentCamera(camera);
+	return camera;
+}
+
+Cube* BaseGame::CreateCube() {
+	Cube* c = new Cube(renderer);
+	entityList->push_back(c);
+	return c;
+}
+
+Line3D* BaseGame::CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor) {
+	Line3D* line = new Line3D(renderer);
+	line->CreateLine(startPoint, endPoint, lineColor);
+	entityList->push_back(line);
+	return line;
 }
 
 Tilemap * BaseGame::CreateTilemap(const char * filePath) {
