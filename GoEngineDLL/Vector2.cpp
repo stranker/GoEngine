@@ -28,6 +28,14 @@ Vector2 Vector2::operator-=(const Vector2 & vec) const {
 	return Vector2(dx, dy);
 }
 
+float Vector2::Dot(const Vector2 vec2) {
+	return x * vec2.x + y * vec2.y;
+}
+
+Vector2 Vector2::Cross(const Vector2 vec2) {
+	return Vector2().One() * (x * vec2.y - (y * vec2.x));
+}
+
 Vector2 Vector2::Normalize() {
 	float mod = sqrt(x * x + y * y);
 	if (mod != 0) {
@@ -67,6 +75,11 @@ float Vector2::Angle() {
 
 float Vector2::Lenght() {
 	return sqrt(x * x + y * y);
+}
+
+string Vector2::ToString() {
+	string output = "Vector2(" + to_string(x) + "," + to_string(y) + ")";
+	return output;
 }
 
 Vector2::Vector2(float _x, float _y) {
