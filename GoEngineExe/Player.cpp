@@ -16,17 +16,17 @@ void Player::ManageCollision(vector<CollisionInfo> collisions) {
 
 void Player::Update(float deltaTime) {
 	velocity = Vector2().Zero();
-	if (Input::IsKeyPressed(Input::KEY_W)) {
+	if (Input::IsKeyPressed(Input::KEY_UP)) {
 		velocity.y -= 1;
 	}
-	if (Input::IsKeyPressed(Input::KEY_S)) {
+	if (Input::IsKeyPressed(Input::KEY_DOWN)) {
 		velocity.y += 1;
 	}
-	if (Input::IsKeyPressed(Input::KEY_A)) {
+	if (Input::IsKeyPressed(Input::KEY_LEFT)) {
 		velocity.x -= 1;
 		animSprite->FlipVertical(true);
 	}
-	if (Input::IsKeyPressed(Input::KEY_D)) {
+	if (Input::IsKeyPressed(Input::KEY_RIGHT)) {
 		velocity.x += 1;
 		animSprite->FlipVertical(false);
 	}

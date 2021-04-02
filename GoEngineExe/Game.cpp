@@ -1,7 +1,9 @@
 #include "Game.h"
 
-Game::Game(int _screen_width, int _screen_height, const char* _screen_title) : BaseGame(_screen_width, _screen_height, _screen_title) {
-
+Game::Game(int _screenWidth, int _screenHeight, const char* _screenTitle) : BaseGame(_screenWidth, _screenHeight, _screenTitle) {
+	screenWidth = _screenWidth;
+	screenHeight = _screenHeight;
+	screenTitle = _screenTitle;
 }
 
 Game::~Game() {
@@ -10,17 +12,44 @@ Game::~Game() {
 
 void Game::Start() {
 	InitEngine();
-	tilemap = BaseGame::GetSingleton()->CreateTilemap("ForestMap.json");
+	/*tilemap = BaseGame::GetSingleton()->CreateTilemap("ForestMap.json");
 	player = new Player();
-	CreateEnemies();
+	CreateEnemies();*/
+	cube = BaseGame::GetSingleton()->CreateCube();
+	camera = BaseGame::GetSingleton()->CreateCamera3D(screenWidth, screenHeight);
+	camera->Translate(Vector3(0, 0, -3));
+	//gizmo = BaseGame::GetSingleton()->CreateGizmo();
 }
 
 void Game::Update(float deltaTime) {
-	player->Update(deltaTime);
+	timer += deltaTime;
+	if (cube) {
+		cube->Rotate(deltaTime * 20, Vector3().Up());
+	}
+	if (player) {
+		player->Update(deltaTime);
+	}
+	if (camera)	{
+		if (Input::IsMouseButtonPressed(Input::MOUSE_BUTTON_2)){
+			//cout << Input::GetMousePosition().ToString().c_str() << endl;
+			if (Input::IsKeyPressed(Input::KEY_W)) {
+				camera->Translate(Vector3().Foward() * -cameraVelocity * deltaTime);
+			}
+			if (Input::IsKeyPressed(Input::KEY_S)) {
+				camera->Translate(Vector3().Back() * -cameraVelocity * deltaTime);
+			}
+			if (Input::IsKeyPressed(Input::KEY_A)) {
+				camera->Translate(Vector3().Right() * cameraVelocity * deltaTime);
+			}
+			if (Input::IsKeyPressed(Input::KEY_D)) {
+				camera->Translate(Vector3().Right() * -cameraVelocity * deltaTime);
+			}
+		}
+	}
 	for (Enemy *enemy : enemies) {
 		enemy->Update(deltaTime);
 	}
-	UpdateCollisions();
+	//UpdateCollisions();
 }
 
 void Game::CreateEnemies() {
@@ -68,6 +97,14 @@ void Game::Stop() {
 			delete enemy;
 		}
 		enemies.clear();
+	}
+	if (cube){
+		cube->Destroy();
+		delete cube;
+	}
+	if (gizmo){
+		gizmo->Destroy();
+		delete gizmo;
 	}
 	DestroyEngine();
 }
