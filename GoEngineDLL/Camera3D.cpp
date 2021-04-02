@@ -62,8 +62,7 @@ void Camera3D::_UpdateProjection(){
     cout << "near: " << near << endl;
     cout << "far: " << far << endl;
     cout << "---------------------------" << endl;
-    //projection = glm::perspective(glm::radians(fov), aspect, near, far);
-    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(fov), aspect, near, far);
 }
 
 Camera3D::Camera3D(float _width, float _height, float _fov, float _near, float _far) : Camera(_width, _height){

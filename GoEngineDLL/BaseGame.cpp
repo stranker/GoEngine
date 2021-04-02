@@ -120,6 +120,12 @@ Cube* BaseGame::CreateCube() {
 	return c;
 }
 
+Gizmo* BaseGame::CreateGizmo() {
+	Gizmo* gizmo = new Gizmo(renderer);
+	entityList->push_back(gizmo);
+	return gizmo;
+}
+
 Line3D* BaseGame::CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor) {
 	Line3D* line = new Line3D(renderer);
 	line->CreateLine(startPoint, endPoint, lineColor);

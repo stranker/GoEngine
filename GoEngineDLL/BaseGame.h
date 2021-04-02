@@ -19,6 +19,7 @@ class Renderer;
 #include "Camera3D.h"
 #include "Cube.h"
 #include "Line3D.h"
+#include "Gizmo.h"
 
 class ENGINEDLL_API BaseGame{
 protected:
@@ -53,6 +54,7 @@ public:
 	ParticleSystem* CreateParticleSystem(const char* filePath, ImageType imageType, size_t particleCount);
 	Camera3D* CreateCamera3D(float width, float height);
 	Cube* CreateCube();
+	Gizmo* CreateGizmo();
 	Line3D* CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor);
 	Tilemap* CreateTilemap(const char* filePath);
 	//WINDOW
