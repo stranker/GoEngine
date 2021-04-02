@@ -4,6 +4,7 @@
 #include "Utils.h"
 #include "Transform.h"
 #include "Renderer.h"
+#include "Material.h"
 
 class ENGINEDLL_API Entity{
 protected:

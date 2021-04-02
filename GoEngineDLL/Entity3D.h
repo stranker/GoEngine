@@ -1,6 +1,5 @@
 #pragma once
 #include "Entity.h"
-#include "Material.h"
 
 class ENGINEDLL_API Entity3D :
     public Entity {
