@@ -12,6 +12,10 @@ protected:
 	Vector3 rotation;
 	Vector3 localScale;
 
+	Vector3 foward;
+	Vector3 right;
+	Vector3 up;
+
 	glm::mat4 matTranslation;
 	glm::mat4 matRotation;
 	glm::mat4 matScale;
@@ -30,6 +34,7 @@ public:
 	void LookAt(Vector3 _target);
 	void LookAt(Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
+	Vector3 Foward();
 	Vector3 GetPosition();
 	Vector3 GetRotation();
 	Vector3 GetScale();

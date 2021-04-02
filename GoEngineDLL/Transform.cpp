@@ -22,13 +22,13 @@ void Transform::SetScale(float x, float y, float z) {
 	localScale.x = x;
 	localScale.y = y;
 	localScale.z = z;
-	matScale = glm::scale(matScale, glm::vec3(localScale.x , localScale.y , localScale.z));
+	matScale = glm::scale(glm::mat4(1.0f), glm::vec3(localScale.x , localScale.y , localScale.z));
 	UpdateModel();
 }
 
 void Transform::SetScale(Vector3 _scale) {
 	localScale = _scale;
-	matScale = glm::scale(matScale, glm::vec3(localScale.x, localScale.y, localScale.z));
+	matScale = glm::scale(glm::mat4(1.0f), glm::vec3(localScale.x, localScale.y, localScale.z));
 	UpdateModel();
 }
 
@@ -71,6 +71,10 @@ void Transform::LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector) {
 	transform = glm::lookAt(glm::vec3(_position.x, _position.y, _position.z), glm::vec3(_target.x, _target.y, _target.z), glm::vec3(_upVector.x, _upVector.y, _upVector.z));
 }
 
+Vector3 Transform::Foward() {
+	return Vector3();
+}
+
 Vector3 Transform::GetPosition() {
 	return position;
 }
@@ -95,6 +99,9 @@ Transform::Transform() {
 	position = Vector3().Zero();
 	rotation = Vector3().Zero();
 	localScale = Vector3().One();
+	foward = Vector3().Foward();
+	right = Vector3().Right();
+	up = Vector3().Up();
 	matTranslation = glm::mat4(1.0f);
 	matRotation = glm::mat4(1.0f);
 	matScale = glm::mat4(1.0f);

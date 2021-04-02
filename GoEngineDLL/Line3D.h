@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity3D.h"
+
 class ENGINEDLL_API Line3D :
     public Entity3D {
 private:
