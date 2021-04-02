@@ -1,8 +1,8 @@
 #pragma once
-#include "Entity3D.h"
+#include "Primitive.h"
 
 class ENGINEDLL_API Cube : 
-	public Entity3D {
+	public Primitive {
 private:
 	const int drawVertices = 12*3;
 public:

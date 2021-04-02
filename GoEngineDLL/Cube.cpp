@@ -8,9 +8,10 @@ void Cube::Draw() {
         material->SetVec3("lightColor", Vector3(1.0f, 1.0f, 1.0f));
     }
     renderer->Draw(GetVertexArrayID(), primitive, drawVertices, false); // VAO => VBO VBO VBO
+    DrawGizmo();
 }
 
-Cube::Cube(Renderer* _renderer) : Entity3D(_renderer) {
+Cube::Cube(Renderer* _renderer) : Primitive(_renderer) {
     float position_vertex_data[] = {
         -0.5f, -0.5f, -0.5f,
          0.5f, -0.5f, -0.5f,
