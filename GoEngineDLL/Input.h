@@ -3,6 +3,8 @@
 #include <iostream>
 
 class Window;
+class Vector2;
+class GLFWwindow;
 
 using namespace std;
 
@@ -35,6 +37,15 @@ public:
 		KEY_UP = 265,
 	};
 
+	enum MouseButton {
+		MOUSE_BUTTON_1 = 0,
+		MOUSE_BUTTON_2 = 1,
+		MOUSE_BUTTON_3 = 2
+	};
+
+	static void MousePositionCallback(GLFWwindow* window, double xpos, double ypos);
+	static Vector2 GetMousePosition();
+	static bool IsMouseButtonPressed(MouseButton button);
 	static bool IsKeyPressed(KeyCode key);
 	Input(Window* window);
 	virtual ~Input();
