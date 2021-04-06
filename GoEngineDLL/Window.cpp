@@ -2,13 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
-void Window::OnMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-}
-
-void Window::OnMousePositionCallback(GLFWwindow* window, double xpos, double ypos) {
-	Vector2 mousePos = Vector2(xpos, ypos);
-}
-
 bool Window::Init()
 {
 	cout << "Windows Init" << endl;
@@ -29,8 +22,6 @@ bool Window::Init()
 	}
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-	/*glfwSetMouseButtonCallback(window, OnMouseButtonCallback);
-	glfwSetCursorPosCallback(window, OnMousePositionCallback);*/
 	return true;
 }
 

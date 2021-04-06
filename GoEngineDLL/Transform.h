@@ -12,13 +12,10 @@ protected:
 	Vector3 rotation;
 	Vector3 localScale;
 
-	Vector3 foward;
 	Vector3 right;
 	Vector3 up;
 
-	glm::mat4 matTranslation;
-	glm::mat4 matRotation;
-	glm::mat4 matScale;
+	Vector3 eulerAngles;
 
 	glm::mat4 transform;
 public:
@@ -34,12 +31,12 @@ public:
 	void LookAt(Vector3 _target);
 	void LookAt(Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
-	Vector3 Foward();
-	Vector3 GetPosition();
-	Vector3 GetRotation();
-	Vector3 GetScale();
+	void SetEulerAngles(Vector3 _eulerAngles);
+	Vector3 GetFoward() const;
+	Vector3 GetPosition() const;
+	Vector3 GetRotation() const;
+	Vector3 GetScale() const;
 	glm::mat4 GetTransform();
-	void UpdateModel();
 	Transform();
 	~Transform();
 };

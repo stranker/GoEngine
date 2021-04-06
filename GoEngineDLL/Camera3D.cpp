@@ -1,5 +1,9 @@
 #include "Camera3D.h"
 
+void Camera3D::SetPosition(Vector3 position) {
+    transform->SetPosition(position);
+}
+
 void Camera3D::Translate(Vector3 position){
     transform->Translate(position);
 }
@@ -35,6 +39,15 @@ void Camera3D::SetNear(float _near){
 void Camera3D::SetFar(float _far){
     far = _far;
     _UpdateProjection();
+}
+
+void Camera3D::SetEulerAngles(Vector3 _eulerAngles) {
+    eulerAngles = _eulerAngles;
+    Rotate(eulerAngles);
+}
+
+void Camera3D::GetFoward() const {
+    transform->GetFoward();
 }
 
 float Camera3D::GetFov() const {

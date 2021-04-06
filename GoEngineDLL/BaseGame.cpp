@@ -4,15 +4,11 @@
 #include "Renderer.h"
 #include "GlInclude.h"
 
-void BaseGame::Test(){
-	printf("Banana");
-}
-
 bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
 	entityList = new list<Entity*>();
-
+	input->SetCurrentWindow(window);
 	currentFrame = glfwGetTime();
 	lastFrame = currentFrame;
 	return true;
@@ -76,7 +72,7 @@ BaseGame* BaseGame::singleton = nullptr;
 BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title) {
 	window = new Window(_screen_width, _screen_height, _screen_title);
 	renderer = new Renderer(window);
-	input = new Input(window);
+	input = new Input();
 	singleton = this;
 }
 
@@ -85,28 +81,6 @@ BaseGame::~BaseGame() {
 }
 
 #pragma region UserMethods
-
-Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
-	Sprite *sprite = new Sprite(renderer);
-	sprite->SetTexture(filePath, imageType, vFrames, hFrames);
-	entityList->push_back(sprite);
-	return sprite;
-}
-
-AnimatedSprite * BaseGame::CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
-	AnimatedSprite *animSprite = new AnimatedSprite(renderer);
-	animSprite->SetTexture(filePath, imageType, vFrames, hFrames);
-	entityList->push_back(animSprite);
-	return animSprite;
-}
-
-ParticleSystem * BaseGame::CreateParticleSystem(const char * filePath, ImageType imageType, size_t particleCount) {
-	ParticleSystem *ps = new ParticleSystem(renderer);
-	ps->SetTexture(filePath, imageType);
-	ps->SetParticleCount(particleCount);
-	entityList->push_back(ps);
-	return ps;
-}
 
 Camera3D* BaseGame::CreateCamera3D(float width, float height) {
 	Camera3D* camera = new Camera3D(width, height);
@@ -133,11 +107,10 @@ Line3D* BaseGame::CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineC
 	return line;
 }
 
-Tilemap * BaseGame::CreateTilemap(const char * filePath) {
-	Tilemap *tilemap = new Tilemap(renderer);
-	tilemap->LoadFromFile(filePath);
-	entityList->push_back(tilemap);
-	return tilemap;
+Light* BaseGame::CreateLight() {
+	Light* light = new Light(renderer);
+	entityList->push_back(light);
+	return light;
 }
 
 Vector2 BaseGame::GetWindowSize(){

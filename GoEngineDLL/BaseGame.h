@@ -20,43 +20,40 @@ class Renderer;
 #include "Cube.h"
 #include "Line3D.h"
 #include "Gizmo.h"
+#include "Light.h"
 
-class ENGINEDLL_API BaseGame{
+class ENGINEDLL_API BaseGame {
 protected:
 	virtual void Start() = 0;
 	virtual void Update(float deltaTime) = 0;
 	virtual void Stop() = 0;
-	virtual void Test();
 	bool InitEngine();
 	bool DestroyEngine();
 	void LoopEngine();
 	void DrawEntities();
-	static BaseGame *singleton;
+	static BaseGame* singleton;
 private:
-	Window *window;
-	Renderer *renderer;
-	Input *input;
-	list<Entity*> *entityList;
+	Window* window;
+	Renderer* renderer;
+	Input* input;
+	list<Entity*>* entityList;
 	list<Entity*>::iterator entityIterator;
 	double currentFrame;
 	double lastFrame;
 	double deltaTime;
 public:
-	static BaseGame *GetSingleton();
+	static BaseGame* GetSingleton();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
 	virtual ~BaseGame();
 
 #pragma region UserMethods
 
 	//ENTITIES
-	Sprite* CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
-	AnimatedSprite* CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames);
-	ParticleSystem* CreateParticleSystem(const char* filePath, ImageType imageType, size_t particleCount);
 	Camera3D* CreateCamera3D(float width, float height);
 	Cube* CreateCube();
 	Gizmo* CreateGizmo();
 	Line3D* CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor);
-	Tilemap* CreateTilemap(const char* filePath);
+	Light* CreateLight();
 	//WINDOW
 	Vector2 GetWindowSize();
 

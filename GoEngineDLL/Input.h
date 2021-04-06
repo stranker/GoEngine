@@ -2,13 +2,16 @@
 #include "Exports.h"
 #include <iostream>
 
+class GLFWwindow;
 class Window;
 class Vector2;
-class GLFWwindow;
 
 using namespace std;
 
 class ENGINEDLL_API Input {
+private:
+	static Vector2 mousePosition;
+	static Vector2 mouseScroll;
 protected:
 	static Window *window;
 public:
@@ -43,11 +46,16 @@ public:
 		MOUSE_BUTTON_3 = 2
 	};
 
-	static void MousePositionCallback(GLFWwindow* window, double xpos, double ypos);
-	static Vector2 GetMousePosition();
+	static void OnMousePositionCallback(GLFWwindow* window, double xpos, double ypos);
+	static void OnMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 	static bool IsMouseButtonPressed(MouseButton button);
 	static bool IsKeyPressed(KeyCode key);
-	Input(Window* window);
+	static void SetCurrentWindow(Window* _window);
+	static Vector2 GetMousePosition();
+	static Vector2 GetMouseScroll();
+	static void SetMouseScrollCallback(void* callback);
+	static void SetMousePositionCallback(void* callback);
+	Input();
 	virtual ~Input();
 };
 

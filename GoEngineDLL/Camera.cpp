@@ -4,6 +4,10 @@ glm::mat4 Camera::GetProjection() {
 	return projection;
 }
 
+glm::mat4 Camera::GetView() {
+	return transform->GetTransform();
+}
+
 glm::mat4 Camera::GetMVPOf(glm::mat4 model) {
 	return projection * transform->GetTransform() * model;
 }
@@ -17,8 +21,9 @@ Vector2 Camera::GetSize() const {
 }
 
 void Camera::Destroy() {
-	if (transform){
+	if (transform != NULL){
 		delete transform;
+		transform = NULL;
 	}
 }
 
@@ -27,11 +32,15 @@ void Camera::LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector) {
 }
 
 void Camera::LookAt(Vector3 _target, Vector3 _upVector) {
-	transform->LookAt(_target, _upVector);
+	LookAt(transform->GetPosition(), _target, _upVector);
 }
 
 void Camera::LookAt(Vector3 _target) {
-	transform->LookAt(_target);
+	LookAt(_target, Vector3().Up());
+}
+
+Vector3 Camera::GetPosition() {
+	return transform->GetPosition();
 }
 
 Camera::Camera(float _width, float _height) {
