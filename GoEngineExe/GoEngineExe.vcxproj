@@ -136,19 +136,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bat.cpp" />
-    <ClCompile Include="Dragon.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bat.h" />
-    <ClInclude Include="Dragon.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="GameCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GoEngineDLL\GoEngineDLL.vcxproj">
