@@ -20,7 +20,9 @@ void Input::SetCurrentWindow(Window* _window) {
 }
 
 Vector2 Input::GetMousePosition() {
-	return Vector2();
+	double xpos, ypos;
+	glfwGetCursorPos((GLFWwindow*)window->GetWindowPtr(), &xpos, &ypos);
+	return Vector2(xpos, ypos);
 }
 
 Vector2 Input::GetMouseScroll() {
@@ -35,7 +37,7 @@ void Input::SetMouseScrollCallback(void* callback) {
 
 void Input::SetMousePositionCallback(void* callback) {
 	if ((GLFWwindow*)window->GetWindowPtr()) {
-		glfwSetScrollCallback((GLFWwindow*)window->GetWindowPtr(), (GLFWcursorposfun)callback);
+		glfwSetCursorPosCallback((GLFWwindow*)window->GetWindowPtr(), (GLFWcursorposfun)callback);
 	}
 }
 

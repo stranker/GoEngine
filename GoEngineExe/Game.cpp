@@ -45,7 +45,6 @@ void Game::Stop() {
 		delete gizmo;
 	}
 	if (camera)	{
-		camera->Destroy();
 		delete camera;
 	}
 	DestroyEngine();

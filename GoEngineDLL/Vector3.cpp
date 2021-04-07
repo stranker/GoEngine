@@ -31,10 +31,11 @@ Vector3 Vector3::Normalize() {
 }
 
 Vector3 Vector3::Cross(Vector3 vec2){
-	x = y * vec2.z - (vec2.y * z);
-	y = -(x * vec2.z - (vec2.x * z));
-	z = x * vec2.y - (vec2.x * y);
-	return Vector3(x, y, z);
+	Vector3 result;
+	result.x = y * vec2.z - (vec2.y * z);
+	result.y = -(x * vec2.z - (vec2.x * z));
+	result.z = x * vec2.y - (vec2.x * y);
+	return result;
 }
 
 float Vector3::Dot(Vector3 vec2){
