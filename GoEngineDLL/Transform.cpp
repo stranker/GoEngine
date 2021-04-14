@@ -76,17 +76,20 @@ void Transform::LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector) {
 
 void Transform::SetEulerAngles(Vector3 _eulerAngles) {
 	eulerAngles = _eulerAngles;
-	RotateX(eulerAngles.x);
-	RotateY(eulerAngles.y);
-	RotateZ(eulerAngles.z);
+	foward.x = cos(glm::radians(eulerAngles.y)) * cos(glm::radians(eulerAngles.x));
+	foward.y = sin(glm::radians(eulerAngles.x));
+	foward.z = sin(glm::radians(eulerAngles.y)) * cos(glm::radians(eulerAngles.x));
+	right = foward.Cross(Vector3().Up());
+	up = right.Cross(foward);
+	LookAt(position, position + foward, up);
 }
 
 Vector3 Transform::GetFoward() const {
-	Vector3 direction = Vector3();
-	direction.x = cos(glm::radians(eulerAngles.y)) * cos(glm::radians(eulerAngles.x));
-	direction.y = sin(glm::radians(eulerAngles.x));
-	direction.z = sin(glm::radians(eulerAngles.y)) * cos(glm::radians(eulerAngles.x));
-	return direction;
+	return foward;
+}
+
+Vector3 Transform::GetRight() const {
+	return right;
 }
 
 Vector3 Transform::GetPosition() const {
@@ -111,6 +114,7 @@ Transform::Transform() {
 	localScale = Vector3().One();
 	right = Vector3().Right();
 	up = Vector3().Up();
+	foward = Vector3().Foward();
 	transform = glm::mat4(1.0f);
 }
 

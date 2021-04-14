@@ -42,12 +42,15 @@ void Camera3D::SetFar(float _far){
 }
 
 void Camera3D::SetEulerAngles(Vector3 _eulerAngles) {
-    eulerAngles = _eulerAngles;
-    Rotate(eulerAngles);
+    transform->SetEulerAngles(_eulerAngles);
 }
 
-void Camera3D::GetFoward() const {
-    transform->GetFoward();
+Vector3 Camera3D::GetFoward() const {
+    return transform->GetFoward();
+}
+
+Vector3 Camera3D::GetRight() const {
+    return transform->GetRight();
 }
 
 float Camera3D::GetFov() const {

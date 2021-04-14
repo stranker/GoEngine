@@ -19,6 +19,8 @@ public:
 	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _target);
+	Vector3 GetFoward() const;
+	Vector3 GetRight() const;
 	Vector3 GetPosition();
 	Camera(float _width, float _height);
 	~Camera();

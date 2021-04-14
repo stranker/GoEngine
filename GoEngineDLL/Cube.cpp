@@ -13,6 +13,7 @@ void Cube::Draw() {
         spatialMaterial->SetVec3("viewPos", renderer->GetCamera()->GetPosition());
 
         spatialMaterial->SetVec3("light.position", light->GetPosition());
+        //spatialMaterial->SetVec3("light.direction", renderer->GetCamera().);
         spatialMaterial->SetVec3("light.ambient", light->GetAmbient());
         spatialMaterial->SetVec3("light.diffuse", light->GetDiffuse());
         spatialMaterial->SetVec3("light.specular", light->GetSpecular());

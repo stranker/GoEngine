@@ -14,13 +14,13 @@ void Game::Start() {
 	InitEngine();
 	cube = BaseGame::GetSingleton()->CreateCube();
 	camera = new GameCamera(screenWidth, screenHeight);
-	light = BaseGame::GetSingleton()->CreateLight(Vector3().One(), Vector3().One() * 0.2, Vector3().One() * 0.5, Vector3().One());
+	light = BaseGame::GetSingleton()->CreateLight(Vector3().One(), Vector3().One() * 0.2, Vector3().One(), Vector3().One());
 	cube->SetScale(Vector3().One());
 	cube->SetPosition(Vector3().Zero());
 	light->SetScale(Vector3().One() * 0.5f);
-	light->SetPosition(Vector3(10, 5, 0));
+	light->SetPosition(Vector3(10, 2, 0));
 	cube->SetLight(light);
-	cubeMaterial = new SpatialMaterial(Vector3(1.0f, 0.5f, 0.31f), Vector3(1.0f, 0.5f, 0.31f), Vector3(0.2f, 0.2f, 0.2f), 32.0f);
+	cubeMaterial = new SpatialMaterial(Vector3(1.0f, 0.5f, 0.31f), Vector3(1.0f, 0.5f, 0.31f), Vector3().One() * 0.5, 32.0f);
 	cube->SetMaterial(cubeMaterial);
 }
 
@@ -34,7 +34,7 @@ void Game::Update(float deltaTime) {
 	if (cube) {
 		Vector3 velocity;
 		velocity.x = dir * deltaTime * 2;
-		cube->Translate(velocity);
+		//cube->Translate(velocity);
 		if ((int)timer % 2 == 0 && (int)timer != 0){
 			dir = -dir;
 		}
