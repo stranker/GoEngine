@@ -1,19 +1,21 @@
 #include "Cube.h"
 
-void Cube::SetLightPosition(Vector3 pos) {
-    lightPosition = pos;
+void Cube::SetLight(Light* _light) {
+    light = _light;
 }
 
 void Cube::Draw() {
-    if (material) {
-        material->Use(); // Uso el material
-        material->SetMat4("model", GetTransform()->GetTransform());
-        material->SetMat4("view", renderer->GetCamera()->GetView());
-        material->SetMat4("projection", renderer->GetCamera()->GetProjection());
-        material->SetVec3("objectColor", Vector3(1.0f, 0.5f, 0.31f));
-        material->SetVec3("lightColor", Vector3(1.0f, 1.0f, 1.0f));
-        material->SetVec3("lightPos", lightPosition);
-        material->SetVec3("viewPos", renderer->GetCamera()->GetPosition());
+    if (spatialMaterial) {
+        spatialMaterial->Use(); // Uso el material
+        spatialMaterial->SetMat4("model", GetTransform()->GetTransform());
+        spatialMaterial->SetMat4("view", renderer->GetCamera()->GetView());
+        spatialMaterial->SetMat4("projection", renderer->GetCamera()->GetProjection());
+        spatialMaterial->SetVec3("viewPos", renderer->GetCamera()->GetPosition());
+
+        spatialMaterial->SetVec3("light.position", light->GetPosition());
+        spatialMaterial->SetVec3("light.ambient", light->GetAmbient());
+        spatialMaterial->SetVec3("light.diffuse", light->GetDiffuse());
+        spatialMaterial->SetVec3("light.specular", light->GetSpecular());
     }
     renderer->Draw(GetVertexArrayID(), primitive, drawVertices, false); // VAO => VBO VBO VBO
     DrawGizmo();
@@ -111,8 +113,6 @@ Cube::Cube(Renderer* _renderer) : Primitive(_renderer) {
     CreateVertexData(normal_vertex_data, sizeof(normal_vertex_data), 3, Renderer::ARRAY_BUFFER, 1); // VBO
     BindVertexObjects(); // Bindeo VAO
     primitive = Renderer::TRIANGLES;
-    material = new Material();
-    material->LoadShaders("Shaders/BasicLightVertexShader.shader", "Shaders/LightFragmentShader.shader");
     cout << "Creating Cube" << endl;
 }
 

@@ -42,7 +42,7 @@ void BaseGame::LoopEngine() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		renderer->SetClearColor(Color().Magenta());
+		renderer->SetClearColor(Color(0.1,0.1,0.1,1));
 		renderer->ClearScreen();
 		renderer->EnableClientState();
 
@@ -107,8 +107,9 @@ Line3D* BaseGame::CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineC
 	return line;
 }
 
-Light* BaseGame::CreateLight() {
+Light* BaseGame::CreateLight(Vector3 lightColor, Vector3 ambient, Vector3 diffuse, Vector3 specular) {
 	Light* light = new Light(renderer);
+	light->CreateLight(lightColor, ambient, diffuse, specular);
 	entityList->push_back(light);
 	return light;
 }

@@ -165,6 +165,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="SpatialMaterial.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="stb_image.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="SpatialMaterial.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="TextureMaterial.cpp" />

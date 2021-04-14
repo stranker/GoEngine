@@ -4,6 +4,10 @@ void Primitive::DrawGizmo() {
 	gizmo->Draw();
 }
 
+void Primitive::SetMaterial(SpatialMaterial* _spatialMaterial) {
+	spatialMaterial = _spatialMaterial;
+}
+
 void Primitive::SetPosition(Vector3 position) {
 	Entity3D::SetPosition(position);
 	gizmo->SetPosition(position);
@@ -37,5 +41,9 @@ Primitive::~Primitive() {
 	if (gizmo){
 		gizmo->Destroy();
 		delete gizmo;
+	}
+	if (spatialMaterial){
+		spatialMaterial->Destroy();
+		delete spatialMaterial;
 	}
 }

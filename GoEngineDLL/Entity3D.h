@@ -16,6 +16,7 @@ public:
 	Vector3 GetScale() const;
 	void Destroy() override;
 	Transform* GetTransform();
+	void SetMaterial(Material* _material);
 	Entity3D(Renderer* _renderer);
 	~Entity3D();
 };

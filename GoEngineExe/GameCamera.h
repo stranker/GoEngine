@@ -24,6 +24,7 @@ private:
 	void _UpdateCameraVectors();
 	void _ProcessMousePosition();
 public:
+	void SetPosition(Vector3 position);
 	void Update(float deltaTime);
 	GameCamera(float screenWidth, float screenHeight);
 	~GameCamera();

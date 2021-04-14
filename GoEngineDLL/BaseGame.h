@@ -21,6 +21,7 @@ class Renderer;
 #include "Line3D.h"
 #include "Gizmo.h"
 #include "Light.h"
+#include "SpatialMaterial.h"
 
 class ENGINEDLL_API BaseGame {
 protected:
@@ -53,7 +54,7 @@ public:
 	Cube* CreateCube();
 	Gizmo* CreateGizmo();
 	Line3D* CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor);
-	Light* CreateLight();
+	Light* CreateLight(Vector3 lightColor, Vector3 ambient, Vector3 diffuse, Vector3 specular);
 	//WINDOW
 	Vector2 GetWindowSize();
 

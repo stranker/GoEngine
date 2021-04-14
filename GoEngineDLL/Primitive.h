@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity3D.h"
+#include "SpatialMaterial.h"
 #include "Gizmo.h"
 
 class ENGINEDLL_API Primitive :
@@ -7,8 +8,10 @@ class ENGINEDLL_API Primitive :
 private:
     Gizmo* gizmo;
 protected:
+    SpatialMaterial* spatialMaterial;
     void DrawGizmo();
 public:
+    void SetMaterial(SpatialMaterial* spatialMaterial);
     void SetPosition(Vector3 position);
     void Translate(Vector3 position);
     void Rotate(Vector3  rotation);

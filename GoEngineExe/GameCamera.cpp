@@ -25,6 +25,10 @@ void GameCamera::_ProcessMousePosition() {
 	_UpdateCameraVectors();
 }
 
+void GameCamera::SetPosition(Vector3 position) {
+	camera->SetPosition(position);
+}
+
 void GameCamera::Update(float deltaTime) {
 	if (Input::IsMouseButtonPressed(Input::MOUSE_BUTTON_2)){
 		if (Input::IsKeyPressed(Input::KEY_W)) {

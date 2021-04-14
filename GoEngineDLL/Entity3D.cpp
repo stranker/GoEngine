@@ -51,6 +51,14 @@ Transform* Entity3D::GetTransform() {
 	return transform;
 }
 
+void Entity3D::SetMaterial(Material* _material) {
+	if (material){
+		material->Destroy();
+		delete material;
+	}
+	material = _material;
+}
+
 Entity3D::Entity3D(Renderer* _renderer) : Entity(_renderer) {
 }
 

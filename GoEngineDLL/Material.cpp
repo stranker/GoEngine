@@ -83,7 +83,7 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 
 
 	// Compilar Vertex Shader
-	printf("Compiling shader : %s\n", vertex_file_path);
+	//printf("Compiling shader : %s\n", vertex_file_path);
 	char const * VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
 	glCompileShader(VertexShaderID);
@@ -100,7 +100,7 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 
 
 	// Compilar Fragment Shader
-	printf("Compiling shader : %s\n", fragment_file_path);
+	//printf("Compiling shader : %s\n", fragment_file_path);
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
 	glCompileShader(FragmentShaderID);
@@ -117,7 +117,7 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 
 
 	// Vincular el programa por medio del ID
-	printf("Linking program\n");
+	//printf("Linking program\n");
 	ID = glCreateProgram();
 	glAttachShader(ID, VertexShaderID);
 	glAttachShader(ID, FragmentShaderID);

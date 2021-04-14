@@ -9,7 +9,6 @@ class Game :
 private:
 	GameCamera* camera;
 	Cube* cube;
-	Gizmo* gizmo;
 	Light* light;
 	float cameraVelocity = 1;
 	float cameraFovIncrement = 1;
@@ -20,6 +19,7 @@ private:
 	int screenWidth;
 	int screenHeight;
 	const char* screenTitle;
+	SpatialMaterial* cubeMaterial;
 public:
 	void Start() override;
 	void Update(float deltaTime) override;

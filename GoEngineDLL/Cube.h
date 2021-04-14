@@ -1,13 +1,14 @@
 #pragma once
 #include "Primitive.h"
+#include "Light.h"
 
 class ENGINEDLL_API Cube : 
 	public Primitive {
 private:
 	const int drawVertices = 12*3;
-	Vector3 lightPosition;
+	Light* light;
 public:
-	void SetLightPosition(Vector3 pos);
+	void SetLight(Light* _light);
 	void Draw() override;
 	Cube(Renderer* _renderer);
 	~Cube();
