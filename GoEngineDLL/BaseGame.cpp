@@ -114,6 +114,16 @@ Light* BaseGame::CreateLight(Vector3 lightColor, Vector3 ambient, Vector3 diffus
 	return light;
 }
 
+Light* BaseGame::CreateLight(Vector3 lightColor) {
+	Light* light = new Light(renderer);
+	Vector3 diffuse = Vector3(1.0f, 0.5f, 0.0f);
+	Vector3 ambient = Vector3().One() * 0.5f;
+	Vector3 specular = Vector3(1.0f, 1.0f, 0.0f);
+	light->CreateLight(lightColor, ambient, diffuse, specular);
+	entityList->push_back(light);
+	return light;
+}
+
 Vector2 BaseGame::GetWindowSize(){
 	return window->GetSize();
 }

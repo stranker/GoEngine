@@ -28,9 +28,8 @@ unsigned char * TextureMaterial::GetData() const {
 
 void TextureMaterial::SetTextureProperty(const char * property, unsigned int value) {
 	unsigned int location = glGetUniformLocation(ID, property);
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(property == "material.diffuse" ? GL_TEXTURE0 : GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, value);
-	glUniform1i(location, 0);
 }
 
 void TextureMaterial::LoadTexture(const char* filePath, ImageType imageType) {

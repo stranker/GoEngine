@@ -11,6 +11,11 @@ struct ENGINEDLL_API TextureData {
 	int height;
 	int nrChannels;
 	unsigned char* data;
+
+	int GetWidth() const { return width; }
+	int Getheight() const { return height; }
+	int GetNrChannels() const {	return nrChannels; }
+	unsigned char* GetData() { return data;	}
 };
 
 class ENGINEDLL_API TextureImporter {

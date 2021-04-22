@@ -1,5 +1,6 @@
 #include "Material.h"
 #include "GlInclude.h"
+#include "Renderer.h"
 
 void Material::SetMat4(const char *property, glm::mat4 matrix) const{
 	unsigned int location = glGetUniformLocation(ID, property);

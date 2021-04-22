@@ -8,6 +8,8 @@ using namespace std;
 
 class ENGINEDLL_API Renderer
 {
+private:
+	static Renderer* singleton;
 protected:
 	Window* window;
 	Camera* camera;
@@ -54,6 +56,7 @@ public:
 	void DrawElements(Primitive _primitive, int vertexCount);
 	void EnableClientState();
 	void DisableClientState();
+	static Renderer* GetSingleton();
 	Camera* GetCamera();
 	void SetCurrentCamera(Camera* _camera);
 	Renderer(Window* _window);

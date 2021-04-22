@@ -151,6 +151,11 @@ void Renderer::EnableClientState() {
 void Renderer::DisableClientState() {
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
+Renderer* Renderer::singleton = NULL;
+
+Renderer* Renderer::GetSingleton() {
+	return singleton;
+}
 
 void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw) {
 	BindVertexArray(vao);
@@ -174,6 +179,7 @@ Renderer::Renderer(Window* _window){
 	window = _window;
 	firstCamera = new Camera(window->GetWidth(), window->GetHeight());
 	camera = firstCamera;
+	singleton = this;
 }
 
 Renderer::~Renderer(){

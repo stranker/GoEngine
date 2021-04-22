@@ -5,6 +5,7 @@ void Light::CreateLight(Vector3 _color, Vector3 _ambient, Vector3 _diffuse, Vect
     ambient = _ambient;
     diffuse = _diffuse;
     specular = _specular;
+    range = 7.0f;
 }
 
 void Light::Draw() {
@@ -31,6 +32,15 @@ void Light::SetDiffuse(Vector3 _diffuse) {
 
 void Light::SetSpecular(Vector3 _specular) {
     specular = _specular;
+}
+
+void Light::SetRange(float _range) {
+    range = _range;
+    range = Utils::Clamp(range, 0, 100);
+}
+
+float Light::GetRange() const {
+    return range;
 }
 
 Vector3 Light::GetLightColor() const {

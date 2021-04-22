@@ -55,6 +55,7 @@ public:
 	Gizmo* CreateGizmo();
 	Line3D* CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor);
 	Light* CreateLight(Vector3 lightColor, Vector3 ambient, Vector3 diffuse, Vector3 specular);
+	Light* CreateLight(Vector3 lightColor);
 	//WINDOW
 	Vector2 GetWindowSize();
 

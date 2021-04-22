@@ -21,7 +21,8 @@ public:
 	void LookAt(Vector3 _target);
 	Vector3 GetFoward() const;
 	Vector3 GetRight() const;
-	Vector3 GetPosition();
+	Vector3 GetPosition() const;
+	Transform* GetTransform() const;
 	Camera(float _width, float _height);
 	~Camera();
 };

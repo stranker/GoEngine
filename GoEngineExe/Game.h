@@ -9,6 +9,8 @@ class Game :
 private:
 	GameCamera* camera;
 	Cube* cube;
+	Cube* cube2;
+	Cube* cube3;
 	Light* light;
 	float cameraVelocity = 1;
 	float cameraFovIncrement = 1;

@@ -19,6 +19,11 @@ protected:
 	Vector3 eulerAngles;
 
 	glm::mat4 transform;
+	glm::mat4 matTrans;
+	glm::mat4 matRot;
+	glm::mat4 matScl;
+
+	void _UpdateTransform();
 public:
 	void SetPosition(float x, float y, float z);
 	void SetPosition(Vector3 _position);

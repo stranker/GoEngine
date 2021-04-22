@@ -7,6 +7,7 @@ private:
     Vector3 ambient;
     Vector3 diffuse;
     Vector3 specular;
+    float range;
     const int drawVertices = 12 * 3;
 public:
     void CreateLight(Vector3 _color, Vector3 _ambient, Vector3 _diffuse, Vector3 _specular);
@@ -15,6 +16,8 @@ public:
     void SetAmbient(Vector3 _ambient);
     void SetDiffuse(Vector3 _diffuse);
     void SetSpecular(Vector3 _specular);
+    void SetRange(float _range);
+    float GetRange() const;
     Vector3 GetLightColor() const;
     Vector3 GetAmbient() const;
     Vector3 GetDiffuse() const;

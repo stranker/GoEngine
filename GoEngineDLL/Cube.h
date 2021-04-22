@@ -5,10 +5,12 @@
 class ENGINEDLL_API Cube : 
 	public Primitive {
 private:
-	const int drawVertices = 12*3;
 	Light* light;
+	const int LIGHT_SHADER_VERSION = 2;
+	const int drawVertices = 36;
 public:
-	void SetLight(Light* _light);
+	void SetMaterial(SpatialMaterial* spatialMaterial);
+	void SetLight(Light* light);
 	void Draw() override;
 	Cube(Renderer* _renderer);
 	~Cube();

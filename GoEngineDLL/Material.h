@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include "TextureImporter.h"
 
 class ENGINEDLL_API Material
 {

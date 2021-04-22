@@ -47,8 +47,12 @@ Vector3 Camera::GetRight() const {
 	return transform->GetRight();
 }
 
-Vector3 Camera::GetPosition() {
+Vector3 Camera::GetPosition() const {
 	return transform->GetPosition();
+}
+
+Transform* Camera::GetTransform() const {
+	return transform;
 }
 
 Camera::Camera(float _width, float _height) {

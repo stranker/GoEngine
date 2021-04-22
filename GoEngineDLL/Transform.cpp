@@ -1,17 +1,24 @@
 #include "Transform.h"
 
+void Transform::_UpdateTransform() {
+	transform = glm::mat4(1.0f);
+	transform = matTrans * matRot * matScl;
+}
+
 void Transform::SetPosition(float x, float y, float z) {
 	position.x = x;
 	position.y = y;
 	position.z = z;
-	transform = glm::mat4(1.0f);
-	transform = glm::translate(transform, glm::vec3(position.x, position.y, position.z));
+	matTrans = glm::mat4(1.0f);
+	matTrans = glm::translate(matTrans, glm::vec3(position.x, position.y, position.z));
+	_UpdateTransform();
 }
 
 void Transform::SetPosition(Vector3 _position) {
 	position = _position;
-	transform = glm::mat4(1.0f);
-	transform = glm::translate(transform, glm::vec3(position.x, position.y, position.z));
+	matTrans = glm::mat4(1.0f);
+	matTrans = glm::translate(matTrans, glm::vec3(position.x, position.y, position.z));
+	_UpdateTransform();
 }
 
 void Transform::Translate(Vector3 _position){
@@ -22,40 +29,43 @@ void Transform::SetScale(float x, float y, float z) {
 	localScale.x = x;
 	localScale.y = y;
 	localScale.z = z;
-	transform = glm::mat4(1.0f);
-	transform = glm::scale(transform, glm::vec3(localScale.x , localScale.y , localScale.z));
+	matScl = glm::mat4(1.0f);
+	matScl = glm::scale(matScl, glm::vec3(localScale.x, localScale.y, localScale.z));
+	_UpdateTransform();
 }
 
 void Transform::SetScale(Vector3 _scale) {
 	localScale = _scale;
-	transform = glm::mat4(1.0f);
-	transform = glm::scale(transform, glm::vec3(localScale.x, localScale.y, localScale.z));
+	matScl = glm::mat4(1.0f);
+	matScl = glm::scale(transform, glm::vec3(localScale.x, localScale.y, localScale.z));
+	_UpdateTransform();
 }
 
 void Transform::SetRotation(float angle, Vector3 axis) {
 	rotation.x = angle * axis.x;
 	rotation.y = angle * axis.y;
 	rotation.z = angle * axis.z;
-	transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, glm::radians(angle), glm::vec3(axis.x, axis.y, axis.z));
+	matRot = glm::mat4(1.0f);
+	matRot = glm::rotate(transform, glm::radians(angle), glm::vec3(axis.x, axis.y, axis.z));
+	_UpdateTransform();
 }
 
 void Transform::RotateX(float angle) {
-	rotation.x = angle;
-	transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+	rotation.x += angle;
+	matRot = glm::rotate(transform, glm::radians(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+	_UpdateTransform();
 }
 
 void Transform::RotateY(float angle) {
-	rotation.y = angle;
-	transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+	rotation.y += angle;
+	matRot = glm::rotate(transform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+	_UpdateTransform();
 }
 
 void Transform::RotateZ(float angle) {
-	rotation.z = angle;
-	transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
+	rotation.z += angle;
+	matRot = glm::rotate(transform, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
+	_UpdateTransform();
 }
 
 
@@ -79,6 +89,7 @@ void Transform::SetEulerAngles(Vector3 _eulerAngles) {
 	foward.x = cos(glm::radians(eulerAngles.y)) * cos(glm::radians(eulerAngles.x));
 	foward.y = sin(glm::radians(eulerAngles.x));
 	foward.z = sin(glm::radians(eulerAngles.y)) * cos(glm::radians(eulerAngles.x));
+	foward = foward.Normalize();
 	right = foward.Cross(Vector3().Up());
 	up = right.Cross(foward);
 	LookAt(position, position + foward, up);
@@ -116,6 +127,9 @@ Transform::Transform() {
 	up = Vector3().Up();
 	foward = Vector3().Foward();
 	transform = glm::mat4(1.0f);
+	matTrans = glm::mat4(1.0f);
+	matRot = glm::mat4(1.0f);
+	matScl = glm::mat4(1.0f);
 }
 
 
