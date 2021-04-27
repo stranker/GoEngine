@@ -17,47 +17,37 @@ void Game::Start() {
 	cube3 = BaseGame::GetSingleton()->CreateCube();
 	camera = new GameCamera(screenWidth, screenHeight);
 	camera->SetPosition(Vector3(0, 0, 5));
-	light = BaseGame::GetSingleton()->CreateLight(Vector3().One());
+	spotLight = BaseGame::GetSingleton()->CreateSpotLight(Vector3(0, 0, 1), 1, 0.5f, 3, Vector3().Foward(), Vector3(1, 0.09, 0.032), 12, 15);
+	dirLight = BaseGame::GetSingleton()->CreateDirectional(Vector3(1.0, 0, 0), 1, 0.5f, Vector3().Foward());
 	cube->SetPosition(Vector3().Zero());
 	cube->SetScale(Vector3(10, 10, 2));
 	cube2->SetPosition(Vector3(1, 1, 3));
 	cube3->SetPosition(Vector3(-1, 1, 2));
 	cube2->Rotate(45.0f, Vector3().Right());
 	cube3->Rotate(70.0f, Vector3().Foward());
-	cubeMaterial = new SpatialMaterial(Vector3(1.0f, 0.5f, 0.31f), Vector3(1.0f, 0.5f, 0.31f), Vector3().One() * 0.5, 32.0f);
+	cubeMaterial = new SpatialMaterial(0.5f, 0.0f);
 	cubeMaterial->SetDiffuseMap("container2.png", ImageType::IMAGETYPE_PNG);
 	cubeMaterial->SetSpecularMap("container2_specular.png", ImageType::IMAGETYPE_PNG);
 	cube->SetMaterial(cubeMaterial);
 	cube2->SetMaterial(cubeMaterial);
 	cube3->SetMaterial(cubeMaterial);
-	cube->SetLight(light);
-	cube2->SetLight(light);
-	cube3->SetLight(light);
 }
 
 void Game::Update(float deltaTime) {
 	timer += deltaTime;
-	if (light){
+	if (spotLight){
 		const float velocity = 5 * deltaTime;
 		if (Input::IsKeyPressed(Input::KEY_UP)){
-			light->Translate(light->GetTransform()->GetFoward() * velocity);
+			spotLight->Translate(spotLight->GetTransform()->GetFoward() * velocity);
 		}
 		if (Input::IsKeyPressed(Input::KEY_DOWN)) {
-			light->Translate(light->GetTransform()->GetFoward() * -velocity);
+			spotLight->Translate(spotLight->GetTransform()->GetFoward() * -velocity);
 		}
 		if (Input::IsKeyPressed(Input::KEY_RIGHT)) {
-			light->Translate(light->GetTransform()->GetRight() * velocity);
+			spotLight->Translate(spotLight->GetTransform()->GetRight() * velocity);
 		}
 		if (Input::IsKeyPressed(Input::KEY_LEFT)) {
-			light->Translate(light->GetTransform()->GetRight() * -velocity);
-		}
-		if (Input::IsKeyPressed(Input::KEY_Q)) {
-			cout << light->GetRange() << endl;
-			light->SetRange(light->GetRange() - deltaTime);
-		}
-		if (Input::IsKeyPressed(Input::KEY_E)) {
-			cout << light->GetRange() << endl;
-			light->SetRange(light->GetRange() + deltaTime);
+			spotLight->Translate(spotLight->GetTransform()->GetRight() * -velocity);
 		}
 	}
 	if (cube) {

@@ -3,16 +3,12 @@
 void Triangle::Draw() {
 	if (material) {
 		material->Use(); // Uso el material
-		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform())); // Seteo al material la propiedad mvp obtenida por la Camara al shader
+		material->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform())); // Seteo al material la propiedad mvp obtenida por la Camara al shader
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, 3, false);
+	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 3, false);
 }
 
-void Triangle::Destroy() {
-
-}
-
-Triangle::Triangle(Renderer* _renderer) : Shape(_renderer) {
+Triangle::Triangle() {
 	float position_vertex_data[] = {
 		-0.5f, -0.5f, 0.0f,
 		 0.5f, -0.5f, 0.0f,

@@ -16,6 +16,6 @@ public:
 	void Stop();
 	void Resume();
 	void Update(float deltaTime) override;
-	AnimatedSprite(Renderer *_renderer);
+	AnimatedSprite();
 	~AnimatedSprite();
 };

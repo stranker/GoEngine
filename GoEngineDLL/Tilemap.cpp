@@ -120,7 +120,7 @@ void Tilemap::SetTexture(const char * filePath, ImageType imageType, int vFrames
 	texture = new TextureMaterial();
 	texture->LoadShaders("Shaders/TilemapVertexShader.shader", "Shaders/TilemapFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
-	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
+	textureBuffer = Renderer::GetSingleton()->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
@@ -131,7 +131,7 @@ void Tilemap::SetTexture(const char * filePath, ImageType imageType, int vFrames
 void Tilemap::Draw() {
 	if (texture) {
 		texture->Use();
-		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
+		texture->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
 		texture->SetTextureProperty("sprite", textureBuffer);
 		texture->SetInt("tileRows", horizontalFrames);
 		texture->SetInt("tileColumns", verticalFrames);
@@ -142,7 +142,7 @@ void Tilemap::Draw() {
 			texture->SetInt("tileId", tile.id);
 			texture->SetVec2("offset", tile.tilemapPosition);
 		}
-		renderer->Draw(GetVertexArrayID(), primitive, 6, true);
+		Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 6, true);
 	}
 }
 
@@ -161,7 +161,7 @@ Vector2 Tilemap::GetTileSize() const {
 	return Vector2(tileWidth, tileHeight);
 }
 
-Tilemap::Tilemap(Renderer *_renderer) : Sprite(_renderer) {
+Tilemap::Tilemap() {
 }
 
 Tilemap::~Tilemap() {

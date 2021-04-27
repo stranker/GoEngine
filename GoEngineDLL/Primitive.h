@@ -17,7 +17,7 @@ public:
     void Rotate(Vector3  rotation);
     void Rotate(float angle, Vector3 axis);
     void SetScale(Vector3 scale);
-    Primitive(Renderer* _renderer);
+    Primitive();
     ~Primitive();
 };
 

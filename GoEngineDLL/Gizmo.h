@@ -4,6 +4,7 @@
 class ENGINEDLL_API Gizmo :
     public Line3D {
 private:
+    Material* lineMaterial;
     Line3D* redLine;
     Line3D* blueLine;
     Line3D* greenLine;
@@ -14,7 +15,7 @@ public:
     void Rotate(float angle, Vector3 axis);
     void Draw() override;
     void Destroy() override;
-    Gizmo(Renderer* _renderer);
+    Gizmo();
     ~Gizmo();
 };
 

@@ -41,7 +41,7 @@ public:
 	void Draw() override;
 	void Destroy() override;
 	void RandomizeParticle(Particle& p);
-	ParticleSystem(Renderer *rend);
+	ParticleSystem();
 	virtual ~ParticleSystem();
 };
 

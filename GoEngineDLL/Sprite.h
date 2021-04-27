@@ -35,7 +35,7 @@ public:
 	void SetCurrentFrame(unsigned int value);
 	void SetTotalFrames(int value);
 	AABB GetAABB() const;
-	Sprite(Renderer *_renderer);
+	Sprite();
 	virtual ~Sprite();
 };
 

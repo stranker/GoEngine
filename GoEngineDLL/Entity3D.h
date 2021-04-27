@@ -1,10 +1,12 @@
 #pragma once
 #include "Entity.h"
+#include "Transform.h"
+#include "Material.h"
 
 class ENGINEDLL_API Entity3D :
     public Entity {
 protected:
-	Material* material;
+	Transform* transform;
 public:
 	void SetPosition(Vector3 position);
 	void Translate(Vector3 position);
@@ -16,8 +18,6 @@ public:
 	Vector3 GetScale() const;
 	void Destroy() override;
 	Transform* GetTransform();
-	void SetMaterial(Material* _material);
-	Entity3D(Renderer* _renderer);
+	Entity3D();
 	~Entity3D();
 };
-

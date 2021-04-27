@@ -31,10 +31,6 @@ void Gizmo::Draw() {
 }
 
 void Gizmo::Destroy() {
-	if (material){
-		material->Destroy();
-		delete material;
-	}
 	if (redLine){
 		redLine->Destroy();
 		delete redLine;
@@ -47,15 +43,24 @@ void Gizmo::Destroy() {
 		greenLine->Destroy();
 		delete greenLine;
 	}
+	if (lineMaterial){
+		lineMaterial->Destroy();
+		delete lineMaterial;
+	}
 }
 
-Gizmo::Gizmo(Renderer* _renderer) : Line3D(_renderer){
-	redLine = new Line3D(_renderer);
-	blueLine = new Line3D(_renderer);
-	greenLine = new Line3D(_renderer);
-	redLine->CreateLine(Vector3().Zero(), Vector3().Right() * 1, Color().Red());
-	blueLine->CreateLine(Vector3().Zero(), Vector3().Foward() * 1, Color().Blue());
-	greenLine->CreateLine(Vector3().Zero(), Vector3().Up() * 1, Color().Green());
+Gizmo::Gizmo(){
+	lineMaterial = new Material();
+	lineMaterial->LoadShaders("Shaders/SimpleVertex3dShader.shader", "Shaders/LineFragmentShader.shader");
+	redLine = new Line3D();
+	blueLine = new Line3D();
+	greenLine = new Line3D();
+	redLine->CreateLine(Vector3().Zero(), Vector3().Right() * 1.5f, Color().Red());
+	blueLine->CreateLine(Vector3().Zero(), Vector3().Foward() * 1.5f, Color().Blue());
+	greenLine->CreateLine(Vector3().Zero(), Vector3().Up() * 1.5f, Color().Green());
+	redLine->SetMaterial(lineMaterial);
+	blueLine->SetMaterial(lineMaterial);
+	greenLine->SetMaterial(lineMaterial);
 }
 
 Gizmo::~Gizmo() {

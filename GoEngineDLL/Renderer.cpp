@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "GlInclude.h"
 #include "Window.h"
+#include "Light.h"
+#include "SpatialMaterial.h"
 
 bool Renderer::Init(){
 	cout << "Renderer Init" << endl;
@@ -20,6 +22,27 @@ bool Renderer::Init(){
 
 bool Renderer::Destroy(){
 	cout << "Renderer Destroy" << endl;
+	if (!dirLights.empty()){
+		for (Light* light : dirLights) {
+			light->Destroy();
+			delete light;
+		}
+		dirLights.clear();
+	}
+	if (!pointLights.empty()) {
+		for (Light* light : pointLights) {
+			light->Destroy();
+			delete light;
+		}
+		pointLights.clear();
+	}
+	if (!spotLights.empty()) {
+		for (Light* light : spotLights) {
+			light->Destroy();
+			delete light;
+		}
+		spotLights.clear();
+	}
 	if (firstCamera){
 		firstCamera->Destroy();
 		delete firstCamera;
@@ -151,6 +174,13 @@ void Renderer::EnableClientState() {
 void Renderer::DisableClientState() {
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
+
+void Renderer::DestroyVertexData(vector<VertexData> data) {
+	for (VertexData vertexData : data) {
+		DeleteBuffer(vertexData.vbo);
+	}
+}
+
 Renderer* Renderer::singleton = NULL;
 
 Renderer* Renderer::GetSingleton() {
@@ -173,6 +203,67 @@ Camera * Renderer::GetCamera() {
 
 void Renderer::SetCurrentCamera(Camera* _camera){
 	camera = _camera;
+}
+
+void Renderer::AddLight(Light* light) {
+	switch (light->GetType())
+	{
+	case LightType::DIRECTIONAL: dirLights.push_back((DirectionalLight*)light); break;
+	case LightType::POINT: pointLights.push_back((PointLight*)light); break;
+	case LightType::SPOT: spotLights.push_back((SpotLight*)light); break;
+	default:
+		break;
+	}
+}
+
+int Renderer::GetDirLights() const {
+	return dirLights.size();
+}
+
+int Renderer::GetPointLights() const {
+	return pointLights.size();
+}
+
+int Renderer::GetSpotLights() const {
+	return spotLights.size();
+}
+
+void Renderer::ProcessLighting(SpatialMaterial* material) {
+	material->SetInt("dirLightSize", dirLights.size());
+	material->SetInt("pointLightSize", pointLights.size());
+	material->SetInt("spotLightSize", spotLights.size());
+	for (size_t i = 0; i < dirLights.size(); i++){
+		string dirArrayIdx = "dirLights[" + to_string(i) + "]";
+		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetDirection());
+		material->SetVec3(dirArrayIdx + ".color", dirLights[i]->GetLightColor());
+		material->SetFloat(dirArrayIdx + ".specular", dirLights[i]->GetSpecular());
+		material->SetFloat(dirArrayIdx + ".energy", dirLights[i]->GetEnergy());
+	}
+	for (size_t i = 0; i < pointLights.size(); i++) {
+		string dirArrayIdx = "pointLights[" + to_string(i) + "]";
+		material->SetVec3(dirArrayIdx + ".position", pointLights[i]->GetTransform()->GetPosition());
+		material->SetVec3(dirArrayIdx + ".color", pointLights[i]->GetLightColor());
+		material->SetFloat(dirArrayIdx + ".specular", pointLights[i]->GetSpecular());
+		material->SetFloat(dirArrayIdx + ".energy", pointLights[i]->GetEnergy());
+		material->SetFloat(dirArrayIdx + ".constant", pointLights[i]->GetAttenuation().x);
+		material->SetFloat(dirArrayIdx + ".linear", pointLights[i]->GetAttenuation().y);
+		material->SetFloat(dirArrayIdx + ".quadratic", pointLights[i]->GetAttenuation().z);
+		material->SetFloat(dirArrayIdx + ".range", pointLights[i]->GetRange());
+	}
+	for (size_t i = 0; i < spotLights.size(); i++) {
+		string dirArrayIdx = "spotLights[" + to_string(i) + "]";
+		material->SetVec3(dirArrayIdx + ".direction", spotLights[i]->GetTransform()->GetFoward());
+		material->SetVec3(dirArrayIdx + ".position", spotLights[i]->GetTransform()->GetPosition());
+		material->SetVec3(dirArrayIdx + ".color", spotLights[i]->GetLightColor());
+		material->SetFloat(dirArrayIdx + ".specular", spotLights[i]->GetSpecular());
+		material->SetFloat(dirArrayIdx + ".energy", spotLights[i]->GetEnergy());
+		material->SetFloat(dirArrayIdx + ".constant", spotLights[i]->GetAttenuation().x);
+		material->SetFloat(dirArrayIdx + ".linear", spotLights[i]->GetAttenuation().y);
+		material->SetFloat(dirArrayIdx + ".quadratic", spotLights[i]->GetAttenuation().z);
+		material->SetFloat(dirArrayIdx + ".cutOff", spotLights[i]->GetCutOff());
+		material->SetFloat(dirArrayIdx + ".outerCutOff", spotLights[i]->GetOuterCutOff());
+		material->SetFloat(dirArrayIdx + ".range", spotLights[i]->GetRange());
+	}
 }
 
 Renderer::Renderer(Window* _window){

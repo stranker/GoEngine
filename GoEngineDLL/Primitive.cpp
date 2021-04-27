@@ -33,8 +33,8 @@ void Primitive::SetScale(Vector3 scale) {
 	gizmo->SetScale(scale);
 }
 
-Primitive::Primitive(Renderer* _renderer) : Entity3D(_renderer) {
-	gizmo = new Gizmo(_renderer);
+Primitive::Primitive(){
+	gizmo = new Gizmo();
 }
 
 Primitive::~Primitive() {

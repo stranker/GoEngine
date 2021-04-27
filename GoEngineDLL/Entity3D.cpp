@@ -36,14 +36,9 @@ Vector3 Entity3D::GetScale() const {
 
 void Entity3D::Destroy() {
 	cout << "Destroy Entity3D" << endl;
-	if (renderer) {
-		for (Renderer::VertexData vertexData : vectorVertexData) {
-			renderer->DeleteBuffer(vertexData.vbo);
-		}
-	}
-	if (material){
-		material->Destroy();
-		delete material;
+	Renderer::GetSingleton()->DestroyVertexData(vectorVertexData);
+	if (transform){
+		delete transform;
 	}
 }
 
@@ -51,15 +46,8 @@ Transform* Entity3D::GetTransform() {
 	return transform;
 }
 
-void Entity3D::SetMaterial(Material* _material) {
-	if (material){
-		material->Destroy();
-		delete material;
-	}
-	material = _material;
-}
-
-Entity3D::Entity3D(Renderer* _renderer) : Entity(_renderer) {
+Entity3D::Entity3D(){
+	transform = new Transform();
 }
 
 Entity3D::~Entity3D() {

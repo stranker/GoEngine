@@ -54,8 +54,9 @@ public:
 	Cube* CreateCube();
 	Gizmo* CreateGizmo();
 	Line3D* CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor);
-	Light* CreateLight(Vector3 lightColor, Vector3 ambient, Vector3 diffuse, Vector3 specular);
-	Light* CreateLight(Vector3 lightColor);
+	DirectionalLight* CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction);
+	PointLight* CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation);
+	SpotLight* CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff);
 	//WINDOW
 	Vector2 GetWindowSize();
 

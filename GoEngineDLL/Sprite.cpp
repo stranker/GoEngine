@@ -31,7 +31,7 @@ void Sprite::SetTexture(const char* filePath, ImageType imageType, int vFrames, 
 	texture = new TextureMaterial();
 	texture->LoadShaders("Shaders/TextureVertexShader.shader", "Shaders/TextureFragmentShader.shader");
 	texture->LoadTexture(filePath, imageType);
-	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
+	textureBuffer = Renderer::GetSingleton()->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
@@ -47,13 +47,13 @@ TextureMaterial *Sprite::GetTexture() {
 void Sprite::Draw() {
 	if (texture) {
 		texture->Use();
-		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
+		texture->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
 		texture->SetTextureProperty("sprite", textureBuffer);
 		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 		texture->SetBool("flipVertical", flipVertical);
 		texture->SetBool("flipHorizontal", flipHorizontal);
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, draw_vertices, true); // VAO => VBO VBO VBO
+	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, draw_vertices, true); // VAO => VBO VBO VBO
 }
 
 void Sprite::Destroy() {
@@ -91,7 +91,7 @@ AABB Sprite::GetAABB() const {
 	return AABB(GetPosition(), GetSize());
 }
 
-Sprite::Sprite(Renderer *_renderer) : Entity2D(_renderer) {
+Sprite::Sprite() {
 	float position_vertex_data[] = {
 		 1.0f,  1.0f, 0.0f,  // top right
 		 1.0f,  0.0f, 0.0f,  // bottom right

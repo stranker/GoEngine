@@ -4,12 +4,12 @@
 void Square::Draw() {
 	if (material) {
 		material->Use(); // Uso el material
-		material->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
+		material->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
 	}
-	renderer->Draw(GetVertexArrayID(), primitive, draw_vertices, true);
+	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, draw_vertices, true);
 }
 
-Square::Square(Renderer *_renderer) : Shape(_renderer) {
+Square::Square() {
 	float position_vertex_data[] = {
 		 1.0f,  1.0f, 0.0f,  // top right
 		 1.0f,  0.0f, 0.0f,  // bottom right

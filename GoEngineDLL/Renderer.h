@@ -3,6 +3,11 @@
 #include <vector>
 
 class Window;
+class Light;
+class DirectionalLight;
+class PointLight;
+class SpotLight;
+class SpatialMaterial;
 
 using namespace std;
 
@@ -10,6 +15,9 @@ class ENGINEDLL_API Renderer
 {
 private:
 	static Renderer* singleton;
+	vector<DirectionalLight*> dirLights;
+	vector<PointLight*> pointLights;
+	vector<SpotLight*> spotLights;
 protected:
 	Window* window;
 	Camera* camera;
@@ -30,6 +38,11 @@ public:
 		int attributeID;
 		unsigned int dataCount;
 		BufferType bufferType;
+	};
+	enum LightType {
+		DIRECTIONAL,
+		POINT,
+		SPOT
 	};
 	bool Init();
 	bool Destroy();
@@ -56,9 +69,15 @@ public:
 	void DrawElements(Primitive _primitive, int vertexCount);
 	void EnableClientState();
 	void DisableClientState();
+	void DestroyVertexData(vector<VertexData> data);
 	static Renderer* GetSingleton();
 	Camera* GetCamera();
 	void SetCurrentCamera(Camera* _camera);
+	void AddLight(Light* light);
+	int GetDirLights() const;
+	int GetPointLights() const;
+	int GetSpotLights() const;
+	void ProcessLighting(SpatialMaterial* material);
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

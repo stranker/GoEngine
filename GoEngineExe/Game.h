@@ -11,7 +11,8 @@ private:
 	Cube* cube;
 	Cube* cube2;
 	Cube* cube3;
-	Light* light;
+	SpotLight* spotLight;
+	DirectionalLight* dirLight;
 	float cameraVelocity = 1;
 	float cameraFovIncrement = 1;
 	int dir = 1;

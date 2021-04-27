@@ -57,7 +57,7 @@ public:
 	Vector2 GetTileSize() const;
 	bool IsColliderTile(Vector2 pos) const;
 	Tile GetColliderTileAt(Vector2 pos) const;
-	Tilemap(Renderer *_renderer);
+	Tilemap();
 	~Tilemap();
 };
 
