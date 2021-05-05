@@ -72,14 +72,35 @@ unsigned int Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, 
 	return vertexBuffer;
 }
 
+unsigned int Renderer::CreateVertexBuffer(void* data, size_t dataSize, BufferType bufferType) {
+	unsigned int vertexBuffer;
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer((GLenum)bufferType, vertexBuffer);
+	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
+	return vertexBuffer;
+}
+
 unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels) {
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, width, height, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	return texture;
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	GLenum format;
+	if (nrChannels == 1)
+		format = GL_RED;
+	else if (nrChannels == 3)
+		format = GL_RGB;
+	else if (nrChannels == 4)
+		format = GL_RGBA;
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	TextureImporter::FreeTexture(data);
+	return textureID;
 }
 
 void Renderer::UpdateVertexBuffer(unsigned int vbo, float * data, size_t dataSize, BufferType bufferType) {
@@ -129,14 +150,11 @@ void Renderer::BindVertexArray(unsigned int vertexArrayID) {
 	glBindVertexArray(vertexArrayID);
 }
 
-void Renderer::SetTextureParameters(unsigned char * data, int width, int height) {
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+void Renderer::SetTextureProperty(const char* propertyName, unsigned int id, unsigned int index) {
+}
+
+void Renderer::ActivateTexture(unsigned int index) {
+	glActiveTexture(GL_TEXTURE0 + index);
 }
 
 void Renderer::SetClearColor(Color color) {

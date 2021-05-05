@@ -39,11 +39,16 @@ void Entity3D::Destroy() {
 	Renderer::GetSingleton()->DestroyVertexData(vectorVertexData);
 	if (transform){
 		delete transform;
+		transform = NULL;
 	}
 }
 
 Transform* Entity3D::GetTransform() {
 	return transform;
+}
+
+void Entity3D::SetTransform(Transform* _transform) {
+	transform = _transform;
 }
 
 Entity3D::Entity3D(){

@@ -39,6 +39,11 @@ public:
 		unsigned int dataCount;
 		BufferType bufferType;
 	};
+	struct MeshVertexData {
+		Vector3 position;
+		Vector3 normal;
+		Vector3 texCoords;
+	};
 	enum LightType {
 		DIRECTIONAL,
 		POINT,
@@ -47,7 +52,8 @@ public:
 	bool Init();
 	bool Destroy();
 	unsigned int CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType);
-	unsigned int CreateVertexBuffer(unsigned int *data, size_t dataSize, BufferType bufferType);
+	unsigned int CreateVertexBuffer(unsigned int* data, size_t dataSize, BufferType bufferType);
+	unsigned int CreateVertexBuffer(void *data, size_t dataSize, BufferType bufferType);
 	unsigned int CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels);
 	void UpdateVertexBuffer(unsigned int vbo, float *data, size_t dataSize, BufferType bufferType);
 	void UpdateVertexBuffer(unsigned int vbo, unsigned int *data, size_t dataSize, BufferType bufferType);
@@ -58,7 +64,8 @@ public:
 	void BindTexture(unsigned int textureBuffer);
 	void BindVertexArray(unsigned int vertexArrayID);
 	void SetAttributePointer(unsigned int attributeId, size_t dataCount);
-	void SetTextureParameters(unsigned char* data, int width, int height);
+	void ActivateTexture(unsigned int index);
+	void SetTextureProperty(const char* propertyName, unsigned int id, unsigned int index);
 	void SetClearColor(Color color);
 	void ClearScreen();
 	void SwapBuffers();

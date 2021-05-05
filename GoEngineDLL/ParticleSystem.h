@@ -35,7 +35,7 @@ public:
 	void SetDirection(Vector2 dir);
 	void SetSpread(float angle);
 	void SetEmitting(bool val);
-	void SetTexture(const char* filePath, ImageType imageType);
+	void SetTexture(const char* filePath);
 	void SetFinalColor(Color col);
 	void Update(float deltaTime);
 	void Draw() override;

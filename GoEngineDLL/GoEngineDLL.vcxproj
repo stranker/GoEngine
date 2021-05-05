@@ -154,12 +154,13 @@
     <ClInclude Include="Entity2D.h" />
     <ClInclude Include="Entity3D.h" />
     <ClInclude Include="Exports.h" />
-    <ClInclude Include="Gizmo.h" />
     <ClInclude Include="GlInclude.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Line3D.h" />
+    <ClInclude Include="MeshInstance.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Rect2.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
+    <ClInclude Include="VisualInstance3D.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -192,11 +194,12 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Entity2D.cpp" />
     <ClCompile Include="Entity3D.cpp" />
-    <ClCompile Include="Gizmo.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Line3D.cpp" />
+    <ClCompile Include="MeshInstance.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Rect2.cpp" />
@@ -214,6 +217,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="VisualInstance3D.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,10 +2,6 @@
 #include "GlInclude.h"
 #include "Sprite.h"
 
-void TextureMaterial::Destroy() {
-	TextureImporter::FreeTexture(textureData);
-}
-
 int TextureMaterial::GetWidth() const {
 	return textureData.width;
 }
@@ -26,14 +22,15 @@ unsigned char * TextureMaterial::GetData() const {
 	return textureData.data;
 }
 
-void TextureMaterial::SetTextureProperty(const char * property, unsigned int value) {
-	unsigned int location = glGetUniformLocation(ID, property);
-	glActiveTexture(property == "material.diffuse" ? GL_TEXTURE0 : GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, value);
+void TextureMaterial::SetTextureProperty(string const& propertyName, unsigned int textureId) {
+	glActiveTexture(GL_TEXTURE0);
+	unsigned int location = glGetUniformLocation(ID, propertyName.c_str());
+	glUniform1i(location, textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
-void TextureMaterial::LoadTexture(const char* filePath, ImageType imageType) {
-	textureData = TextureImporter::LoadTexture(filePath, imageType);
+void TextureMaterial::LoadTexture(const char* filePath) {
+	textureData = TextureImporter::LoadTexture(filePath);
 }
 
 TextureMaterial::TextureMaterial(){

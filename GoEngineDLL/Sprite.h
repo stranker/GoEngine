@@ -26,7 +26,7 @@ private:
 	const int draw_vertices = 6;
 public:
 	Vector2 GetSize() const;
-	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
+	void SetTexture(const char* filePath, int vFrames, int hFrames);
 	TextureMaterial *GetTexture();
 	void Draw() override;
 	void Destroy() override;

@@ -59,10 +59,10 @@ void ParticleSystem::SetEmitting(bool val) {
 	SetParticleCount(particleCount);
 }
 
-void ParticleSystem::SetTexture(const char * filePath, ImageType imageType) {
+void ParticleSystem::SetTexture(const char * filePath) {
 	texture = new TextureMaterial();
 	texture->LoadShaders("Shaders/ParticleVertexShader.shader", "Shaders/ParticleFragmentShader.shader");
-	texture->LoadTexture(filePath, imageType);
+	texture->LoadTexture(filePath);
 	textureBuffer = Renderer::GetSingleton()->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	Scale(texture->GetSize());
 }

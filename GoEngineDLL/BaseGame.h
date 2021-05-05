@@ -19,9 +19,9 @@ class Renderer;
 #include "Camera3D.h"
 #include "Cube.h"
 #include "Line3D.h"
-#include "Gizmo.h"
 #include "Light.h"
 #include "SpatialMaterial.h"
+#include "MeshInstance.h"
 
 class ENGINEDLL_API BaseGame {
 protected:
@@ -52,11 +52,10 @@ public:
 	//ENTITIES
 	Camera3D* CreateCamera3D(float width, float height);
 	Cube* CreateCube();
-	Gizmo* CreateGizmo();
-	Line3D* CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor);
 	DirectionalLight* CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction);
 	PointLight* CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation);
 	SpotLight* CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff);
+	MeshInstance* CreateMeshInstance(string const& path);
 	//WINDOW
 	Vector2 GetWindowSize();
 

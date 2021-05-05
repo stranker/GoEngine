@@ -13,6 +13,7 @@ private:
 	Cube* cube3;
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
+	MeshInstance* backpack;
 	float cameraVelocity = 1;
 	float cameraFovIncrement = 1;
 	int dir = 1;

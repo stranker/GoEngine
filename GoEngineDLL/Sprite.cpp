@@ -27,11 +27,11 @@ void Sprite::AddFramesRect() {
 	}
 }
 
-void Sprite::SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
+void Sprite::SetTexture(const char* filePath, int vFrames, int hFrames) {
 	texture = new TextureMaterial();
 	texture->LoadShaders("Shaders/TextureVertexShader.shader", "Shaders/TextureFragmentShader.shader");
-	texture->LoadTexture(filePath, imageType);
-	textureBuffer = Renderer::GetSingleton()->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
+	texture->LoadTexture(filePath);
+	textureBuffer = texture->GetTextureID();
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
@@ -111,7 +111,7 @@ Sprite::Sprite() {
 	};
 	CreateVertexArrayID(); //crea el VAO
 	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0); // VBO
-	CreateVertexData(index_data, sizeof(index_data), 2, Renderer::ELEMENT_BUFFER, -1); // VBO
+	CreateVertexData(index_data, sizeof(index_data), 1, Renderer::ELEMENT_BUFFER, -1); // VBO
 	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1); // VBO
 	CreateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2, Renderer::ARRAY_BUFFER, 2); // VBO
 	BindVertexObjects(); // Bindeo VAO

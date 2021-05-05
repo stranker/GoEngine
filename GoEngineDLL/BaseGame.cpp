@@ -94,19 +94,6 @@ Cube* BaseGame::CreateCube() {
 	return c;
 }
 
-Gizmo* BaseGame::CreateGizmo() {
-	Gizmo* gizmo = new Gizmo();
-	entityList->push_back(gizmo);
-	return gizmo;
-}
-
-Line3D* BaseGame::CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor) {
-	Line3D* line = new Line3D();
-	line->CreateLine(startPoint, endPoint, lineColor);
-	entityList->push_back(line);
-	return line;
-}
-
 DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction) {
 	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular, direction);
 	Renderer::GetSingleton()->AddLight(dl);
@@ -126,6 +113,12 @@ SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float spe
 	Renderer::GetSingleton()->AddLight(sl);
 	entityList->push_back(sl);
 	return sl;
+}
+
+MeshInstance* BaseGame::CreateMeshInstance(string const& path) {
+	MeshInstance* mi = new MeshInstance(path);
+	entityList->push_back(mi);
+	return mi;
 }
 
 Vector2 BaseGame::GetWindowSize(){

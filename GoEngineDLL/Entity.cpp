@@ -31,6 +31,15 @@ void Entity::CreateVertexData(unsigned int* _vertex, size_t dataSize, size_t ver
 	vectorVertexData.push_back(vertexData);
 }
 
+void Entity::CreateVertexData(void* _vertexData, size_t dataSize, size_t vertexCount, Renderer::BufferType bufferType, size_t attributeID) {
+	Renderer::VertexData vertexData;
+	vertexData.dataCount = vertexCount;
+	vertexData.vbo = Renderer::GetSingleton()->CreateVertexBuffer(_vertexData, dataSize, bufferType);
+	vertexData.bufferType = bufferType;
+	vertexData.attributeID = attributeID;
+	vectorVertexData.push_back(vertexData);
+}
+
 void Entity::UpdateVertexData(float* _vertex, size_t dataSize, size_t attributeID) {
 	for (Renderer::VertexData vertexData : vectorVertexData) {
 		if (vertexData.attributeID == attributeID) {
@@ -46,6 +55,10 @@ void Entity::BindVertexObjects() {
 	for (Renderer::VertexData vertexData : vectorVertexData) {
 		Renderer::GetSingleton()->BindVertexData(vertexData);
 	}
+}
+
+void Entity::SetVertexData(vector<Renderer::VertexData> vertexData) {
+	vectorVertexData = vertexData;
 }
 
 Entity::Entity(){

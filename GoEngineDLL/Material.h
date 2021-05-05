@@ -32,7 +32,7 @@ public:
 	void SetInt(const char* property, int value) const;
 	void SetFloat(const char* property, float value) const;
 	virtual void Use();
-	void Destroy();
+	virtual void Destroy();
 	void LoadShaders(const char *vertex_file_path, const char *fragment_file_path);
 	Material();
 	virtual ~Material();

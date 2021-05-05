@@ -109,17 +109,17 @@ void Tilemap::LoadFromFile(const char * filePath) {
 	Value& tileset = d["tilesets"].GetArray()[0];
 	const char *tilesetFilePath = tileset["image"].GetString();
 	ProcessLayers(layers, tileset);
-	SetTexture(tilesetFilePath, IMAGETYPE_PNG, tileset["columns"].GetInt(), tileset["imageheight"].GetInt() / tileset["tileheight"].GetInt());
+	SetTexture(tilesetFilePath, tileset["columns"].GetInt(), tileset["imageheight"].GetInt() / tileset["tileheight"].GetInt());
 }
 
 vector<Tilemap::TileObject> Tilemap::GetMapObjects() const {
 	return mapObjects;
 }
 
-void Tilemap::SetTexture(const char * filePath, ImageType imageType, int vFrames, int hFrames) {
+void Tilemap::SetTexture(const char * filePath, int vFrames, int hFrames) {
 	texture = new TextureMaterial();
 	texture->LoadShaders("Shaders/TilemapVertexShader.shader", "Shaders/TilemapFragmentShader.shader");
-	texture->LoadTexture(filePath, imageType);
+	texture->LoadTexture(filePath);
 	textureBuffer = Renderer::GetSingleton()->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;

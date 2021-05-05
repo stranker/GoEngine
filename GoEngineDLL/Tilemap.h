@@ -47,7 +47,7 @@ private:
 	void HandleTileLayer(const Value& tilesData, const Value& tilesProperties);
 	void HandleObjectsGroup(const Value& objects);
 	bool CheckColliderTileProperty(int tileId, const Value& tileSet);
-	void SetTexture(const char* filePath, ImageType imageType, int vFrames, int hFrames);
+	void SetTexture(const char* filePath, int vFrames, int hFrames);
 public:
 	void LoadFromFile(const char* filePath);
 	vector<TileObject> GetMapObjects() const;

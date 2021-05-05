@@ -7,6 +7,7 @@ class ENGINEDLL_API Entity3D :
     public Entity {
 protected:
 	Transform* transform;
+	bool canScale = true;
 public:
 	void SetPosition(Vector3 position);
 	void Translate(Vector3 position);
@@ -18,6 +19,8 @@ public:
 	Vector3 GetScale() const;
 	void Destroy() override;
 	Transform* GetTransform();
+	void SetTransform(Transform* _transform);
 	Entity3D();
 	~Entity3D();
 };
+
