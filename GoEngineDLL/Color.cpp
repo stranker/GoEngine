@@ -38,11 +38,11 @@ Color Color::Yellow() const {
 }
 
 Color Color::Black() const {
-	return Color(1, 1, 1);
+	return Color(0, 0, 0);
 }
 
 Color Color::White() const {
-	return Color();
+	return Color(1, 1 ,1);
 }
 
 Color Color::Cyan() const {

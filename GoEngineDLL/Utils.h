@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <vector>
+#include <string.h>
 #include "Exports.h"
 #include "Vector2.h"
 #include "Vector3.h"

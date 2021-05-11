@@ -4,20 +4,11 @@
 
 class ENGINEDLL_API Entity2D :
 	public Entity{
-private:
-	unsigned int vertexArrayID;
-	vector<Renderer::VertexData> vectorVertexData;
 protected:
-	Renderer::Primitive primitive;
+	Material* material;
 	Color selfModulate;
 	float rotationDegrees;
-	void CreateVertexArrayID();
-	unsigned int GetVertexArrayID() const;
-	vector<Renderer::VertexData> GetVectorVertexData() const;
-	void CreateVertexData(float *_vertex, size_t dataSize, size_t vertexCount, Renderer::BufferType bufferType, size_t attributeID);
-	void CreateVertexData(unsigned int *_vertex, size_t dataSize, size_t vertexCount, Renderer::BufferType bufferType, size_t attributeID);
-	void UpdateVertexData(float *_vertex, size_t dataSize, size_t attributeID);
-	void BindVertexObjects();
+	Transform* transform;
 public:
 	void SetPosition(float x, float y);
 	void SetPosition(Vector2 vec);
@@ -29,11 +20,11 @@ public:
 	Vector2 GetPosition() const;
 	float GetRotation() const;
 	Vector2 GetScale() const;
-	void Destroy() override;
+	virtual void Destroy() override;
 	void SetModulate(Color _new_modulate);
 	Color GetModulate() const;
 	Transform *GetTransform();
-	Entity2D(Renderer* _renderer);
+	Entity2D();
 	~Entity2D();
 };
 
