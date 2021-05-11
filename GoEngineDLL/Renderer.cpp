@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "GlInclude.h"
 #include "Window.h"
+#include "Light.h"
+#include "SpatialMaterial.h"
 
 bool Renderer::Init(){
 	cout << "Renderer Init" << endl;
@@ -20,6 +22,27 @@ bool Renderer::Init(){
 
 bool Renderer::Destroy(){
 	cout << "Renderer Destroy" << endl;
+	if (!dirLights.empty()){
+		for (Light* light : dirLights) {
+			light->Destroy();
+			delete light;
+		}
+		dirLights.clear();
+	}
+	if (!pointLights.empty()) {
+		for (Light* light : pointLights) {
+			light->Destroy();
+			delete light;
+		}
+		pointLights.clear();
+	}
+	if (!spotLights.empty()) {
+		for (Light* light : spotLights) {
+			light->Destroy();
+			delete light;
+		}
+		spotLights.clear();
+	}
 	if (firstCamera){
 		firstCamera->Destroy();
 		delete firstCamera;
@@ -49,14 +72,35 @@ unsigned int Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, 
 	return vertexBuffer;
 }
 
+unsigned int Renderer::CreateVertexBuffer(void* data, size_t dataSize, BufferType bufferType) {
+	unsigned int vertexBuffer;
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer((GLenum)bufferType, vertexBuffer);
+	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
+	return vertexBuffer;
+}
+
 unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels) {
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, width, height, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	return texture;
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	GLenum format;
+	if (nrChannels == 1)
+		format = GL_RED;
+	else if (nrChannels == 3)
+		format = GL_RGB;
+	else if (nrChannels == 4)
+		format = GL_RGBA;
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	TextureImporter::FreeTexture(data);
+	return textureID;
 }
 
 void Renderer::UpdateVertexBuffer(unsigned int vbo, float * data, size_t dataSize, BufferType bufferType) {
@@ -106,14 +150,11 @@ void Renderer::BindVertexArray(unsigned int vertexArrayID) {
 	glBindVertexArray(vertexArrayID);
 }
 
-void Renderer::SetTextureParameters(unsigned char * data, int width, int height) {
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+void Renderer::SetTextureProperty(const char* propertyName, unsigned int id, unsigned int index) {
+}
+
+void Renderer::ActivateTexture(unsigned int index) {
+	glActiveTexture(GL_TEXTURE0 + index);
 }
 
 void Renderer::SetClearColor(Color color) {
@@ -152,12 +193,28 @@ void Renderer::DisableClientState() {
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+void Renderer::DestroyVertexData(vector<VertexData> data) {
+	for (VertexData vertexData : data) {
+		DeleteBuffer(vertexData.vbo);
+	}
+}
+
+Renderer* Renderer::singleton = NULL;
+
+Renderer* Renderer::GetSingleton() {
+	return singleton;
+}
+
 void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw) {
 	BindVertexArray(vao);
-	if (elementDraw){
+	Draw(_primitive, vertexCount, elementDraw);
+}
+
+void Renderer::Draw(Primitive _primitive, int vertexCount, bool elementDraw) {
+	if (elementDraw) {
 		DrawElements(_primitive, vertexCount);
 	}
-	else{
+	else {
 		Draw(_primitive, vertexCount);
 	}
 }
@@ -170,10 +227,72 @@ void Renderer::SetCurrentCamera(Camera* _camera){
 	camera = _camera;
 }
 
+void Renderer::AddLight(Light* light) {
+	switch (light->GetType())
+	{
+	case LightType::DIRECTIONAL: dirLights.push_back((DirectionalLight*)light); break;
+	case LightType::POINT: pointLights.push_back((PointLight*)light); break;
+	case LightType::SPOT: spotLights.push_back((SpotLight*)light); break;
+	default:
+		break;
+	}
+}
+
+int Renderer::GetDirLights() const {
+	return dirLights.size();
+}
+
+int Renderer::GetPointLights() const {
+	return pointLights.size();
+}
+
+int Renderer::GetSpotLights() const {
+	return spotLights.size();
+}
+
+void Renderer::ProcessLighting(SpatialMaterial* material) {
+	material->SetInt("dirLightSize", dirLights.size());
+	material->SetInt("pointLightSize", pointLights.size());
+	material->SetInt("spotLightSize", spotLights.size());
+	for (size_t i = 0; i < dirLights.size(); i++){
+		string dirArrayIdx = "dirLights[" + to_string(i) + "]";
+		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetDirection());
+		material->SetVec3(dirArrayIdx + ".color", dirLights[i]->GetLightColor());
+		material->SetFloat(dirArrayIdx + ".specular", dirLights[i]->GetSpecular());
+		material->SetFloat(dirArrayIdx + ".energy", dirLights[i]->GetEnergy());
+	}
+	for (size_t i = 0; i < pointLights.size(); i++) {
+		string dirArrayIdx = "pointLights[" + to_string(i) + "]";
+		material->SetVec3(dirArrayIdx + ".position", pointLights[i]->GetTransform()->GetPosition());
+		material->SetVec3(dirArrayIdx + ".color", pointLights[i]->GetLightColor());
+		material->SetFloat(dirArrayIdx + ".specular", pointLights[i]->GetSpecular());
+		material->SetFloat(dirArrayIdx + ".energy", pointLights[i]->GetEnergy());
+		material->SetFloat(dirArrayIdx + ".constant", pointLights[i]->GetAttenuation().x);
+		material->SetFloat(dirArrayIdx + ".linear", pointLights[i]->GetAttenuation().y);
+		material->SetFloat(dirArrayIdx + ".quadratic", pointLights[i]->GetAttenuation().z);
+		material->SetFloat(dirArrayIdx + ".range", pointLights[i]->GetRange());
+	}
+	for (size_t i = 0; i < spotLights.size(); i++) {
+		string dirArrayIdx = "spotLights[" + to_string(i) + "]";
+		material->SetVec3(dirArrayIdx + ".direction", spotLights[i]->GetTransform()->GetFoward());
+		material->SetVec3(dirArrayIdx + ".position", spotLights[i]->GetTransform()->GetPosition());
+		material->SetVec3(dirArrayIdx + ".color", spotLights[i]->GetLightColor());
+		material->SetFloat(dirArrayIdx + ".specular", spotLights[i]->GetSpecular());
+		material->SetFloat(dirArrayIdx + ".energy", spotLights[i]->GetEnergy());
+		material->SetFloat(dirArrayIdx + ".constant", spotLights[i]->GetAttenuation().x);
+		material->SetFloat(dirArrayIdx + ".linear", spotLights[i]->GetAttenuation().y);
+		material->SetFloat(dirArrayIdx + ".quadratic", spotLights[i]->GetAttenuation().z);
+		material->SetFloat(dirArrayIdx + ".cutOff", spotLights[i]->GetCutOff());
+		material->SetFloat(dirArrayIdx + ".outerCutOff", spotLights[i]->GetOuterCutOff());
+		material->SetFloat(dirArrayIdx + ".range", spotLights[i]->GetRange());
+	}
+}
+
 Renderer::Renderer(Window* _window){
 	window = _window;
 	firstCamera = new Camera(window->GetWidth(), window->GetHeight());
 	camera = firstCamera;
+	singleton = this;
 }
 
 Renderer::~Renderer(){

@@ -54,17 +54,13 @@ Transform * Entity2D::GetTransform() {
 }
 
 void Entity2D::Destroy() {
-	if (renderer) {
-		for (Renderer::VertexData vertexData : vectorVertexData) {
-			renderer->DeleteBuffer(vertexData.vbo);
-		}
-	}
+	Renderer::GetSingleton()->DestroyVertexData(vectorVertexData);
 	if (transform) {
 		delete transform;
 	}
 }
 
-Entity2D::Entity2D(Renderer* _renderer) : Entity(_renderer){
+Entity2D::Entity2D(){
 	selfModulate = Color();
 }
 

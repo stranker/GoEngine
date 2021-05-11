@@ -1,25 +1,68 @@
 #pragma once
 #include "Primitive.h"
+
 class ENGINEDLL_API Light :
     public Primitive {
-private:
+protected:
+    Renderer::LightType type;
     Vector3 lightColor;
-    Vector3 ambient;
-    Vector3 diffuse;
-    Vector3 specular;
+    float energy;
+    float specular;
     const int drawVertices = 12 * 3;
+private:
+
 public:
-    void CreateLight(Vector3 _color, Vector3 _ambient, Vector3 _diffuse, Vector3 _specular);
     void Draw() override;
     void SetLightColor(Vector3 _color);
-    void SetAmbient(Vector3 _ambient);
-    void SetDiffuse(Vector3 _diffuse);
-    void SetSpecular(Vector3 _specular);
+    void SetSpecular(float _specular);
+    void SetEnergy(float _energy);
     Vector3 GetLightColor() const;
-    Vector3 GetAmbient() const;
-    Vector3 GetDiffuse() const;
-    Vector3 GetSpecular() const;
-    Light(Renderer* _renderer);
+    float GetSpecular() const;
+    float GetEnergy() const;
+    Renderer::LightType GetType() const;
+    Light(Vector3 _color, float _energy, float _specular);
+    Light();
     ~Light();
+
 };
 
+class ENGINEDLL_API DirectionalLight : 
+    public Light {
+protected:
+    Vector3 direction;
+public:
+    Vector3 GetDirection() const { return direction; };
+    DirectionalLight(Vector3 _color, float _energy, float _specular, Vector3 _direction);
+    DirectionalLight();
+    ~DirectionalLight();
+};
+
+class ENGINEDLL_API PointLight :
+    public Light {
+protected:
+    float range;
+    float kConstant;
+    float kLinear;
+    float kQuadratic;
+public:
+    float GetRange() const { return range; };
+    Vector3 GetAttenuation() const { return Vector3(kConstant, kLinear, kQuadratic); };
+    PointLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 _attenuation);
+    PointLight();
+    ~PointLight();
+};
+
+class ENGINEDLL_API SpotLight :
+    public PointLight {
+protected:
+    float cutOff;
+    float outerCutOff;
+    Vector3 direction;
+public:
+    Vector3 GetDirection() const { return direction; };
+    float GetCutOff() const { return cutOff; };
+    float GetOuterCutOff() const { return outerCutOff; };
+    SpotLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 direction, Vector3 _attenuation, float _cutOff, float _outerCutOff);
+    SpotLight();
+    ~SpotLight();
+};

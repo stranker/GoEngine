@@ -3,11 +3,21 @@
 #include <vector>
 
 class Window;
+class Light;
+class DirectionalLight;
+class PointLight;
+class SpotLight;
+class SpatialMaterial;
 
 using namespace std;
 
 class ENGINEDLL_API Renderer
 {
+private:
+	static Renderer* singleton;
+	vector<DirectionalLight*> dirLights;
+	vector<PointLight*> pointLights;
+	vector<SpotLight*> spotLights;
 protected:
 	Window* window;
 	Camera* camera;
@@ -29,10 +39,21 @@ public:
 		unsigned int dataCount;
 		BufferType bufferType;
 	};
+	struct MeshVertexData {
+		Vector3 position;
+		Vector3 normal;
+		Vector3 texCoords;
+	};
+	enum LightType {
+		DIRECTIONAL,
+		POINT,
+		SPOT
+	};
 	bool Init();
 	bool Destroy();
 	unsigned int CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType);
-	unsigned int CreateVertexBuffer(unsigned int *data, size_t dataSize, BufferType bufferType);
+	unsigned int CreateVertexBuffer(unsigned int* data, size_t dataSize, BufferType bufferType);
+	unsigned int CreateVertexBuffer(void *data, size_t dataSize, BufferType bufferType);
 	unsigned int CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels);
 	void UpdateVertexBuffer(unsigned int vbo, float *data, size_t dataSize, BufferType bufferType);
 	void UpdateVertexBuffer(unsigned int vbo, unsigned int *data, size_t dataSize, BufferType bufferType);
@@ -43,7 +64,8 @@ public:
 	void BindTexture(unsigned int textureBuffer);
 	void BindVertexArray(unsigned int vertexArrayID);
 	void SetAttributePointer(unsigned int attributeId, size_t dataCount);
-	void SetTextureParameters(unsigned char* data, int width, int height);
+	void ActivateTexture(unsigned int index);
+	void SetTextureProperty(const char* propertyName, unsigned int id, unsigned int index);
 	void SetClearColor(Color color);
 	void ClearScreen();
 	void SwapBuffers();
@@ -51,11 +73,19 @@ public:
 	void DeleteBuffer(unsigned int bufferID);
 	void Draw(Primitive _primitive, int vertexCount);
 	void Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw);
+	void Draw(Primitive _primitive, int vertexCount, bool elementDraw);
 	void DrawElements(Primitive _primitive, int vertexCount);
 	void EnableClientState();
 	void DisableClientState();
+	void DestroyVertexData(vector<VertexData> data);
+	static Renderer* GetSingleton();
 	Camera* GetCamera();
 	void SetCurrentCamera(Camera* _camera);
+	void AddLight(Light* light);
+	int GetDirLights() const;
+	int GetPointLights() const;
+	int GetSpotLights() const;
+	void ProcessLighting(SpatialMaterial* material);
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

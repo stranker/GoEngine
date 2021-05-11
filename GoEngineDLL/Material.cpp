@@ -1,5 +1,6 @@
 #include "Material.h"
 #include "GlInclude.h"
+#include "Renderer.h"
 
 void Material::SetMat4(const char *property, glm::mat4 matrix) const{
 	unsigned int location = glGetUniformLocation(ID, property);
@@ -38,7 +39,7 @@ void Material::SetInt(const char *property, int value) const {
 
 void Material::SetFloat(const char *property, float value) const {
 	unsigned int location = glGetUniformLocation(ID, property);
-	glUniform1i(location, (float)value);
+	glUniform1f(location, (float)value);
 }
 
 void Material::Use(){
@@ -145,4 +146,36 @@ Material::Material(){
 
 
 Material::~Material(){
+}
+
+void Material::SetMat4(string property, glm::mat4 matrix) const {
+	SetMat4(property.c_str(), matrix);
+}
+
+void Material::SetVec2(string property, Vector2 vec) const {
+	SetVec2(property.c_str(), vec);
+}
+
+void Material::SetVec3(string property, Vector3 vec) const {
+	SetVec3(property.c_str(), vec);
+}
+
+void Material::SetVec4(string property, glm::vec4 vec) const {
+	SetVec4(property.c_str(), vec);
+}
+
+void Material::SetVec4(string property, Rect2 value) const {
+	SetVec4(property.c_str(), value);
+}
+
+void Material::SetBool(string property, bool value) const {
+	SetBool(property.c_str(), value);
+}
+
+void Material::SetInt(string property, int value) const {
+	SetInt(property.c_str(), value);
+}
+
+void Material::SetFloat(string property, float value) const {
+	SetFloat(property.c_str(), value);
 }

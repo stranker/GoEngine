@@ -89,29 +89,36 @@ Camera3D* BaseGame::CreateCamera3D(float width, float height) {
 }
 
 Cube* BaseGame::CreateCube() {
-	Cube* c = new Cube(renderer);
+	Cube* c = new Cube();
 	entityList->push_back(c);
 	return c;
 }
 
-Gizmo* BaseGame::CreateGizmo() {
-	Gizmo* gizmo = new Gizmo(renderer);
-	entityList->push_back(gizmo);
-	return gizmo;
+DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction) {
+	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular, direction);
+	Renderer::GetSingleton()->AddLight(dl);
+	entityList->push_back(dl);
+	return dl;
 }
 
-Line3D* BaseGame::CreateLine3D(Vector3 startPoint, Vector3 endPoint, Color lineColor) {
-	Line3D* line = new Line3D(renderer);
-	line->CreateLine(startPoint, endPoint, lineColor);
-	entityList->push_back(line);
-	return line;
+PointLight* BaseGame::CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation) {
+	PointLight* pl = new PointLight(lightColor, energy, specular, range, attenuation);
+	Renderer::GetSingleton()->AddLight(pl);
+	entityList->push_back(pl);
+	return pl;
 }
 
-Light* BaseGame::CreateLight(Vector3 lightColor, Vector3 ambient, Vector3 diffuse, Vector3 specular) {
-	Light* light = new Light(renderer);
-	light->CreateLight(lightColor, ambient, diffuse, specular);
-	entityList->push_back(light);
-	return light;
+SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff) {
+	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, direction, attenuation, cutOff, outCutOff);
+	Renderer::GetSingleton()->AddLight(sl);
+	entityList->push_back(sl);
+	return sl;
+}
+
+MeshInstance* BaseGame::CreateMeshInstance(string const& path) {
+	MeshInstance* mi = new MeshInstance(path);
+	entityList->push_back(mi);
+	return mi;
 }
 
 Vector2 BaseGame::GetWindowSize(){

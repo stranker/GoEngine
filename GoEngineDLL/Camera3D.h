@@ -7,7 +7,8 @@ protected:
     float fov = 45.0f;
     float near = 0.1f;
     float far = 1000.0f;
-    Vector3 eulerAngles;
+    Vector3 direction;
+    void CalculateDirection();
 public:
     void SetPosition(Vector3 position);
     void Translate(Vector3 position);
@@ -18,8 +19,9 @@ public:
     void SetFov(float _fov);
     void SetNear(float _near);
     void SetFar(float _far);
-    void SetEulerAngles(Vector3 _eulerAngles);
-    void GetFoward() const;
+    Vector3 GetFoward() const;
+    Vector3 GetDirection() const;
+    Vector3 GetRight() const;
     float GetFov() const;
     float GetNear() const;
     float GetFar() const;

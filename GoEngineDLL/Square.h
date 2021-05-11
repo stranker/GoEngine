@@ -7,7 +7,7 @@ private:
 	const int draw_vertices = 6;
 public:
 	void Draw() override;
-	Square(Renderer *_renderer);
+	Square();
 	virtual ~Square();
 };
 

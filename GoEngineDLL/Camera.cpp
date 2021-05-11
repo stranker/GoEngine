@@ -39,8 +39,20 @@ void Camera::LookAt(Vector3 _target) {
 	LookAt(_target, Vector3().Up());
 }
 
-Vector3 Camera::GetPosition() {
+Vector3 Camera::GetFoward() const {
+	return transform->GetFoward();
+}
+
+Vector3 Camera::GetRight() const {
+	return transform->GetRight();
+}
+
+Vector3 Camera::GetPosition() const {
 	return transform->GetPosition();
+}
+
+Transform* Camera::GetTransform() const {
+	return transform;
 }
 
 Camera::Camera(float _width, float _height) {

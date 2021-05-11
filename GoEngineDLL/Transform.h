@@ -14,10 +14,15 @@ protected:
 
 	Vector3 right;
 	Vector3 up;
-
-	Vector3 eulerAngles;
+	Vector3 foward;
 
 	glm::mat4 transform;
+	glm::mat4 matTrans;
+	glm::mat4 matRot;
+	glm::mat4 matScl;
+
+	void _UpdateTransform();
+	void _UpdateUnitVectors();
 public:
 	void SetPosition(float x, float y, float z);
 	void SetPosition(Vector3 _position);
@@ -31,8 +36,8 @@ public:
 	void LookAt(Vector3 _target);
 	void LookAt(Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
-	void SetEulerAngles(Vector3 _eulerAngles);
 	Vector3 GetFoward() const;
+	Vector3 GetRight() const;
 	Vector3 GetPosition() const;
 	Vector3 GetRotation() const;
 	Vector3 GetScale() const;

@@ -12,20 +12,18 @@ class GameCamera {
 private:
 	static Camera3D* camera;
 
-	Vector3 cameraFront;
-	Vector3 cameraRight;
-	Vector3 cameraUp;
-
 	Vector3 eulerAngles;
-
 	Vector2 lastMousePos;
 
+	Entity3D* target;
+
 	static void OnMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-	void _UpdateCameraVectors();
+	void _UpdateCamera();
 	void _ProcessMousePosition();
 public:
 	void SetPosition(Vector3 position);
 	void Update(float deltaTime);
+	void SetTarget(Entity3D* _target);
 	GameCamera(float screenWidth, float screenHeight);
 	~GameCamera();
 };
