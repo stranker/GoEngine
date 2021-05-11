@@ -13,9 +13,9 @@ public:
 	int GetNrChannels() const;
 	Vector2 GetSize() const;
 	unsigned char * GetData() const;
-	void SetTextureProperty(const char* property, unsigned int value);
-	void Destroy();
-	void LoadTexture(const char* filePath, ImageType imageType);
+	void SetTextureProperty(string const& propertyName, unsigned int textureId);
+	void LoadTexture(const char* filePath);
+	unsigned int GetTextureID() const { return textureData.GetID(); };
 	TextureMaterial();
 	virtual ~TextureMaterial();
 };

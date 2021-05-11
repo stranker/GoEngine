@@ -49,7 +49,7 @@ void AnimatedSprite::Update(float deltaTime) {
 	}
 }
 
-AnimatedSprite::AnimatedSprite(Renderer * _renderer) : Sprite(_renderer){
+AnimatedSprite::AnimatedSprite(){
 }
 
 AnimatedSprite::~AnimatedSprite() {

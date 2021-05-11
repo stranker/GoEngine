@@ -8,7 +8,7 @@ bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
 	entityList = new list<Entity*>();
-
+	input->SetCurrentWindow(window);
 	currentFrame = glfwGetTime();
 	lastFrame = currentFrame;
 	return true;
@@ -42,13 +42,15 @@ void BaseGame::LoopEngine() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		renderer->SetClearColor(Color().Purple());
+		renderer->SetClearColor(Color(0.1,0.1,0.1,1));
 		renderer->ClearScreen();
+		renderer->EnableClientState();
 
 		Update(deltaTime);
 
 		DrawEntities();
 
+		renderer->DisableClientState();
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}
@@ -70,7 +72,7 @@ BaseGame* BaseGame::singleton = nullptr;
 BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_title) {
 	window = new Window(_screen_width, _screen_height, _screen_title);
 	renderer = new Renderer(window);
-	input = new Input(window);
+	input = new Input();
 	singleton = this;
 }
 
@@ -80,33 +82,43 @@ BaseGame::~BaseGame() {
 
 #pragma region UserMethods
 
-Sprite* BaseGame::CreateSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
-	Sprite *sprite = new Sprite(renderer);
-	sprite->SetTexture(filePath, imageType, vFrames, hFrames);
-	entityList->push_back(sprite);
-	return sprite;
+Camera3D* BaseGame::CreateCamera3D(float width, float height) {
+	Camera3D* camera = new Camera3D(width, height);
+	renderer->SetCurrentCamera(camera);
+	return camera;
 }
 
-AnimatedSprite * BaseGame::CreateAnimSprite(const char* filePath, ImageType imageType, int vFrames, int hFrames) {
-	AnimatedSprite *animSprite = new AnimatedSprite(renderer);
-	animSprite->SetTexture(filePath, imageType, vFrames, hFrames);
-	entityList->push_back(animSprite);
-	return animSprite;
+Cube* BaseGame::CreateCube() {
+	Cube* c = new Cube();
+	entityList->push_back(c);
+	return c;
 }
 
-ParticleSystem * BaseGame::CreateParticleSystem(const char * filePath, ImageType imageType, size_t particleCount) {
-	ParticleSystem *ps = new ParticleSystem(renderer);
-	ps->SetTexture(filePath, imageType);
-	ps->SetParticleCount(particleCount);
-	entityList->push_back(ps);
-	return ps;
+DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction) {
+	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular, direction);
+	Renderer::GetSingleton()->AddLight(dl);
+	entityList->push_back(dl);
+	return dl;
 }
 
-Tilemap * BaseGame::CreateTilemap(const char * filePath) {
-	Tilemap *tilemap = new Tilemap(renderer);
-	tilemap->LoadFromFile(filePath);
-	entityList->push_back(tilemap);
-	return tilemap;
+PointLight* BaseGame::CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation) {
+	PointLight* pl = new PointLight(lightColor, energy, specular, range, attenuation);
+	Renderer::GetSingleton()->AddLight(pl);
+	entityList->push_back(pl);
+	return pl;
+}
+
+SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff) {
+	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, direction, attenuation, cutOff, outCutOff);
+	Renderer::GetSingleton()->AddLight(sl);
+	entityList->push_back(sl);
+	return sl;
+}
+
+MeshInstance* BaseGame::CreateMeshInstance(string const& path) {
+	MeshInstance* mi = new MeshInstance(path);
+	entityList->push_back(mi);
+	return mi;
 }
 
 Vector2 BaseGame::GetWindowSize(){

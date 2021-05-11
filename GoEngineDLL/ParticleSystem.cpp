@@ -59,11 +59,11 @@ void ParticleSystem::SetEmitting(bool val) {
 	SetParticleCount(particleCount);
 }
 
-void ParticleSystem::SetTexture(const char * filePath, ImageType imageType) {
+void ParticleSystem::SetTexture(const char * filePath) {
 	texture = new TextureMaterial();
-	texture->LoadShaders("ParticleVertexShader.shader", "ParticleFragmentShader.shader");
-	texture->LoadTexture(filePath, imageType);
-	textureBuffer = renderer->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
+	texture->LoadShaders("Shaders/ParticleVertexShader.shader", "Shaders/ParticleFragmentShader.shader");
+	texture->LoadTexture(filePath);
+	textureBuffer = Renderer::GetSingleton()->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
 	Scale(texture->GetSize());
 }
 
@@ -78,7 +78,7 @@ void ParticleSystem::Update(float deltaTime) {
 	for (unsigned int i = 0; i < particleCount; ++i) {
 		Particle &p = particles[i];
 		p.lifeTime -= deltaTime;
-		if (p.lifeTime > 0.0f) {	// particle is alive, thus update
+		if (p.lifeTime > 0.0f) {
 			p.position = p.position + p.velocity * deltaTime;
 			p.color = initialColor.Interpolate(finalColor,  1 - (p.lifeTime / particleLifetime));
 		}
@@ -94,7 +94,7 @@ void ParticleSystem::Draw() {
 	}
 	if (texture) {
 		texture->Use();
-		texture->SetMat4("mvp", renderer->GetCamera()->GetMVPOf(transform->GetTransform()));
+		texture->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
 		texture->SetTextureProperty("sprite", textureBuffer);
 	}
 	for (Particle particle : particles) {
@@ -103,7 +103,7 @@ void ParticleSystem::Draw() {
 				texture->SetVec2("offset", particle.position);
 				texture->SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
 			}
-			renderer->Draw(GetVertexArrayID(), primitive, 6);
+			Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 6, true);
 		}
 	}
 }
@@ -115,7 +115,7 @@ void ParticleSystem::Destroy() {
 	}
 }
 
-ParticleSystem::ParticleSystem(Renderer * rend) : Sprite(rend) {
+ParticleSystem::ParticleSystem() {
 }
 
 ParticleSystem::~ParticleSystem() {
