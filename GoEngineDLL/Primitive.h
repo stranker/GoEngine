@@ -8,6 +8,7 @@ protected:
     SpatialMaterial* spatialMaterial;
 public:
     void SetMaterial(SpatialMaterial* spatialMaterial);
+    void Destroy() override;
     Primitive();
     ~Primitive();
 };

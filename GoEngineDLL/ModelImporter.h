@@ -6,23 +6,27 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "Renderer.h"
+#include "SpatialMaterial.h"
+#include "Entity.h"
 
-class Mesh;
-class SpatialMaterial;
+struct Mesh;
 
-struct ENGINEDLL_API MeshData {
+class ENGINEDLL_API MeshData : Entity{
+private:
 	vector<Vector3> position_data;
 	vector<Vector3> normal_data;
 	vector<Vector2> texCoord_data;
 	vector<unsigned int> indices;
 	vector<TextureData> textures;
-	MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<TextureData> _textures);
-	void Draw(unsigned int vao, SpatialMaterial& material, Renderer::Primitive primitve);
+	ADSSpatialMaterial adsMaterial;
+public:
+	MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<TextureData> _textures, ADSSpatialMaterial _adsMaterial);
+	void Draw(Transform& transform, Renderer::Primitive primitve);
 };
 
 class ENGINEDLL_API ModelImporter {
 private:
-	static void ProcessObject(Mesh& meshInstance, string const& path);
+	static void ProcessScene(Mesh& meshInstance, string const& path);
 	static void ProcessNode(Mesh& meshInstance, aiNode* node, const aiScene* scene);
 	static void ProcessMesh(Mesh& meshInstance, aiMesh* mesh, const aiScene* scene);
 	static vector<TextureData> LoadMaterialTextures(Mesh& meshInstance, aiMaterial* mat, aiTextureType type, string typeName);

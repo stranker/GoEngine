@@ -110,6 +110,7 @@ Sprite::Sprite() {
 		0.0f, 1.0f // tl
 	};
 	CreateVertexArrayID(); //crea el VAO
+	BindVertexArray();
 	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0); // VBO
 	CreateVertexData(index_data, sizeof(index_data), 1, Renderer::ELEMENT_BUFFER, -1); // VBO
 	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1); // VBO

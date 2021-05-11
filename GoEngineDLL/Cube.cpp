@@ -147,6 +147,7 @@ Cube::Cube() {
          0.0f,  1.0f,
     };
     CreateVertexArrayID(); //crea el VAO
+    BindVertexArray();
     CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0); // VBO
     CreateVertexData(normal_vertex_data, sizeof(normal_vertex_data), 3, Renderer::ARRAY_BUFFER, 1); // VBO
     CreateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2, Renderer::ARRAY_BUFFER, 2); // VBO

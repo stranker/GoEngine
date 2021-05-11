@@ -2,6 +2,7 @@
 
 #include "BaseGame.h"
 #include "GameCamera.h"
+#include "Tank.h"
 
 class Game :
 	public BaseGame
@@ -13,7 +14,6 @@ private:
 	Cube* cube3;
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
-	MeshInstance* backpack;
 	float cameraVelocity = 1;
 	float cameraFovIncrement = 1;
 	int dir = 1;
@@ -24,6 +24,8 @@ private:
 	int screenHeight;
 	const char* screenTitle;
 	SpatialMaterial* cubeMaterial;
+	MeshInstance* cat;
+	Tank* tank;
 public:
 	void Start() override;
 	void Update(float deltaTime) override;

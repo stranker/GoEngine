@@ -1,5 +1,11 @@
 #include "Camera3D.h"
 
+void Camera3D::CalculateDirection() {
+    direction.x = cos(glm::radians(transform->GetRotation().y)) * cos(glm::radians(transform->GetRotation().x));
+    direction.y = sin(glm::radians(transform->GetRotation().x));
+    direction.z = sin(glm::radians(transform->GetRotation().y)) * cos(glm::radians(transform->GetRotation().x));
+}
+
 void Camera3D::SetPosition(Vector3 position) {
     transform->SetPosition(position);
 }
@@ -15,15 +21,18 @@ void Camera3D::Rotate(Vector3 rotation){
 }
 
 void Camera3D::RotateX(float _angle){
-    transform->SetRotation(_angle, Vector3().Right());
+    transform->RotateX(_angle);
+    CalculateDirection();
 }
 
 void Camera3D::RotateY(float _angle){
-    transform->SetRotation(_angle, Vector3().Up());
+    transform->RotateY(_angle);
+    CalculateDirection();
 }
 
 void Camera3D::RotateZ(float _angle){
-    transform->SetRotation(_angle, Vector3().Foward());
+    transform->RotateZ(_angle);
+    CalculateDirection();
 }
 
 void Camera3D::SetFov(float _fov){
@@ -41,12 +50,12 @@ void Camera3D::SetFar(float _far){
     _UpdateProjection();
 }
 
-void Camera3D::SetEulerAngles(Vector3 _eulerAngles) {
-    transform->SetEulerAngles(_eulerAngles);
-}
-
 Vector3 Camera3D::GetFoward() const {
     return transform->GetFoward();
+}
+
+Vector3 Camera3D::GetDirection() const {
+    return direction;
 }
 
 Vector3 Camera3D::GetRight() const {
@@ -71,13 +80,6 @@ void Camera3D::SetAspect(float _width, float _height){
 }
 
 void Camera3D::_UpdateProjection(){
-    cout << "---------------------------" << endl;
-    cout << "Camera3D: Update projection" << endl;
-    cout << "fov: " << fov << endl;
-    cout << "aspect: " << aspect << endl;
-    cout << "near: " << near << endl;
-    cout << "far: " << far << endl;
-    cout << "---------------------------" << endl;
     projection = glm::perspective(glm::radians(fov), aspect, near, far);
 }
 

@@ -1,47 +1,44 @@
 #include "ModelImporter.h"
-#include "Mesh.h"
+#include "MeshInstance.h"
 #include "SpatialMaterial.h"
 
-MeshData::MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<TextureData> _textures) {
+MeshData::MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<TextureData> _textures, ADSSpatialMaterial _adsMaterial){
     position_data = _position_data;
     normal_data = _normal_data;
     texCoord_data = _texCoord_data;
     indices = _indices;
     textures = _textures;
+    adsMaterial = _adsMaterial;
+    CreateVertexArrayID();
+    BindVertexArray();
+    CreateVertexData(&position_data[0], position_data.size() * sizeof(Vector3), 3, Renderer::ARRAY_BUFFER, 0);
+    CreateVertexData(&normal_data[0], normal_data.size() * sizeof(Vector3), 3, Renderer::ARRAY_BUFFER, 1);
+    CreateVertexData(&texCoord_data[0], texCoord_data.size() * sizeof(Vector2), 2, Renderer::ARRAY_BUFFER, 2);
+    CreateVertexData(&indices[0], indices.size() * sizeof(unsigned int), 1, Renderer::ELEMENT_BUFFER, -1);
+    BindVertexObjects();
 }
 
-void MeshData::Draw(unsigned int vao, SpatialMaterial& material, Renderer::Primitive primitive) {
-    // bind appropriate textures
-    unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
-    unsigned int normalNr = 1;
-    unsigned int heightNr = 1;
+void MeshData::Draw(Transform& transform, Renderer::Primitive primitive) {
+    BindVertexArray();
+    adsMaterial.Use();
+    // Vertex properties
+    adsMaterial.SetMat4("model", transform.GetTransform());
+    adsMaterial.SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
+    adsMaterial.SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
     for (unsigned int i = 0; i < textures.size(); i++) {
-        
-        // retrieve texture number (the N in diffuse_textureN)
-        string number;
         string name = textures[i].name;
-        if (name == "texture_diffuse")
-            number = std::to_string(diffuseNr++);
-        else if (name == "texture_specular")
-            number = std::to_string(specularNr++); // transfer unsigned int to stream
-        else if (name == "texture_normal")
-            number = std::to_string(normalNr++); // transfer unsigned int to stream
-        else if (name == "texture_height")
-            number = std::to_string(heightNr++); // transfer unsigned int to stream
-
-        // now set the sampler to the correct texture unit
-        material.SetTextureProperty(name + number, textures[i].textureId, i);
+        adsMaterial.SetBool("material.hasTexture", true);
+        adsMaterial.SetTextureProperty(name, textures[i].textureId, i);
     }
-    Renderer::GetSingleton()->Draw(vao, primitive, indices.size(), true);
-    material.ResetTextureActive();
+    Renderer::GetSingleton()->Draw(primitive, indices.size(), true);
+    adsMaterial.ResetTextureActive();
 }
 
 
-void ModelImporter::ProcessObject(Mesh& meshInstance, string const& path) {
+void ModelImporter::ProcessScene(Mesh& meshInstance, string const& path) {
     // read file via ASSIMP
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs );
     // check for errors
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){ // if is Not Zero
         cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
@@ -117,9 +114,24 @@ void ModelImporter::ProcessMesh(Mesh& meshInstance, aiMesh* mesh, const aiScene*
     // 4. height maps
     vector<TextureData> heightMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
+    // ADS Material
+    ADSSpatialMaterial adsMaterial;
+    aiColor3D color(0.f, 0.f, 0.f);
+    float shininess;
+    if (aiReturn_SUCCESS == material->Get(AI_MATKEY_COLOR_AMBIENT, color)){
+        adsMaterial.SetAmbient(Vector3(color.r, color.g, color.b));
+    }
+    if (aiReturn_SUCCESS == material->Get(AI_MATKEY_COLOR_SPECULAR, color)) {
+        adsMaterial.SetSpecular(Vector3(color.r, color.g, color.b));
+    }
+    if (aiReturn_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, color)) {
+        adsMaterial.SetDiffuse(Vector3(color.r, color.g, color.b));
+    }
+    if (aiReturn_SUCCESS == material->Get(AI_MATKEY_SHININESS, shininess)) {
+        adsMaterial.SetShininess(shininess);
+    }
     // return a mesh object created from the extracted mesh data
-    meshInstance.AddMesh(MeshData(position_data, normal_data, texCoord_data, indices, textures));
+    meshInstance.AddMesh(MeshData(position_data, normal_data, texCoord_data, indices, textures, adsMaterial));
 }
 
 vector<TextureData> ModelImporter::LoadMaterialTextures(Mesh& meshInstance, aiMaterial* mat, aiTextureType type, string typeName) {
@@ -154,8 +166,7 @@ vector<TextureData> ModelImporter::LoadMaterialTextures(Mesh& meshInstance, aiMa
 }
 
 Mesh ModelImporter::LoadModel(string const& path) {
-    Mesh meshInstance;
-    ProcessObject(meshInstance, path);
-    meshInstance.SetupMesh();
-    return meshInstance;
+    Mesh mesh;
+    ProcessScene(mesh, path);
+    return mesh;
 }

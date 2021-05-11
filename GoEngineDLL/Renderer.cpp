@@ -207,10 +207,14 @@ Renderer* Renderer::GetSingleton() {
 
 void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw) {
 	BindVertexArray(vao);
-	if (elementDraw){
+	Draw(_primitive, vertexCount, elementDraw);
+}
+
+void Renderer::Draw(Primitive _primitive, int vertexCount, bool elementDraw) {
+	if (elementDraw) {
 		DrawElements(_primitive, vertexCount);
 	}
-	else{
+	else {
 		Draw(_primitive, vertexCount);
 	}
 }

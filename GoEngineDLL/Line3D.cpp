@@ -19,6 +19,7 @@ void Line3D::CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor
 		endPoint.x, endPoint.y, endPoint.z,
 	};
 	CreateVertexArrayID();
+	BindVertexArray();
 	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
 	BindVertexObjects();
 	primitive = Renderer::LINES;

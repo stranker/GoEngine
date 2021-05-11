@@ -57,6 +57,10 @@ void Entity::BindVertexObjects() {
 	}
 }
 
+void Entity::BindVertexArray() {
+	Renderer::GetSingleton()->BindVertexArray(vertexArrayID);
+}
+
 void Entity::SetVertexData(vector<Renderer::VertexData> vertexData) {
 	vectorVertexData = vertexData;
 }

@@ -20,8 +20,10 @@ Triangle::Triangle() {
 		0.0f, 0.0f, 1.0f, 1.0f,
 	};
 	CreateVertexArrayID();
+	BindVertexArray();
 	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
 	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1);
+	BindVertexObjects();
 	primitive = Renderer::TRIANGLES;
 }
 

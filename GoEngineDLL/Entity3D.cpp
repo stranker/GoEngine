@@ -8,7 +8,7 @@ void Entity3D::Translate(Vector3 position) {
 	transform->Translate(position);
 }
 
-void Entity3D::Rotate(Vector3  rotation) {
+void Entity3D::Rotate(Vector3 rotation) {
 	transform->RotateX(rotation.x);
 	transform->RotateY(rotation.y);
 	transform->RotateZ(rotation.z);
@@ -16,6 +16,18 @@ void Entity3D::Rotate(Vector3  rotation) {
 
 void Entity3D::Rotate(float angle, Vector3 axis) {
 	transform->SetRotation(angle, axis);
+}
+
+void Entity3D::RotateX(float angle) {
+	transform->RotateX(angle);
+}
+
+void Entity3D::RotateY(float angle) {
+	transform->RotateY(angle);
+}
+
+void Entity3D::RotateZ(float angle) {
+	transform->RotateZ(angle);
 }
 
 void Entity3D::SetScale(Vector3 scale) {

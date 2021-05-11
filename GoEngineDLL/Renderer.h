@@ -73,6 +73,7 @@ public:
 	void DeleteBuffer(unsigned int bufferID);
 	void Draw(Primitive _primitive, int vertexCount);
 	void Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw);
+	void Draw(Primitive _primitive, int vertexCount, bool elementDraw);
 	void DrawElements(Primitive _primitive, int vertexCount);
 	void EnableClientState();
 	void DisableClientState();

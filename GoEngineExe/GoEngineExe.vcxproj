@@ -139,10 +139,12 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Tank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GoEngineDLL\GoEngineDLL.vcxproj">

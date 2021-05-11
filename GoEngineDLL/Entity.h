@@ -15,6 +15,7 @@ protected:
 	void CreateVertexData(void* _vertexData, size_t dataSize, size_t vertexCount, Renderer::BufferType bufferType, size_t attributeID);
 	void UpdateVertexData(float* _vertex, size_t dataSize, size_t attributeID);
 	void BindVertexObjects();
+	void BindVertexArray();
 	void SetVertexData(vector<Renderer::VertexData> vertexData);
 	string name;
 public:

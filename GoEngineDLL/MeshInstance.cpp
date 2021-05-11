@@ -1,28 +1,22 @@
 #include "MeshInstance.h"
 #include "SpatialMaterial.h"
 
-void MeshInstance::Draw() {
-	if (spatialMaterial){
-		spatialMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-		mesh.Draw(GetVertexArrayID(), *spatialMaterial, primitive);
+void Mesh::Draw(Transform& transform, Renderer::Primitive _primitive) {
+	for (MeshData meshData : meshes) {
+		meshData.Draw(transform, _primitive);
 	}
+}
+
+Mesh::Mesh() {
+}
+
+void MeshInstance::Draw() {
+	mesh.Draw(*transform, primitive);
 	DrawGizmo();
 }
 
-void MeshInstance::Destroy() {
-	if (spatialMaterial) {
-		spatialMaterial->Destroy();
-	}
-}
-
 MeshInstance::MeshInstance(string const& meshPath) {
-	spatialMaterial = new SpatialMaterial();
-	spatialMaterial->LoadShaders("Shaders/SpatialMesh.vs", "Shaders/SpatialMesh.fs");
-	CreateVertexArrayID();
 	mesh = ModelImporter::LoadModel(meshPath);
-	mesh.SetupMesh();
-	SetVertexData(mesh.GetVectorVertexData());
-	BindVertexObjects();
 	primitive = Renderer::TRIANGLES;
 }
 

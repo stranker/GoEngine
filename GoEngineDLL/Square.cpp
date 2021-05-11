@@ -27,9 +27,11 @@ Square::Square() {
 		1, 2, 3    // second triangle
 	};
 	CreateVertexArrayID();
+	BindVertexArray();
 	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
 	CreateVertexData(color_vertex_data, sizeof(color_vertex_data), 4, Renderer::ARRAY_BUFFER, 1);
 	CreateVertexData(index_data, sizeof(index_data), 2, Renderer::ELEMENT_BUFFER, -1);
+	BindVertexObjects();
 	primitive = Renderer::TRIANGLES;
 }
 
