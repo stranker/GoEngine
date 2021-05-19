@@ -23,9 +23,13 @@ private:
 	int screenWidth;
 	int screenHeight;
 	const char* screenTitle;
-	SpatialMaterial* cubeMaterial;
+	SpatialMaterial cubeMaterial;
 	MeshInstance* cat;
 	Tank* tank;
+	MeshInstance* minecraft;
+	MeshInstance* beer;
+	MeshInstance* wizard;
+	MeshInstance* reptile;
 public:
 	void Start() override;
 	void Update(float deltaTime) override;

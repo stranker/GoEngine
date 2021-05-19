@@ -12,6 +12,7 @@ protected:
 public:
     void SetPosition(Vector3 position);
     void Translate(Vector3 position);
+    void Rotate(float angle, Vector3 axis);
     void Rotate(Vector3 rotation);
     void RotateX(float _angle);
     void RotateY(float _angle);

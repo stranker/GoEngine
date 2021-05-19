@@ -8,6 +8,11 @@ private:
 	float rotationAngle = 0;
 	float rotationSpeed = 100;
 	MeshInstance* model;
+	SpotLight* spotlight;
+	Camera3D* camera;
+	const float cameraXOffset = -15;
+	const float cameraYOffset = 12;
+	const float aimDistance = 10;
 public:
 	void Update(float deltaTime);
 	Tank();

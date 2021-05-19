@@ -14,6 +14,10 @@ void Camera3D::Translate(Vector3 position){
     transform->Translate(position);
 }
 
+void Camera3D::Rotate(float angle, Vector3 axis) {
+    transform->SetRotation(angle, axis);
+}
+
 void Camera3D::Rotate(Vector3 rotation){
     RotateX(rotation.x);
     RotateY(rotation.y);

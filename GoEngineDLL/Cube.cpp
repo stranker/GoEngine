@@ -1,19 +1,16 @@
 #include "Cube.h"
 
-void Cube::SetMaterial(SpatialMaterial* _spatialMaterial) {
-    spatialMaterial = _spatialMaterial;
-}
-
 void Cube::Draw() {
-    if (spatialMaterial) {
-        spatialMaterial->Use(); // Uso el material
-        spatialMaterial->SetMat4("model", transform->GetTransform());
-        spatialMaterial->SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
-        spatialMaterial->SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-        spatialMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCamera()->GetTransform()->GetPosition());
+    Primitive::Draw();
+    BindVertexArray();
+    if (&spatialMaterial) {
+        spatialMaterial.Use(); // Uso el material
+        spatialMaterial.SetMat4("model", transform->GetTransform());
+        spatialMaterial.SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
+        spatialMaterial.SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
+        spatialMaterial.SetVec3("viewPos", Renderer::GetSingleton()->GetCamera()->GetTransform()->GetPosition());
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
-    DrawGizmo();
 }
 
 Cube::Cube() {

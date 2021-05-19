@@ -1,13 +1,13 @@
 #include "Light.h"
 
 void Light::Draw() {
-    if (spatialMaterial){
-        spatialMaterial->Use();
-        spatialMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-        spatialMaterial->SetVec3("lightColor", lightColor);
+    Primitive::Draw();
+    if (&spatialMaterial){
+        spatialMaterial.Use();
+        spatialMaterial.SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
+        spatialMaterial.SetVec3("lightColor", lightColor);
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
-    DrawGizmo();
 }
 
 void Light::SetLightColor(Vector3 _color) {
@@ -95,8 +95,7 @@ Light::Light() {
     CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0); // VBO
     BindVertexObjects(); // Bindeo VAO
     primitive = Renderer::TRIANGLES;
-    spatialMaterial = new SpatialMaterial();
-    spatialMaterial->LoadShaders("Shaders/Simple3D.vs", "Shaders/LightCube.fs");
+    spatialMaterial = ResourceManager::LoadSpatialMaterial("Shaders/Simple3D.vs", "Shaders/LightCube.fs", "light");
 }
 
 Light::~Light() {
