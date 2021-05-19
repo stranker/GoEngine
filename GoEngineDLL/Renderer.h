@@ -71,6 +71,8 @@ public:
 	void SwapBuffers();
 	void DisableBuffer(size_t attributeID);
 	void DeleteBuffer(unsigned int bufferID);
+	void DeleteTexture(unsigned int textureID);
+	void DeleteShader(unsigned int shaderID);
 	void Draw(Primitive _primitive, int vertexCount);
 	void Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw);
 	void Draw(Primitive _primitive, int vertexCount, bool elementDraw);
@@ -78,6 +80,7 @@ public:
 	void EnableClientState();
 	void DisableClientState();
 	void DestroyVertexData(vector<VertexData> data);
+	void SetEnableDepthBuffer(bool value);
 	static Renderer* GetSingleton();
 	Camera* GetCamera();
 	void SetCurrentCamera(Camera* _camera);

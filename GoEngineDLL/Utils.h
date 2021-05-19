@@ -1,8 +1,10 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <algorithm>
 #include <vector>
+#include <map>
 #include <string.h>
 #include "Exports.h"
 #include "Vector2.h"

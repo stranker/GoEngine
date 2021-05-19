@@ -2,7 +2,7 @@
 #include "MeshInstance.h"
 #include "SpatialMaterial.h"
 
-MeshData::MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<TextureData> _textures, ADSSpatialMaterial _adsMaterial){
+MeshData::MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<Texture> _textures, ADSSpatialMaterial _adsMaterial){
     position_data = _position_data;
     normal_data = _normal_data;
     texCoord_data = _texCoord_data;
@@ -12,23 +12,29 @@ MeshData::MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data,
     CreateVertexArrayID();
     BindVertexArray();
     CreateVertexData(&position_data[0], position_data.size() * sizeof(Vector3), 3, Renderer::ARRAY_BUFFER, 0);
-    CreateVertexData(&normal_data[0], normal_data.size() * sizeof(Vector3), 3, Renderer::ARRAY_BUFFER, 1);
-    CreateVertexData(&texCoord_data[0], texCoord_data.size() * sizeof(Vector2), 2, Renderer::ARRAY_BUFFER, 2);
+    if (!normal_data.empty()){
+        CreateVertexData(&normal_data[0], normal_data.size() * sizeof(Vector3), 3, Renderer::ARRAY_BUFFER, 1);
+    }
+    if (!texCoord_data.empty()){
+        CreateVertexData(&texCoord_data[0], texCoord_data.size() * sizeof(Vector2), 2, Renderer::ARRAY_BUFFER, 2);
+    }
     CreateVertexData(&indices[0], indices.size() * sizeof(unsigned int), 1, Renderer::ELEMENT_BUFFER, -1);
     BindVertexObjects();
 }
 
 void MeshData::Draw(Transform& transform, Renderer::Primitive primitive) {
     BindVertexArray();
-    adsMaterial.Use();
-    // Vertex properties
-    adsMaterial.SetMat4("model", transform.GetTransform());
-    adsMaterial.SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
-    adsMaterial.SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-    for (unsigned int i = 0; i < textures.size(); i++) {
-        string name = textures[i].name;
-        adsMaterial.SetBool("material.hasTexture", true);
-        adsMaterial.SetTextureProperty(name, textures[i].textureId, i);
+    if (&adsMaterial){
+        adsMaterial.Use();
+        // Vertex properties
+        adsMaterial.SetMat4("model", transform.GetTransform());
+        adsMaterial.SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
+        adsMaterial.SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
+        for (unsigned int i = 0; i < textures.size(); i++) {
+            string name = textures[i].GetPath();
+            adsMaterial.SetBool("material.hasTexture", true);
+            adsMaterial.SetTexture("material." + name, textures[i].GetTextureID(), i);
+        }
     }
     Renderer::GetSingleton()->Draw(primitive, indices.size(), true);
     adsMaterial.ResetTextureActive();
@@ -73,7 +79,7 @@ void ModelImporter::ProcessMesh(Mesh& meshInstance, aiMesh* mesh, const aiScene*
     vector<Vector3> normal_data;
     vector<Vector2> texCoord_data;
     vector<unsigned int> indices;
-    vector<TextureData> textures;
+    vector<Texture> textures;
 
     // walk through each of the mesh's vertices
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -103,19 +109,21 @@ void ModelImporter::ProcessMesh(Mesh& meshInstance, aiMesh* mesh, const aiScene*
     // specular: texture_specularN
     // normal: texture_normalN
     // 1. diffuse maps
-    vector<TextureData> diffuseMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_DIFFUSE, "texture_diffuse");
+    vector<Texture> diffuseMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     // 2. specular maps
-    vector<TextureData> specularMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_SPECULAR, "texture_specular");
+    vector<Texture> specularMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     // 3. normal maps
-    vector<TextureData> normalMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_HEIGHT, "texture_normal");
+    vector<Texture> normalMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     // 4. height maps
-    vector<TextureData> heightMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_AMBIENT, "texture_height");
+    vector<Texture> heightMaps = LoadMaterialTextures(meshInstance, material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
     // ADS Material
-    ADSSpatialMaterial adsMaterial;
+
+    ADSSpatialMaterial adsMaterial = ResourceManager::LoadADSSpatialMaterial(
+        "Shaders/SpatialMaterial.vs","Shaders/ADSSpatialMaterial.fs",string(material->GetName().C_Str()));
     aiColor3D color(0.f, 0.f, 0.f);
     float shininess;
     if (aiReturn_SUCCESS == material->Get(AI_MATKEY_COLOR_AMBIENT, color)){
@@ -134,8 +142,8 @@ void ModelImporter::ProcessMesh(Mesh& meshInstance, aiMesh* mesh, const aiScene*
     meshInstance.AddMesh(MeshData(position_data, normal_data, texCoord_data, indices, textures, adsMaterial));
 }
 
-vector<TextureData> ModelImporter::LoadMaterialTextures(Mesh& meshInstance, aiMaterial* mat, aiTextureType type, string typeName) {
-    vector<TextureData> textures;
+vector<Texture> ModelImporter::LoadMaterialTextures(Mesh& meshInstance, aiMaterial* mat, aiTextureType type, string typeName) {
+    vector<Texture> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString str;
@@ -145,7 +153,7 @@ vector<TextureData> ModelImporter::LoadMaterialTextures(Mesh& meshInstance, aiMa
         bool skip = false;
         for (unsigned int j = 0; j < meshInstance.GetTexturesLoaded().size(); j++)
         {
-            if (std::strcmp(meshInstance.GetTexturesLoaded()[j].path.c_str(), filePath.c_str()) == 0)
+            if (std::strcmp(meshInstance.GetTexturesLoaded()[j].GetPath().c_str(), filePath.c_str()) == 0)
             {
                 textures.push_back(meshInstance.GetTexturesLoaded()[j]);
                 skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
@@ -154,9 +162,9 @@ vector<TextureData> ModelImporter::LoadMaterialTextures(Mesh& meshInstance, aiMa
         }
         if (!skip)
         {   // if texture hasn't been loaded already, load it
-            TextureData texture = TextureImporter::LoadTexture(filePath.c_str());
-            if (texture.isValid){
-                texture.name = typeName;
+            Texture texture = ResourceManager::LoadTexture(filePath, filePath);
+            if (texture.IsValid()){
+                texture.SetName(typeName);
                 textures.push_back(texture);
                 meshInstance.AddTexture(texture); // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
             }

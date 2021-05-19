@@ -11,7 +11,8 @@ struct ENGINEDLL_API Vector3 {
 	float z = 0;
 
 	Vector3 operator+(const Vector3 &vec) const;
-	Vector3 operator-(const Vector3 &vec) const;
+	Vector3 operator-(const Vector3& vec) const;
+	Vector3 operator+=(const Vector3 &vec);
 	bool operator==(const Vector3 &vec) const;
 	Vector3 operator*(const float k) const;
 	Vector3 operator/(const float k) const;

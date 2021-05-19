@@ -1,7 +1,5 @@
 #pragma once
-#include "Exports.h"
-#include "Utils.h"
-#include "TextureImporter.h"
+#include "ResourceManager.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -17,10 +15,10 @@ private:
 	vector<Vector3> normal_data;
 	vector<Vector2> texCoord_data;
 	vector<unsigned int> indices;
-	vector<TextureData> textures;
+	vector<Texture> textures;
 	ADSSpatialMaterial adsMaterial;
 public:
-	MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<TextureData> _textures, ADSSpatialMaterial _adsMaterial);
+	MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<Texture> _textures, ADSSpatialMaterial _adsMaterial);
 	void Draw(Transform& transform, Renderer::Primitive primitve);
 };
 
@@ -29,7 +27,7 @@ private:
 	static void ProcessScene(Mesh& meshInstance, string const& path);
 	static void ProcessNode(Mesh& meshInstance, aiNode* node, const aiScene* scene);
 	static void ProcessMesh(Mesh& meshInstance, aiMesh* mesh, const aiScene* scene);
-	static vector<TextureData> LoadMaterialTextures(Mesh& meshInstance, aiMaterial* mat, aiTextureType type, string typeName);
+	static vector<Texture> LoadMaterialTextures(Mesh& meshInstance, aiMaterial* mat, aiTextureType type, string typeName);
 public:
 	static Mesh LoadModel(string const& path);
 };

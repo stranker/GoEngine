@@ -1,6 +1,5 @@
 #pragma once
 #include "Entity2D.h"
-#include "TextureMaterial.h"
 
 class ENGINEDLL_API Sprite :
 	public Entity2D {
@@ -11,8 +10,8 @@ protected:
 		Vector2 bl; // bottom left
 		Vector2 tl; // top left
 	};
-	unsigned int textureBuffer;
-	TextureMaterial *texture;
+	Material material;
+	Texture texture;
 	int verticalFrames = 1;
 	int horizontalFrames = 1;
 	int currentFrame = 0;
@@ -27,7 +26,6 @@ private:
 public:
 	Vector2 GetSize() const;
 	void SetTexture(const char* filePath, int vFrames, int hFrames);
-	TextureMaterial *GetTexture();
 	void Draw() override;
 	void Destroy() override;
 	void FlipVertical(bool value);

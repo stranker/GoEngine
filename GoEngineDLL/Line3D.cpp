@@ -1,12 +1,15 @@
 #include "Line3D.h"
 
 void Line3D::Draw() {
+	BindVertexArray();
+	Renderer::GetSingleton()->SetEnableDepthBuffer(false);
 	if (lineMaterial){
 		lineMaterial->Use();
 		lineMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
 		lineMaterial->SetVec4("lineColor", Rect2(lineColor.r, lineColor.g, lineColor.b, lineColor.a));
 	}
 	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 2, false);
+	Renderer::GetSingleton()->SetEnableDepthBuffer(true);
 }
 
 void Line3D::CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor, Material* material) {
@@ -23,6 +26,7 @@ void Line3D::CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor
 	CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0);
 	BindVertexObjects();
 	primitive = Renderer::LINES;
+	transform->SetCanScale(canScale);
 }
 
 void Line3D::SetMaterial(Material* material) {
@@ -36,9 +40,6 @@ Line3D::Line3D(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor, Materia
 
 Line3D::Line3D() {
 	canScale = false;
-}
-
-Line3D::~Line3D() {
 }
 
 void Gizmo3D::Draw() {
@@ -72,7 +73,4 @@ Gizmo3D::Gizmo3D() {
 	lines.push_back(redLine);
 	lines.push_back(blueLine);
 	lines.push_back(greenLine);
-}
-
-Gizmo3D::~Gizmo3D() {
 }

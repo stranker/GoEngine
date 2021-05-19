@@ -21,6 +21,8 @@ protected:
 	glm::mat4 matRot;
 	glm::mat4 matScl;
 
+	bool canScale = true;
+
 	void _UpdateTransform();
 	void _UpdateUnitVectors();
 public:
@@ -36,6 +38,7 @@ public:
 	void LookAt(Vector3 _target);
 	void LookAt(Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
+	void SetCanScale(bool value);
 	Vector3 GetFoward() const;
 	Vector3 GetRight() const;
 	Vector3 GetPosition() const;
