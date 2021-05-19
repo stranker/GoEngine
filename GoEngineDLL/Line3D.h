@@ -14,7 +14,7 @@ public:
     void SetMaterial(Material* material);
     Line3D();
     Line3D(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor, Material* material);
-    ~Line3D();
+    ~Line3D() {};
 };
 
 class ENGINEDLL_API Gizmo3D :
@@ -27,6 +27,6 @@ public:
     void Destroy() override;
     void UpdateGizmo(Transform* transform);
     Gizmo3D();
-    ~Gizmo3D();
+    ~Gizmo3D() {};
 };
 

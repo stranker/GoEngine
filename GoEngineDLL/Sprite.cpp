@@ -11,56 +11,46 @@ void Sprite::AddFramesRect() {
 
 		// Calculan la esquina de la imagen ya invertida. TR <-> BR, TL <-> BL
 		UVFrame uvFrame;
-		uvFrame.tr.x = (frameX + spriteSize.x) / texture->GetSize().x;
-		uvFrame.tr.y = (frameY + spriteSize.y) / texture->GetSize().y;
+		uvFrame.tr.x = (frameX + spriteSize.x) / texture.GetWidth();
+		uvFrame.tr.y = (frameY + spriteSize.y) / texture.GetHeight();
 
-		uvFrame.br.x = (frameX + spriteSize.x) / texture->GetSize().x;
-		uvFrame.br.y = frameY / texture->GetSize().y;
+		uvFrame.br.x = (frameX + spriteSize.x) / texture.GetWidth();
+		uvFrame.br.y = frameY / texture.GetHeight();
 
-		uvFrame.bl.x = frameX / texture->GetSize().x;
-		uvFrame.bl.y = frameY / texture->GetSize().y;
+		uvFrame.bl.x = frameX / texture.GetWidth();
+		uvFrame.bl.y = frameY / texture.GetHeight();
 
-		uvFrame.tl.x = frameX / texture->GetSize().x;
-		uvFrame.tl.y = (frameY + spriteSize.y) / texture->GetSize().y;
+		uvFrame.tl.x = frameX / texture.GetWidth();
+		uvFrame.tl.y = (frameY + spriteSize.y) / texture.GetHeight();
 
 		framesRect.push_back(uvFrame);
 	}
 }
 
 void Sprite::SetTexture(const char* filePath, int vFrames, int hFrames) {
-	texture = new TextureMaterial();
-	texture->LoadShaders("Shaders/TextureVertexShader.shader", "Shaders/TextureFragmentShader.shader");
-	texture->LoadTexture(filePath);
-	textureBuffer = texture->GetTextureID();
+	material = ResourceManager::LoadMaterial("Shaders/TextureVertexShader.shader", "Shaders/TextureFragmentShader.shader", "sprite");
+	texture = ResourceManager::LoadTexture(filePath, "sprite");
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
-	spriteSize = Vector2(texture->GetSize().x / verticalFrames, texture->GetSize().y / horizontalFrames);
+	spriteSize = Vector2(texture.GetWidth() / verticalFrames, texture.GetHeight() / horizontalFrames);
 	Scale(spriteSize);
 	AddFramesRect();
 }
 
-TextureMaterial *Sprite::GetTexture() {
-	return texture;
-}
-
 void Sprite::Draw() {
-	if (texture) {
-		texture->Use();
-		texture->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-		texture->SetTextureProperty("sprite", textureBuffer);
-		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
-		texture->SetBool("flipVertical", flipVertical);
-		texture->SetBool("flipHorizontal", flipHorizontal);
+	if (&material) {
+		material.Use();
+		material.SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
+		material.SetTexture("sprite", texture.GetTextureID(), 0);
+		material.SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
+		material.SetBool("flipVertical", flipVertical);
+		material.SetBool("flipHorizontal", flipHorizontal);
 	}
 	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, draw_vertices, true); // VAO => VBO VBO VBO
 }
 
 void Sprite::Destroy() {
-	if (texture) {
-		texture->Destroy();
-		delete texture;
-	}
 }
 
 void Sprite::FlipVertical(bool value) {

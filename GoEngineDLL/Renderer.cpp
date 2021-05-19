@@ -98,8 +98,6 @@ unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	TextureImporter::FreeTexture(data);
 	return textureID;
 }
 
@@ -177,6 +175,14 @@ void Renderer::DeleteBuffer(unsigned int _buffer) {
 	glDeleteBuffers(1, &_buffer);
 }
 
+void Renderer::DeleteTexture(unsigned int textureID) {
+	glDeleteTextures(1, &textureID);
+}
+
+void Renderer::DeleteShader(unsigned int shaderID) {
+	glDeleteProgram(shaderID);
+}
+
 void Renderer::Draw(Primitive _primitive, int vertexCount) {
 	glDrawArrays((GLenum)_primitive, 0, vertexCount);
 }
@@ -196,6 +202,15 @@ void Renderer::DisableClientState() {
 void Renderer::DestroyVertexData(vector<VertexData> data) {
 	for (VertexData vertexData : data) {
 		DeleteBuffer(vertexData.vbo);
+	}
+}
+
+void Renderer::SetEnableDepthBuffer(bool value) {
+	if (value) 	{
+		glEnable(GL_DEPTH_TEST);
+	}
+	else {
+		glDisable(GL_DEPTH_TEST);
 	}
 }
 
@@ -257,14 +272,14 @@ void Renderer::ProcessLighting(SpatialMaterial* material) {
 	for (size_t i = 0; i < dirLights.size(); i++){
 		string dirArrayIdx = "dirLights[" + to_string(i) + "]";
 		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetDirection());
-		material->SetVec3(dirArrayIdx + ".color", dirLights[i]->GetLightColor());
+		material->SetVec3(dirArrayIdx + ".ambient", dirLights[i]->GetLightColor());
 		material->SetFloat(dirArrayIdx + ".specular", dirLights[i]->GetSpecular());
 		material->SetFloat(dirArrayIdx + ".energy", dirLights[i]->GetEnergy());
 	}
 	for (size_t i = 0; i < pointLights.size(); i++) {
 		string dirArrayIdx = "pointLights[" + to_string(i) + "]";
 		material->SetVec3(dirArrayIdx + ".position", pointLights[i]->GetTransform()->GetPosition());
-		material->SetVec3(dirArrayIdx + ".color", pointLights[i]->GetLightColor());
+		material->SetVec3(dirArrayIdx + ".ambient", pointLights[i]->GetLightColor());
 		material->SetFloat(dirArrayIdx + ".specular", pointLights[i]->GetSpecular());
 		material->SetFloat(dirArrayIdx + ".energy", pointLights[i]->GetEnergy());
 		material->SetFloat(dirArrayIdx + ".constant", pointLights[i]->GetAttenuation().x);
@@ -276,7 +291,7 @@ void Renderer::ProcessLighting(SpatialMaterial* material) {
 		string dirArrayIdx = "spotLights[" + to_string(i) + "]";
 		material->SetVec3(dirArrayIdx + ".direction", spotLights[i]->GetTransform()->GetFoward());
 		material->SetVec3(dirArrayIdx + ".position", spotLights[i]->GetTransform()->GetPosition());
-		material->SetVec3(dirArrayIdx + ".color", spotLights[i]->GetLightColor());
+		material->SetVec3(dirArrayIdx + ".ambient", spotLights[i]->GetLightColor());
 		material->SetFloat(dirArrayIdx + ".specular", spotLights[i]->GetSpecular());
 		material->SetFloat(dirArrayIdx + ".energy", spotLights[i]->GetEnergy());
 		material->SetFloat(dirArrayIdx + ".constant", spotLights[i]->GetAttenuation().x);

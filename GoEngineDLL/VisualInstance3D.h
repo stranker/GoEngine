@@ -17,7 +17,7 @@ public:
 	void Rotate(float angle, Vector3 axis);
 	void SetScale(Vector3 scale);
 	void Destroy() override;
+	void Draw() override;
 	VisualInstance3D();
-	~VisualInstance3D();
 };
 

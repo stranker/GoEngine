@@ -2,52 +2,59 @@
 #include "GlInclude.h"
 #include "Renderer.h"
 
-void Material::SetMat4(const char *property, glm::mat4 matrix) const{
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetMat4(string const& property, glm::mat4 matrix) const{
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Material::SetVec2(const char * property, Vector2 vec) const {
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetVec2(string const& property, Vector2 vec) const {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniform2f(location, vec.x, vec.y);
 }
 
-void Material::SetVec3(const char * property, Vector3 vec) const {
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetVec3(string const& property, Vector3 vec) const {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniform3f(location, vec.x, vec.y, vec.z);
 }
 
-void Material::SetVec4(const char * property, glm::vec4 value) const {
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetVec4(string const& property, glm::vec4 value) const {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
-void Material::SetVec4(const char * property, Rect2 value) const {
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetVec4(string const& property, Rect2 value) const {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniform4f(location, value.x, value.y, value.width, value.height);
 }
 
-void Material::SetBool(const char *property, bool value) const {
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetBool(string const& property, bool value) const {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniform1i(location, (bool)value);
 }
 
-void Material::SetInt(const char *property, int value) const {
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetInt(string const& property, int value) const {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniform1i(location, (int)value);
 }
 
-void Material::SetFloat(const char *property, float value) const {
-	unsigned int location = glGetUniformLocation(ID, property);
+void Material::SetFloat(string const& property, float value) const {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
 	glUniform1f(location, (float)value);
 }
 
-void Material::Use(){
-	glUseProgram(ID);
+void Material::SetTexture(string const& property, unsigned int textureId, unsigned int index) {
+	glActiveTexture(GL_TEXTURE0 + index);
+	unsigned int location = glGetUniformLocation(resourceID, property.c_str());
+	glUniform1i(location, textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
-void Material::Destroy() {
-	glDeleteProgram(ID);
+void Material::Use(){
+	glUseProgram(shaderID);
+}
+
+unsigned int Material::GetID() {
+	return shaderID;
 }
 
 void Material::LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
@@ -56,10 +63,10 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 	unsigned int FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Leer el Vertex Shader desde archivo
-	std::string VertexShaderCode;
-	std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
+	string VertexShaderCode;
+	ifstream VertexShaderStream(vertex_file_path, std::ios::in);
 	if (VertexShaderStream.is_open()) {
-		std::stringstream sstr;
+		stringstream sstr;
 		sstr << VertexShaderStream.rdbuf();
 		VertexShaderCode = sstr.str();
 		VertexShaderStream.close();
@@ -69,11 +76,10 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 		getchar();
 	}
 
-	// Leer el Fragment Shader desde archivo
-	std::string FragmentShaderCode;
-	std::ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
+	string FragmentShaderCode;
+	ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
 	if (FragmentShaderStream.is_open()) {
-		std::stringstream sstr;
+		stringstream sstr;
 		sstr << FragmentShaderStream.rdbuf();
 		FragmentShaderCode = sstr.str();
 		FragmentShaderStream.close();
@@ -82,9 +88,6 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 	int Result = GL_FALSE;
 	int InfoLogLength;
 
-
-	// Compilar Vertex Shader
-	//printf("Compiling shader : %s\n", vertex_file_path);
 	char const * VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
 	glCompileShader(VertexShaderID);
@@ -97,11 +100,6 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
 		printf("%s\n", &VertexShaderErrorMessage[0]);
 	}
-
-
-
-	// Compilar Fragment Shader
-	//printf("Compiling shader : %s\n", fragment_file_path);
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
 	glCompileShader(FragmentShaderID);
@@ -114,68 +112,24 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
 		printf("%s\n", &FragmentShaderErrorMessage[0]);
 	}
+	
+	shaderID = glCreateProgram();
+	glAttachShader(shaderID, VertexShaderID);
+	glAttachShader(shaderID, FragmentShaderID);
+	glLinkProgram(shaderID);
 
-
-
-	// Vincular el programa por medio del ID
-	//printf("Linking program\n");
-	ID = glCreateProgram();
-	glAttachShader(ID, VertexShaderID);
-	glAttachShader(ID, FragmentShaderID);
-	glLinkProgram(ID);
-
-	// Revisar el programa
-	glGetProgramiv(ID, GL_LINK_STATUS, &Result);
-	glGetProgramiv(ID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	glGetProgramiv(shaderID, GL_LINK_STATUS, &Result);
+	glGetProgramiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	if (InfoLogLength > 0) {
-		std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-		glGetProgramInfoLog(ID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+		vector<char> ProgramErrorMessage(InfoLogLength + 1);
+		glGetProgramInfoLog(shaderID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 		printf("%s\n", &ProgramErrorMessage[0]);
 	}
 
 
-	glDetachShader(ID, VertexShaderID);
-	glDetachShader(ID, FragmentShaderID);
+	glDetachShader(shaderID, VertexShaderID);
+	glDetachShader(shaderID, FragmentShaderID);
 
 	glDeleteShader(VertexShaderID);
 	glDeleteShader(FragmentShaderID);
-}
-
-Material::Material(){
-}
-
-
-Material::~Material(){
-}
-
-void Material::SetMat4(string property, glm::mat4 matrix) const {
-	SetMat4(property.c_str(), matrix);
-}
-
-void Material::SetVec2(string property, Vector2 vec) const {
-	SetVec2(property.c_str(), vec);
-}
-
-void Material::SetVec3(string property, Vector3 vec) const {
-	SetVec3(property.c_str(), vec);
-}
-
-void Material::SetVec4(string property, glm::vec4 vec) const {
-	SetVec4(property.c_str(), vec);
-}
-
-void Material::SetVec4(string property, Rect2 value) const {
-	SetVec4(property.c_str(), value);
-}
-
-void Material::SetBool(string property, bool value) const {
-	SetBool(property.c_str(), value);
-}
-
-void Material::SetInt(string property, int value) const {
-	SetInt(property.c_str(), value);
-}
-
-void Material::SetFloat(string property, float value) const {
-	SetFloat(property.c_str(), value);
 }

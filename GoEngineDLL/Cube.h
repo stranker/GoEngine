@@ -7,7 +7,6 @@ class ENGINEDLL_API Cube :
 private:
 	const int drawVertices = 36;
 public:
-	void SetMaterial(SpatialMaterial* spatialMaterial);
 	void Draw() override;
 	Cube();
 	~Cube();
