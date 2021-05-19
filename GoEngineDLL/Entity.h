@@ -2,6 +2,7 @@
 #include "Exports.h"
 #include "Utils.h"
 #include "Renderer.h"
+#include "ResourceManager.h"
 
 class ENGINEDLL_API Entity{
 protected:

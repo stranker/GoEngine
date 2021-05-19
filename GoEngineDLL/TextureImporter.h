@@ -1,32 +1,33 @@
 #pragma once
-#include "Exports.h"
-#include <iostream>
+#include "Resource.h"
 
-using namespace std;
-
-struct ENGINEDLL_API TextureData {
+class ENGINEDLL_API Texture : public Resource {
+private:
 	unsigned int textureId;
-	int width;
-	int height;
-	int nrChannels;
-	unsigned char* data;
+	int width = 0;
+	int height = 0;
+	int nrChannels = 0;
 	string path;
 	string name;
 	bool isValid = false;
-
+public:
+	void CreateTexture(unsigned char* data, int _width, int _height, int _nrChannels, string const& path);
 	int GetWidth() const { return width; }
-	int Getheight() const { return height; }
+	int GetHeight() const { return height; }
 	int GetNrChannels() const {	return nrChannels; }
-	unsigned int GetID() const { return textureId; };
-	unsigned char* GetData() { return data;	}
+	Vector2 GetSize() const { return Vector2(width, height); };
+	void SetName(string const& _name) { name = _name; };
+	unsigned int GetTextureID() const { return textureId; };
 	bool IsValid() { return isValid; };
+	string GetPath() const { return path; };
+	string GetName() const { return name; };
+	Texture() {};
 };
 
 class ENGINEDLL_API TextureImporter {
 public:
-	static TextureData LoadTexture(const char* filePath);
-	static void FreeTexture(unsigned char* textureData);
-	TextureImporter();
-	~TextureImporter();
+	static Texture LoadTexture(string const& filePath);
+	TextureImporter() {};
+	~TextureImporter() {};
 };
 

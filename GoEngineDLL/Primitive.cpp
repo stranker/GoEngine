@@ -1,18 +1,9 @@
 #include "Primitive.h"
 
-void Primitive::SetMaterial(SpatialMaterial* _spatialMaterial) {
+void Primitive::SetMaterial(SpatialMaterial _spatialMaterial) {
 	spatialMaterial = _spatialMaterial;
 }
 
-void Primitive::Destroy() {
-	if (spatialMaterial) {
-		spatialMaterial->Destroy();
-		delete spatialMaterial;
-	}
-}
-
-Primitive::Primitive(){
-}
-
-Primitive::~Primitive() {
+void Primitive::Draw() {
+	VisualInstance3D::Draw();
 }

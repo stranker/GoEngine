@@ -117,40 +117,34 @@ vector<Tilemap::TileObject> Tilemap::GetMapObjects() const {
 }
 
 void Tilemap::SetTexture(const char * filePath, int vFrames, int hFrames) {
-	texture = new TextureMaterial();
-	texture->LoadShaders("Shaders/TilemapVertexShader.shader", "Shaders/TilemapFragmentShader.shader");
-	texture->LoadTexture(filePath);
-	textureBuffer = Renderer::GetSingleton()->CreateTextureBuffer(texture->GetData(), texture->GetWidth(), texture->GetHeight(), texture->GetNrChannels());
+	material = ResourceManager::LoadMaterial("Shaders/TextureVertexShader.shader", "Shaders/TextureFragmentShader.shader", "sprite");
+	texture = ResourceManager::LoadTexture(filePath, "sprite");
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
-	spriteSize = Vector2(texture->GetSize().x / verticalFrames, texture->GetSize().y / horizontalFrames);
+	spriteSize = Vector2(texture.GetWidth() / verticalFrames, texture.GetHeight() / horizontalFrames);
 	Scale(spriteSize);
 }
 
 void Tilemap::Draw() {
-	if (texture) {
-		texture->Use();
-		texture->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-		texture->SetTextureProperty("sprite", textureBuffer);
-		texture->SetInt("tileRows", horizontalFrames);
-		texture->SetInt("tileColumns", verticalFrames);
-		texture->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
+	if (&material) {
+		material.Use();
+		material.SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
+		material.SetTexture("sprite", texture.GetTextureID(), 0);
+		material.SetInt("tileRows", horizontalFrames);
+		material.SetInt("tileColumns", verticalFrames);
+		material.SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 	}
 	for (Tile tile : mapTiles) {
-		if (texture) {
-			texture->SetInt("tileId", tile.id);
-			texture->SetVec2("offset", tile.tilemapPosition);
+		if (&material) {
+			material.SetInt("tileId", tile.id);
+			material.SetVec2("offset", tile.tilemapPosition);
 		}
 		Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 6, true);
 	}
 }
 
 void Tilemap::Destroy() {
-	if (texture) {
-		texture->Destroy();
-		delete texture;
-	}
 }
 
 Vector2 Tilemap::GetMapSize() const {

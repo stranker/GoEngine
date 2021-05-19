@@ -1,7 +1,7 @@
 #include "Transform.h"
 
 void Transform::_UpdateTransform() {
-	transform = matTrans * matRot * matScl;
+	transform = matTrans * matRot * (canScale? matScl : glm::mat4(1.0f));
 }
 
 void Transform::_UpdateUnitVectors() {
@@ -51,7 +51,7 @@ void Transform::SetRotation(float angle, Vector3 axis) {
 	rotation.x = angle * axis.x;
 	rotation.y = angle * axis.y;
 	rotation.z = angle * axis.z;
-	matRot = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(axis.x, axis.y, axis.z));
+	matRot *= glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(axis.x, axis.y, axis.z));
 	_UpdateUnitVectors();
 	_UpdateTransform();
 }
@@ -91,6 +91,10 @@ void Transform::LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector) {
 	up = _upVector;
 	transform = glm::lookAt(glm::vec3(_position.x, _position.y, _position.z), glm::vec3(_target.x, _target.y, _target.z), glm::vec3(_upVector.x, _upVector.y, _upVector.z));
 	_UpdateUnitVectors();
+}
+
+void Transform::SetCanScale(bool value) {
+	canScale = value;
 }
 
 Vector3 Transform::GetFoward() const {
