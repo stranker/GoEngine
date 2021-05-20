@@ -7,12 +7,18 @@ void Mesh::Draw(Transform& transform, Renderer::Primitive _primitive) {
 	}
 }
 
+void Mesh::Destroy() {
+	for (MeshData meshData : meshes) {
+		meshData.Destroy();
+	}
+}
+
 Mesh::Mesh() {
 }
 
 void MeshInstance::Draw() {
+	Primitive::Draw();
 	mesh.Draw(*transform, primitive);
-	DrawGizmo();
 }
 
 MeshInstance::MeshInstance(string const& meshPath) {
@@ -20,5 +26,6 @@ MeshInstance::MeshInstance(string const& meshPath) {
 	primitive = Renderer::TRIANGLES;
 }
 
-MeshInstance::~MeshInstance() {
+void MeshInstance::Destroy() {
+	mesh.Destroy();
 }

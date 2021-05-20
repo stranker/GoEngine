@@ -38,7 +38,7 @@ void ADSSpatialMaterial::Use() {
 	Renderer::GetSingleton()->ProcessLighting(this);
 }
 
-ADSSpatialMaterial::ADSSpatialMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular, float _shininess){
+void ADSSpatialMaterial::CreateMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular, float _shininess) {
 	ambient = _ambient;
 	diffuse = _diffuse;
 	specular = _specular;

@@ -2,12 +2,15 @@
 #include "Renderer.h"
 #include "TextureImporter.h"
 #include "SpatialMaterial.h"
+#include "ModelImporter.h"
+#include "MeshInstance.h"
 
 ResourceManager* ResourceManager::singleton = NULL;
 map<string, Texture> ResourceManager::textures;
 map<string, SpatialMaterial> ResourceManager::spatialMaterials;
 map<string, ADSSpatialMaterial> ResourceManager::adsSpatialMaterials;
 map<string, Material> ResourceManager::materials;
+map<string, Mesh> ResourceManager::models;
 
 Texture ResourceManager::LoadTextureFromFile(string const& path) {
     Texture texture = TextureImporter::LoadTexture(path.c_str());
@@ -30,6 +33,10 @@ Material ResourceManager::LoadMaterial(string const& pathVertexShader, string co
     Material mat;
     mat.LoadShaders(pathVertexShader.c_str(), pathFragmentShader.c_str());
     return mat;
+}
+
+Mesh ResourceManager::LoadModel(string const& path) {
+    return ModelImporter::LoadModel(path);
 }
 
 ResourceManager* ResourceManager::GetSingleton() {
@@ -72,17 +79,31 @@ Material ResourceManager::GetMaterial(string const& name) {
     return materials[name];
 }
 
+Mesh ResourceManager::LoadModel(string const& path, string const& name) {
+    models[name] = LoadModel(path, name);
+    return models[name];
+}
+
+Mesh ResourceManager::GetModel(string const& name) {
+    return models[name];
+}
+
 void ResourceManager::Clear() {
     for (auto iter : textures) {
         Renderer::GetSingleton()->DeleteTexture(iter.second.GetTextureID());
     }
+    textures.clear();
     for (auto iter : spatialMaterials) {
         Renderer::GetSingleton()->DeleteShader(iter.second.GetID());
     }
+    spatialMaterials.clear();
     for (auto iter : adsSpatialMaterials) {
         Renderer::GetSingleton()->DeleteShader(iter.second.GetID());
     }
+    adsSpatialMaterials.clear();
     for (auto iter : materials) {
         Renderer::GetSingleton()->DeleteShader(iter.second.GetID());
     }
+    materials.clear();
+    models.clear();
 }

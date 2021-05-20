@@ -52,8 +52,8 @@ void Entity::UpdateVertexData(float* _vertex, size_t dataSize, size_t attributeI
 }
 
 void Entity::BindVertexObjects() {
-	for (Renderer::VertexData vertexData : vectorVertexData) {
-		Renderer::GetSingleton()->BindVertexData(vertexData);
+	for (size_t i = 0; i < vectorVertexData.size(); i++){
+		Renderer::GetSingleton()->BindVertexData(vectorVertexData[i]);
 	}
 }
 

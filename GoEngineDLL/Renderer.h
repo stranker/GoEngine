@@ -61,11 +61,9 @@ public:
 	void BindBuffer(unsigned int bufferID, BufferType bufferType);
 	void BindBufferWithAttribute(unsigned int bufferID, BufferType bufferType, int attributeID, unsigned int vertexCount);
 	void BindVertexData(VertexData vertexData);
-	void BindTexture(unsigned int textureBuffer);
 	void BindVertexArray(unsigned int vertexArrayID);
 	void SetAttributePointer(unsigned int attributeId, size_t dataCount);
 	void ActivateTexture(unsigned int index);
-	void SetTextureProperty(const char* propertyName, unsigned int id, unsigned int index);
 	void SetClearColor(Color color);
 	void ClearScreen();
 	void SwapBuffers();

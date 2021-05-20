@@ -7,9 +7,9 @@
 #include "SpatialMaterial.h"
 #include "Entity.h"
 
-struct Mesh;
+class Mesh;
 
-class ENGINEDLL_API MeshData : Entity{
+class ENGINEDLL_API MeshData : public Entity{
 private:
 	vector<Vector3> position_data;
 	vector<Vector3> normal_data;
@@ -20,6 +20,7 @@ private:
 public:
 	MeshData(vector<Vector3> _position_data, vector<Vector3> _normal_data, vector<Vector2> _texCoord_data, vector<unsigned int> _indices, vector<Texture> _textures, ADSSpatialMaterial _adsMaterial);
 	void Draw(Transform& transform, Renderer::Primitive primitve);
+	void Destroy() override;
 };
 
 class ENGINEDLL_API ModelImporter {

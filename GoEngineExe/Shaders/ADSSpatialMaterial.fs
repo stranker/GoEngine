@@ -13,7 +13,7 @@ struct Material {
 struct DirLight {
     vec3 direction;
 	
-    vec3 color;
+    vec3 ambient;
     float specular;
 	float energy;
 };
@@ -25,7 +25,7 @@ struct PointLight {
     float linear;
     float quadratic;
 	
-    vec3 color;
+    vec3 ambient;
     float specular;
 	float energy;
 	float range;
@@ -41,7 +41,7 @@ struct SpotLight {
     float linear;
     float quadratic;
   
-    vec3 color;
+    vec3 ambient;
     float specular;
 	float range;
 	float energy;
@@ -104,7 +104,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 	if(material.hasTexture){
 		textureDiffuse = vec3(texture(material.texture_diffuse, TexCoords));
 	}
-    vec3 ambient = material.ambient * light.color * textureDiffuse;
+	vec3 ambient = (material.hasTexture ? textureDiffuse : material.ambient) * light.ambient;
     vec3 diffuse = material.diffuse * diff * textureDiffuse;
     vec3 specular = material.specular * light.specular * spec * textureDiffuse;
     return (ambient + diffuse + specular) * light.energy;
@@ -127,7 +127,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	if(material.hasTexture){
 		textureDiffuse = vec3(texture(material.texture_diffuse, TexCoords));
 	}
-    vec3 ambient = material.ambient * light.color * textureDiffuse;
+	vec3 ambient = (material.hasTexture ? textureDiffuse : material.ambient) * light.ambient;
     vec3 diffuse = material.diffuse * diff * textureDiffuse;
     vec3 specular = material.specular * light.specular * spec * textureDiffuse;
     ambient *= attenuation;
@@ -157,7 +157,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	if(material.hasTexture){
 		textureDiffuse = vec3(texture(material.texture_diffuse, TexCoords));
 	}
-    vec3 ambient = material.ambient * light.color * textureDiffuse;
+	vec3 ambient = (material.hasTexture ? textureDiffuse : material.ambient) * light.ambient;
     vec3 diffuse = material.diffuse * diff * textureDiffuse;
     vec3 specular = material.specular * light.specular * spec * textureDiffuse;
     ambient *= attenuation * intensity;

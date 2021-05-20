@@ -29,23 +29,21 @@ void Material::SetVec4(string const& property, Rect2 value) const {
 
 void Material::SetBool(string const& property, bool value) const {
 	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
-	glUniform1i(location, (bool)value);
+	glUniform1i(location, value);
 }
 
 void Material::SetInt(string const& property, int value) const {
 	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
-	glUniform1i(location, (int)value);
+	glUniform1i(location, value);
 }
 
 void Material::SetFloat(string const& property, float value) const {
 	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
-	glUniform1f(location, (float)value);
+	glUniform1f(location, value);
 }
 
 void Material::SetTexture(string const& property, unsigned int textureId, unsigned int index) {
 	glActiveTexture(GL_TEXTURE0 + index);
-	unsigned int location = glGetUniformLocation(resourceID, property.c_str());
-	glUniform1i(location, textureId);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
@@ -125,7 +123,6 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 		glGetProgramInfoLog(shaderID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 		printf("%s\n", &ProgramErrorMessage[0]);
 	}
-
 
 	glDetachShader(shaderID, VertexShaderID);
 	glDetachShader(shaderID, FragmentShaderID);

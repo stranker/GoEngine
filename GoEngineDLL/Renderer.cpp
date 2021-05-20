@@ -16,6 +16,8 @@ bool Renderer::Init(){
 	}
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return true;
 }
@@ -83,7 +85,7 @@ unsigned int Renderer::CreateVertexBuffer(void* data, size_t dataSize, BufferTyp
 unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels) {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
-	GLenum format;
+	GLenum format = GL_RED;
 	if (nrChannels == 1)
 		format = GL_RED;
 	else if (nrChannels == 3)
@@ -140,15 +142,8 @@ void Renderer::BindVertexData(VertexData vertexData) {
 	BindBufferWithAttribute(vertexData.vbo, vertexData.bufferType, vertexData.attributeID, vertexData.dataCount);
 }
 
-void Renderer::BindTexture(unsigned int textureBuffer) {
-	glBindTexture(GL_TEXTURE_2D, textureBuffer);
-}
-
 void Renderer::BindVertexArray(unsigned int vertexArrayID) {
 	glBindVertexArray(vertexArrayID);
-}
-
-void Renderer::SetTextureProperty(const char* propertyName, unsigned int id, unsigned int index) {
 }
 
 void Renderer::ActivateTexture(unsigned int index) {
@@ -200,8 +195,8 @@ void Renderer::DisableClientState() {
 }
 
 void Renderer::DestroyVertexData(vector<VertexData> data) {
-	for (VertexData vertexData : data) {
-		DeleteBuffer(vertexData.vbo);
+	for (size_t i = 0; i < data.size(); i++){
+		DeleteBuffer(data[i].vbo);
 	}
 }
 

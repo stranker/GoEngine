@@ -31,13 +31,17 @@ void MeshData::Draw(Transform& transform, Renderer::Primitive primitive) {
         adsMaterial.SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
         adsMaterial.SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
         for (unsigned int i = 0; i < textures.size(); i++) {
-            string name = textures[i].GetPath();
+            string name = textures[i].GetName();
             adsMaterial.SetBool("material.hasTexture", true);
             adsMaterial.SetTexture("material." + name, textures[i].GetTextureID(), i);
         }
     }
     Renderer::GetSingleton()->Draw(primitive, indices.size(), true);
     adsMaterial.ResetTextureActive();
+}
+
+void MeshData::Destroy() {
+    Renderer::GetSingleton()->DestroyVertexData(GetVectorVertexData());
 }
 
 
@@ -124,7 +128,7 @@ void ModelImporter::ProcessMesh(Mesh& meshInstance, aiMesh* mesh, const aiScene*
 
     ADSSpatialMaterial adsMaterial = ResourceManager::LoadADSSpatialMaterial(
         "Shaders/SpatialMaterial.vs","Shaders/ADSSpatialMaterial.fs",string(material->GetName().C_Str()));
-    aiColor3D color(0.f, 0.f, 0.f);
+    aiColor3D color(1.0f, 1.0f, 1.0f);
     float shininess;
     if (aiReturn_SUCCESS == material->Get(AI_MATKEY_COLOR_AMBIENT, color)){
         adsMaterial.SetAmbient(Vector3(color.r, color.g, color.b));

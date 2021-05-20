@@ -2,13 +2,16 @@
 #include "Primitive.h"
 #include "ModelImporter.h"
 
-struct ENGINEDLL_API Mesh {
+class ENGINEDLL_API Mesh :
+	public Entity
+{
 private:
 	vector<MeshData> meshes;
 	vector<Texture> texturesLoaded;
 	string directory;
 public:
 	void Draw(Transform& transform, Renderer::Primitive _primitive);
+	void Destroy();
 	vector<Texture> GetTexturesLoaded() { return texturesLoaded; };
 	void AddMesh(MeshData meshData) { meshes.push_back(meshData); };
 	void AddTexture(Texture textureData) { texturesLoaded.push_back(textureData); };
@@ -26,6 +29,6 @@ protected:
 public:
     void Draw() override;
     MeshInstance(string const &meshPath);
-    ~MeshInstance();
+	void Destroy() override;
 };
 
