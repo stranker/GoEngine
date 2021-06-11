@@ -7,15 +7,17 @@
 bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
-	entityList = new list<Entity*>();
 	input->SetCurrentWindow(window);
 	currentFrame = glfwGetTime();
 	lastFrame = currentFrame;
+	rootNode = new Node3D("rootNode");
 	return true;
 }
 
 bool BaseGame::DestroyEngine() {
-	delete entityList;
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 	if (renderer) {
 		renderer->Destroy();
 		delete renderer;
@@ -27,6 +29,8 @@ bool BaseGame::DestroyEngine() {
 		window->Destroy();
 		delete window;
 	}
+	ResourceManager::Clear();
+	NodeManager::Clear();
 	return true;
 }
 
@@ -46,9 +50,16 @@ void BaseGame::LoopEngine() {
 		renderer->ClearScreen();
 		renderer->EnableClientState();
 
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
 		Update(deltaTime);
 
-		DrawEntities();
+		Render();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		renderer->DisableClientState();
 		renderer->SwapBuffers();
@@ -56,11 +67,8 @@ void BaseGame::LoopEngine() {
 	}
 }
 
-void BaseGame::DrawEntities() {
-	for (entityIterator = entityList->begin(); entityIterator != entityList->end(); entityIterator++) {
-		Entity *entity = *entityIterator;
-		entity->Draw();
-	}
+void BaseGame::Render() {
+	rootNode->Draw();
 }
 
 BaseGame * BaseGame::GetSingleton(){
@@ -85,44 +93,61 @@ BaseGame::~BaseGame() {
 Camera3D* BaseGame::CreateCamera3D(float width, float height) {
 	Camera3D* camera = new Camera3D(width, height);
 	renderer->SetCurrentCamera(camera);
+	rootNode->AddChildren(camera);
 	return camera;
 }
 
 Cube* BaseGame::CreateCube() {
 	Cube* c = new Cube();
-	entityList->push_back(c);
+	rootNode->AddChildren(c);
 	return c;
 }
 
 DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction) {
 	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular, direction);
 	Renderer::GetSingleton()->AddLight(dl);
-	entityList->push_back(dl);
 	return dl;
 }
 
 PointLight* BaseGame::CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation) {
 	PointLight* pl = new PointLight(lightColor, energy, specular, range, attenuation);
 	Renderer::GetSingleton()->AddLight(pl);
-	entityList->push_back(pl);
 	return pl;
 }
 
 SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff) {
 	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, direction, attenuation, cutOff, outCutOff);
 	Renderer::GetSingleton()->AddLight(sl);
-	entityList->push_back(sl);
 	return sl;
 }
 
-MeshInstance* BaseGame::CreateMeshInstance(string const& path) {
-	MeshInstance* mi = new MeshInstance(path);
-	entityList->push_back(mi);
-	return mi;
+Node3D* BaseGame::LoadModel(string const& path) {
+	Node3D* modelRootNode = ModelImporter::LoadModel(path);
+	return modelRootNode;
+}
+
+Node3D* BaseGame::GetRoot() {
+	return rootNode;
 }
 
 Vector2 BaseGame::GetWindowSize(){
 	return window->GetSize();
+}
+
+void BaseGame::ImguiBegin(const char* panelName) {
+	ImGui::Begin(panelName);
+}
+
+void BaseGame::ImguiSliderFloat(const char* property, float* v, float vmin, float vmax) {
+	ImGui::SliderFloat(property, v, vmin, vmax);
+}
+
+void BaseGame::ImguiEnd() {
+	ImGui::End();
+}
+
+void BaseGame::ImguiText(const char* text) {
+	ImGui::Text(text);
 }
 
 #pragma endregion

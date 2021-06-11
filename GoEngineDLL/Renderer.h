@@ -1,15 +1,16 @@
 #pragma once
+#include "Utils.h"
 #include "Camera.h"
-#include <vector>
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_glfw.h"
 
 class Window;
 class Light;
 class DirectionalLight;
 class PointLight;
 class SpotLight;
-class SpatialMaterial;
-
-using namespace std;
+class Material;
+class Camera;
 
 class ENGINEDLL_API Renderer
 {
@@ -18,10 +19,10 @@ private:
 	vector<DirectionalLight*> dirLights;
 	vector<PointLight*> pointLights;
 	vector<SpotLight*> spotLights;
+	Camera* firstCamera;
+	Camera* currentCamera;
 protected:
 	Window* window;
-	Camera* camera;
-	Camera* firstCamera;
 public:
 	enum Primitive {
 		LINES = 0x0001,
@@ -51,12 +52,9 @@ public:
 	};
 	bool Init();
 	bool Destroy();
-	unsigned int CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType);
-	unsigned int CreateVertexBuffer(unsigned int* data, size_t dataSize, BufferType bufferType);
 	unsigned int CreateVertexBuffer(void *data, size_t dataSize, BufferType bufferType);
 	unsigned int CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels);
-	void UpdateVertexBuffer(unsigned int vbo, float *data, size_t dataSize, BufferType bufferType);
-	void UpdateVertexBuffer(unsigned int vbo, unsigned int *data, size_t dataSize, BufferType bufferType);
+	void UpdateVertexBuffer(unsigned int vbo, void *data, size_t dataSize, BufferType bufferType);
 	unsigned int CreateVertexArrayID();
 	void BindBuffer(unsigned int bufferID, BufferType bufferType);
 	void BindBufferWithAttribute(unsigned int bufferID, BufferType bufferType, int attributeID, unsigned int vertexCount);
@@ -80,13 +78,13 @@ public:
 	void DestroyVertexData(vector<VertexData> data);
 	void SetEnableDepthBuffer(bool value);
 	static Renderer* GetSingleton();
-	Camera* GetCamera();
+	Camera* GetCamera() const;
 	void SetCurrentCamera(Camera* _camera);
 	void AddLight(Light* light);
 	int GetDirLights() const;
 	int GetPointLights() const;
 	int GetSpotLights() const;
-	void ProcessLighting(SpatialMaterial* material);
+	void ProcessLighting(Material* material);
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

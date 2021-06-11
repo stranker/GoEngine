@@ -2,7 +2,7 @@
 #include "GlInclude.h"
 #include "Window.h"
 #include "Light.h"
-#include "SpatialMaterial.h"
+#include "Material.h"
 
 bool Renderer::Init(){
 	cout << "Renderer Init" << endl;
@@ -19,6 +19,16 @@ bool Renderer::Init(){
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::StyleColorsDark();
+	// Setup Platform/Renderer bindings
+	ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)window->GetWindowPtr(), true);
+	ImGui_ImplOpenGL3_Init();
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
 	return true;
 }
 
@@ -45,33 +55,7 @@ bool Renderer::Destroy(){
 		}
 		spotLights.clear();
 	}
-	if (firstCamera){
-		firstCamera->Destroy();
-		delete firstCamera;
-		firstCamera = NULL;
-	}
-	if (camera) {
-		camera->Destroy();
-		delete camera;
-		camera = NULL;
-	}
 	return true;
-}
-
-unsigned int Renderer::CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType) {
-	unsigned int vertexBuffer;
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer((GLenum)bufferType, vertexBuffer);
-	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
-	return vertexBuffer;
-}
-
-unsigned int Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, BufferType bufferType) {
-	unsigned int vertexBuffer;
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer((GLenum)bufferType, vertexBuffer);
-	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
-	return vertexBuffer;
 }
 
 unsigned int Renderer::CreateVertexBuffer(void* data, size_t dataSize, BufferType bufferType) {
@@ -103,13 +87,7 @@ unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int 
 	return textureID;
 }
 
-void Renderer::UpdateVertexBuffer(unsigned int vbo, float * data, size_t dataSize, BufferType bufferType) {
-	glGenBuffers(1, &vbo);
-	glBindBuffer((GLenum)bufferType, vbo);
-	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
-}
-
-void Renderer::UpdateVertexBuffer(unsigned int vbo, unsigned int * data, size_t dataSize, BufferType bufferType) {
+void Renderer::UpdateVertexBuffer(unsigned int vbo, void * data, size_t dataSize, BufferType bufferType) {
 	glGenBuffers(1, &vbo);
 	glBindBuffer((GLenum)bufferType, vbo);
 	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
@@ -229,12 +207,12 @@ void Renderer::Draw(Primitive _primitive, int vertexCount, bool elementDraw) {
 	}
 }
 
-Camera * Renderer::GetCamera() {
-	return camera;
+Camera* Renderer::GetCamera() const{
+	return currentCamera;
 }
 
 void Renderer::SetCurrentCamera(Camera* _camera){
-	camera = _camera;
+	currentCamera = _camera;
 }
 
 void Renderer::AddLight(Light* light) {
@@ -260,7 +238,7 @@ int Renderer::GetSpotLights() const {
 	return spotLights.size();
 }
 
-void Renderer::ProcessLighting(SpatialMaterial* material) {
+void Renderer::ProcessLighting(Material* material) {
 	material->SetInt("dirLightSize", dirLights.size());
 	material->SetInt("pointLightSize", pointLights.size());
 	material->SetInt("spotLightSize", spotLights.size());
@@ -300,10 +278,11 @@ void Renderer::ProcessLighting(SpatialMaterial* material) {
 
 Renderer::Renderer(Window* _window){
 	window = _window;
-	firstCamera = new Camera(window->GetWidth(), window->GetHeight());
-	camera = firstCamera;
+	firstCamera = new Camera(window->GetSize().x, window->GetSize().y);
+	currentCamera = firstCamera;
 	singleton = this;
 }
 
 Renderer::~Renderer(){
+
 }

@@ -55,7 +55,7 @@ unsigned int Material::GetID() {
 	return shaderID;
 }
 
-void Material::LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
+void Material::LoadShaders(string const& vertex_file_path, string const& fragment_file_path){
 	// Crear los shaders
 	unsigned int VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	unsigned int FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -129,4 +129,12 @@ void Material::LoadShaders(const char * vertex_file_path, const char * fragment_
 
 	glDeleteShader(VertexShaderID);
 	glDeleteShader(FragmentShaderID);
+}
+
+void Material::ResetTextureActive() {
+	glActiveTexture(GL_TEXTURE0);
+}
+
+Material::Material() {
+	SetDefaultName("Material");
 }

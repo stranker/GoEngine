@@ -1,11 +1,6 @@
 #pragma once
 
 #include "Exports.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <list>
-#include <iterator>
 
 class Window;
 class Renderer;
@@ -31,14 +26,13 @@ protected:
 	bool InitEngine();
 	bool DestroyEngine();
 	void LoopEngine();
-	void DrawEntities();
+	void Render();
 	static BaseGame* singleton;
 private:
 	Window* window;
 	Renderer* renderer;
 	Input* input;
-	list<Entity*>* entityList;
-	list<Entity*>::iterator entityIterator;
+	Node3D* rootNode;
 	double currentFrame;
 	double lastFrame;
 	double deltaTime;
@@ -55,9 +49,17 @@ public:
 	DirectionalLight* CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction);
 	PointLight* CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation);
 	SpotLight* CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff);
-	MeshInstance* CreateMeshInstance(string const& path);
+	Node3D* LoadModel(string const& path);
+	Node3D* GetRoot();
 	//WINDOW
 	Vector2 GetWindowSize();
-
 #pragma endregion
+
+#pragma region Imgui
+	void ImguiBegin(const char* panelName);
+	void ImguiSliderFloat(const char* property, float* v, float vmin, float vmax);
+	void ImguiEnd();
+	void ImguiText(const char* text);
+#pragma endregion
+
 };

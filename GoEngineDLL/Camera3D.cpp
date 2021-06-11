@@ -1,42 +1,15 @@
 #include "Camera3D.h"
 
-void Camera3D::CalculateDirection() {
-    direction.x = cos(glm::radians(transform->GetRotation().y)) * cos(glm::radians(transform->GetRotation().x));
-    direction.y = sin(glm::radians(transform->GetRotation().x));
-    direction.z = sin(glm::radians(transform->GetRotation().y)) * cos(glm::radians(transform->GetRotation().x));
+glm::mat4 Camera3D::GetView() const{
+    return transform->GetTransform();
 }
 
-void Camera3D::SetPosition(Vector3 position) {
-    transform->SetPosition(position);
+glm::mat4 Camera3D::GetProjection() const {
+    return projection;
 }
 
-void Camera3D::Translate(Vector3 position){
-    transform->Translate(position);
-}
-
-void Camera3D::Rotate(float angle, Vector3 axis) {
-    transform->SetRotation(angle, axis);
-}
-
-void Camera3D::Rotate(Vector3 rotation){
-    RotateX(rotation.x);
-    RotateY(rotation.y);
-    RotateZ(rotation.z);
-}
-
-void Camera3D::RotateX(float _angle){
-    transform->RotateX(_angle);
-    CalculateDirection();
-}
-
-void Camera3D::RotateY(float _angle){
-    transform->RotateY(_angle);
-    CalculateDirection();
-}
-
-void Camera3D::RotateZ(float _angle){
-    transform->RotateZ(_angle);
-    CalculateDirection();
+glm::mat4 Camera3D::GetMVPOf(const Transform& _transform) const{
+    return projection * transform->GetTransform() * _transform.GetTransform();
 }
 
 void Camera3D::SetFov(float _fov){
@@ -58,12 +31,12 @@ Vector3 Camera3D::GetFoward() const {
     return transform->GetFoward();
 }
 
-Vector3 Camera3D::GetDirection() const {
-    return direction;
-}
-
 Vector3 Camera3D::GetRight() const {
     return transform->GetRight();
+}
+
+Vector3 Camera3D::GetUp() const {
+    return transform->GetUp();
 }
 
 float Camera3D::GetFov() const {
@@ -84,12 +57,10 @@ void Camera3D::SetAspect(float _width, float _height){
 }
 
 void Camera3D::_UpdateProjection(){
-    projection = glm::perspective(glm::radians(fov), aspect, near, far);
+    UpdateProjection(fov, aspect, near, far);
 }
 
-Camera3D::Camera3D(float _width, float _height, float _fov, float _near, float _far) : Camera(_width, _height){
-    name = "Camera3D";
-    aspect = _width / _height;
+Camera3D::Camera3D(float _width, float _height, float _fov, float _near, float _far) : Camera3D(_width, _height){
     fov = _fov;
     near = _near;
     far = _far;
@@ -97,12 +68,9 @@ Camera3D::Camera3D(float _width, float _height, float _fov, float _near, float _
 }
 
 Camera3D::Camera3D(float _width, float _height) : Camera(_width, _height) {
-    name = "Camera3D";
+    SetDefaultName("Camera3D");
     aspect = _width / _height;
-    cout << "Camera3D: Creating Camera3D" << endl;
+    Renderer::GetSingleton()->SetCurrentCamera(this);
     _UpdateProjection();
-}
-
-
-Camera3D::~Camera3D(){
+    SetGizmoVisible(false);
 }

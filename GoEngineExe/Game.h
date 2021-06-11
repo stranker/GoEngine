@@ -8,23 +8,18 @@ class Game :
 	public BaseGame
 {
 private:
+	float timer = 0.0f;
+	int screenWidth;
+	int screenHeight;
+	const char* screenTitle;
 	GameCamera* camera;
 	Cube* cube;
 	Cube* cube2;
 	Cube* cube3;
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
-	float cameraVelocity = 1;
-	float cameraFovIncrement = 1;
-	int dir = 1;
-	float timer = 0.0f;
-	float xLast;
-	float yLast;
-	int screenWidth;
-	int screenHeight;
-	const char* screenTitle;
-	SpatialMaterial cubeMaterial;
-	MeshInstance* cat;
+	SpatialMaterial* cubeMaterial;
+	Node3D* cat;
 	Tank* tank;
 	MeshInstance* minecraft;
 	MeshInstance* beer;
@@ -36,6 +31,5 @@ public:
 	void Stop() override;
 	void LoopGame();
 	Game(int _screenWidth, int _screenHeight, const char* _screenTitle);
-	~Game();
 };
 
