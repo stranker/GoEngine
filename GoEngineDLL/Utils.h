@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <list>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iterator>
 #include <string.h>
 #include "Exports.h"
 #include "Vector2.h"
@@ -13,6 +17,8 @@
 #include "Color.h"
 
 #define PI 3.14159265
+
+#define PRINT_DEBUG(x) cout << x << endl;
 
 using namespace std;
 

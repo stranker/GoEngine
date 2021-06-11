@@ -122,23 +122,23 @@ void Tilemap::SetTexture(const char * filePath, int vFrames, int hFrames) {
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
-	spriteSize = Vector2(texture.GetWidth() / verticalFrames, texture.GetHeight() / horizontalFrames);
+	spriteSize = Vector2(texture->GetWidth() / verticalFrames, texture->GetHeight() / horizontalFrames);
 	Scale(spriteSize);
 }
 
 void Tilemap::Draw() {
-	if (&material) {
-		material.Use();
-		material.SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-		material.SetTexture("sprite", texture.GetTextureID(), 0);
-		material.SetInt("tileRows", horizontalFrames);
-		material.SetInt("tileColumns", verticalFrames);
-		material.SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
+	if (material) {
+		material->Use();
+		material->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
+		material->SetTexture("sprite", texture->GetTextureID(), 0);
+		material->SetInt("tileRows", horizontalFrames);
+		material->SetInt("tileColumns", verticalFrames);
+		material->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
 	}
 	for (Tile tile : mapTiles) {
-		if (&material) {
-			material.SetInt("tileId", tile.id);
-			material.SetVec2("offset", tile.tilemapPosition);
+		if (material) {
+			material->SetInt("tileId", tile.id);
+			material->SetVec2("offset", tile.tilemapPosition);
 		}
 		Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 6, true);
 	}

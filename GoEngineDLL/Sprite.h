@@ -1,8 +1,8 @@
 #pragma once
-#include "Entity2D.h"
+#include "Node2D.h"
 
 class ENGINEDLL_API Sprite :
-	public Entity2D {
+	public Node2D {
 protected:
 	struct UVFrame {
 		Vector2 tr; // top right
@@ -10,8 +10,8 @@ protected:
 		Vector2 bl; // bottom left
 		Vector2 tl; // top left
 	};
-	Material material;
-	Texture texture;
+	Material* material;
+	Texture* texture;
 	int verticalFrames = 1;
 	int horizontalFrames = 1;
 	int currentFrame = 0;

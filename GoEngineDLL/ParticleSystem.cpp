@@ -62,7 +62,7 @@ void ParticleSystem::SetEmitting(bool val) {
 void ParticleSystem::SetTexture(const char * filePath) {
 	material = ResourceManager::LoadMaterial("Shaders/TextureVertexShader.shader", "Shaders/TextureFragmentShader.shader", "sprite");
 	texture = ResourceManager::LoadTexture(filePath, "sprite");
-	Scale(texture.GetSize());
+	Scale(texture->GetSize());
 }
 
 void ParticleSystem::SetFinalColor(Color col) {
@@ -90,16 +90,16 @@ void ParticleSystem::Draw() {
 	if (!isEmitting) {
 		return;
 	}
-	if (&material) {
-		material.Use();
-		material.SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-		material.SetTexture("sprite", texture.GetTextureID(), 0);
+	if (material) {
+		material->Use();
+		material->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
+		material->SetTexture("sprite", texture->GetTextureID(), 0);
 	}
 	for (Particle particle : particles) {
 		if (particle.lifeTime > 0) {
-			if (&material) {
-				material.SetVec2("offset", particle.position);
-				material.SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
+			if (material) {
+				material->SetVec2("offset", particle.position);
+				material->SetVec4("color", Rect2(particle.color.r, particle.color.g, particle.color.b, particle.color.a));
 			}
 			Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 6, true);
 		}

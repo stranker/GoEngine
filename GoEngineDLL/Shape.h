@@ -1,8 +1,8 @@
 #pragma once
-#include "Entity2D.h"
+#include "Node2D.h"
 
 class ENGINEDLL_API Shape :
-	public Entity2D {
+	public Node2D {
 protected:
 	Material *material;
 public:

@@ -11,17 +11,17 @@ void Sprite::AddFramesRect() {
 
 		// Calculan la esquina de la imagen ya invertida. TR <-> BR, TL <-> BL
 		UVFrame uvFrame;
-		uvFrame.tr.x = (frameX + spriteSize.x) / texture.GetWidth();
-		uvFrame.tr.y = (frameY + spriteSize.y) / texture.GetHeight();
+		uvFrame.tr.x = (frameX + spriteSize.x) / texture->GetWidth();
+		uvFrame.tr.y = (frameY + spriteSize.y) / texture->GetHeight();
 
-		uvFrame.br.x = (frameX + spriteSize.x) / texture.GetWidth();
-		uvFrame.br.y = frameY / texture.GetHeight();
+		uvFrame.br.x = (frameX + spriteSize.x) / texture->GetWidth();
+		uvFrame.br.y = frameY / texture->GetHeight();
 
-		uvFrame.bl.x = frameX / texture.GetWidth();
-		uvFrame.bl.y = frameY / texture.GetHeight();
+		uvFrame.bl.x = frameX / texture->GetWidth();
+		uvFrame.bl.y = frameY / texture->GetHeight();
 
-		uvFrame.tl.x = frameX / texture.GetWidth();
-		uvFrame.tl.y = (frameY + spriteSize.y) / texture.GetHeight();
+		uvFrame.tl.x = frameX / texture->GetWidth();
+		uvFrame.tl.y = (frameY + spriteSize.y) / texture->GetHeight();
 
 		framesRect.push_back(uvFrame);
 	}
@@ -33,19 +33,19 @@ void Sprite::SetTexture(const char* filePath, int vFrames, int hFrames) {
 	verticalFrames = vFrames;
 	horizontalFrames = hFrames;
 	totalFrames = verticalFrames * hFrames;
-	spriteSize = Vector2(texture.GetWidth() / verticalFrames, texture.GetHeight() / horizontalFrames);
+	spriteSize = Vector2(texture->GetWidth() / verticalFrames, texture->GetHeight() / horizontalFrames);
 	Scale(spriteSize);
 	AddFramesRect();
 }
 
 void Sprite::Draw() {
-	if (&material) {
-		material.Use();
-		material.SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-		material.SetTexture("sprite", texture.GetTextureID(), 0);
-		material.SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
-		material.SetBool("flipVertical", flipVertical);
-		material.SetBool("flipHorizontal", flipHorizontal);
+	if (material) {
+		material->Use();
+		material->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
+		material->SetTexture("sprite", texture->GetTextureID(), 0);
+		material->SetVec4("selfModulate", glm::vec4(selfModulate.r, selfModulate.g, selfModulate.b, selfModulate.a));
+		material->SetBool("flipVertical", flipVertical);
+		material->SetBool("flipHorizontal", flipHorizontal);
 	}
 	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, draw_vertices, true); // VAO => VBO VBO VBO
 }

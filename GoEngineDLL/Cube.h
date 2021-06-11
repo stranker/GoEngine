@@ -7,7 +7,7 @@ class ENGINEDLL_API Cube :
 private:
 	const int drawVertices = 36;
 public:
-	void Draw() override;
+	virtual void Draw() override;
 	Cube();
 	~Cube();
 };

@@ -2,10 +2,10 @@
 
 void Light::Draw() {
     Primitive::Draw();
-    if (&spatialMaterial){
-        spatialMaterial.Use();
-        spatialMaterial.SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
-        spatialMaterial.SetVec3("lightColor", lightColor);
+    if (spatialMaterial){
+        spatialMaterial->Use();
+        spatialMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
+        spatialMaterial->SetVec3("lightColor", lightColor);
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
 }
@@ -96,6 +96,7 @@ Light::Light() {
     BindVertexObjects(); // Bindeo VAO
     primitive = Renderer::TRIANGLES;
     spatialMaterial = ResourceManager::LoadSpatialMaterial("Shaders/Simple3D.vs", "Shaders/LightCube.fs", "light");
+    SetDefaultName("Light");
 }
 
 Light::~Light() {
@@ -104,6 +105,7 @@ Light::~Light() {
 DirectionalLight::DirectionalLight(Vector3 _color, float _energy, float _specular, Vector3 _direction) : Light(_color, _energy, _specular) {
     type = Renderer::DIRECTIONAL;
     direction = _direction;
+    SetDefaultName("DirectionalLight");
 }
 
 DirectionalLight::DirectionalLight() {
@@ -112,6 +114,7 @@ DirectionalLight::DirectionalLight() {
     energy = 1.0f;
     specular = 0.5f;
     direction = GetTransform()->GetFoward();
+    SetDefaultName("DirectionalLight");
 }
 
 DirectionalLight::~DirectionalLight() {
@@ -123,6 +126,7 @@ PointLight::PointLight(Vector3 _color, float _energy, float _specular, float _ra
     kLinear = _attenuation.y;
     kQuadratic = _attenuation.z;
     range = _range;
+    SetDefaultName("PointLight");
 }
 
 PointLight::PointLight() {
@@ -134,6 +138,7 @@ PointLight::PointLight() {
     kLinear = 0.7f;
     kQuadratic = 1.8f;
     range = 1.0f;
+    SetDefaultName("PointLight");
 }
 
 PointLight::~PointLight() {
@@ -145,6 +150,7 @@ SpotLight::SpotLight(Vector3 _color, float _energy, float _specular, float _rang
     cutOff = glm::cos(glm::radians(_cutOff));
     outerCutOff = glm::cos(glm::radians(_outerCutOff));
     direction = _direction;
+    SetDefaultName("SpotLight");
 }
 
 SpotLight::SpotLight() {
@@ -159,6 +165,7 @@ SpotLight::SpotLight() {
     range = 1.0f;
     cutOff = glm::cos(glm::radians(45.0f));
     outerCutOff = glm::cos(glm::radians(1.0f));
+    SetDefaultName("SpotLight");
 }
 
 SpotLight::~SpotLight() {
