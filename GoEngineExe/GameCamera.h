@@ -27,6 +27,5 @@ public:
 	void Update(float deltaTime) override;
 	void SetTarget(Node3D* _target);
 	GameCamera(float screenWidth, float screenHeight);
-	~GameCamera() {};
 };
 

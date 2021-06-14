@@ -44,9 +44,12 @@ void Node::RemoveChildren(Node* _child) {
 }
 
 Node* Node::GetNode(const string& nodeName) {
-	vector<Node*> test;
-	GetNode(nodeName, test);
-	Node* current = test.at(0);
+	vector<Node*> vecNode;
+	GetNode(nodeName, vecNode);
+	Node* current = nullptr;
+	if (!vecNode.empty()){
+		current = vecNode.at(0);
+	}
 	return current;
 }
 
@@ -76,6 +79,12 @@ unsigned int Node::GetNodeID() const {
 	return nodeID;
 }
 
+void Node::Ready() {
+	for (Node* child : childrens) {
+		child->Ready();
+	}
+}
+
 void Node::Draw() {
 	for (Node* child : childrens) {
 		child->Draw();
@@ -90,11 +99,8 @@ void Node::Update(float deltaTime) {
 
 void Node::Destroy() {
 	for (Node* child : childrens) {
-		child->Release();
+		child->Destroy();
 	}
-}
-
-void Node::Release() {
 	delete this;
 }
 

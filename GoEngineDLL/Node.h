@@ -23,10 +23,10 @@ public:
 	void PrintTree();
 	void SetParent(Node* _parent);
 	unsigned int GetNodeID() const;
+	virtual void Ready();
 	virtual void Draw();
 	virtual void Update(float deltaTime);
 	virtual void Destroy();
-	void Release();
 	string GetClass() const;
 	Node();
 	Node(const string& _name);

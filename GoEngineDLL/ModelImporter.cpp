@@ -33,9 +33,7 @@ void ModelImporter::ProcessNode(Node3D* parentNode, aiNode* node, const aiScene*
         MeshInstance* meshInstance = new MeshInstance();
         MeshData* meshData = new MeshData();
         *meshData = ProcessMesh(mesh, scene);
-        meshInstance->SetName(mesh->mName.C_Str());
         meshInstance->SetMesh(meshData);
-        cout << meshInstance->GetName() << endl;
         parentNode->AddChildren((Node*)meshInstance);
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
@@ -43,7 +41,6 @@ void ModelImporter::ProcessNode(Node3D* parentNode, aiNode* node, const aiScene*
     {
         Node3D* childNode = new Node3D();
         childNode->SetName(node->mChildren[i]->mName.C_Str());
-        cout << childNode->GetName() << endl;
         parentNode->AddChildren((Node*)childNode);
         ProcessNode(childNode, node->mChildren[i], scene);
     }
@@ -121,6 +118,5 @@ Texture* ModelImporter::LoadMaterialTexture(aiMaterial* mat, aiTextureType type,
 }
 
 Node3D* ModelImporter::LoadModel(string const& path) {
-    Node3D* rootModel = ProcessScene(path);
-    return rootModel;
+    return ProcessScene(path);
 }

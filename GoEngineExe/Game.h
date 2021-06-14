@@ -15,7 +15,6 @@ private:
 	GameCamera* camera;
 	Cube* cube;
 	Cube* cube2;
-	Cube* cube3;
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
 	SpatialMaterial* cubeMaterial;
@@ -27,9 +26,6 @@ private:
 	MeshInstance* reptile;
 public:
 	void Start() override;
-	void Update(float deltaTime) override;
 	void Stop() override;
-	void LoopGame();
 	Game(int _screenWidth, int _screenHeight, const char* _screenTitle);
 };
-

@@ -10,11 +10,10 @@ private:
 	float turretRotationAngle = 0;
 	float turretRotationSpeed = 100;
 	Node3D* model;
-	Node3D* modelRoot;
-	MeshInstance* turret;
-	SpotLight* spotlight;
+	Node3D* turret;
 public:
+	void Ready();
 	void Update(float deltaTime);
-	Tank();
+	Tank() {};
 };
 

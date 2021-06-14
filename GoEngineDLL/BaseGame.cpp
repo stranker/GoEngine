@@ -4,6 +4,20 @@
 #include "Renderer.h"
 #include "GlInclude.h"
 
+void BaseGame::OnStart() {
+	rootNode->Ready();
+	LoopEngine();
+}
+
+void BaseGame::OnStop() {
+	rootNode->Destroy();
+	DestroyEngine();
+}
+
+void BaseGame::Update(float deltaTime) {
+	rootNode->Update(deltaTime);
+}
+
 bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
@@ -82,10 +96,14 @@ BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_t
 	renderer = new Renderer(window);
 	input = new Input();
 	singleton = this;
+	if (!InitEngine()){
+		DestroyEngine();
+	}
 }
 
 BaseGame::~BaseGame() {
 	singleton = NULL;
+	DestroyEngine();
 }
 
 #pragma region UserMethods
@@ -134,19 +152,27 @@ Vector2 BaseGame::GetWindowSize(){
 	return window->GetSize();
 }
 
-void BaseGame::ImguiBegin(const char* panelName) {
+void BaseGame::IGBegin(const char* panelName) {
 	ImGui::Begin(panelName);
 }
 
-void BaseGame::ImguiSliderFloat(const char* property, float* v, float vmin, float vmax) {
+void BaseGame::IGSliderFloat(const char* property, float* v, float vmin, float vmax) {
 	ImGui::SliderFloat(property, v, vmin, vmax);
 }
 
-void BaseGame::ImguiEnd() {
+void BaseGame::IGSliderFloat3(const char* property, float v[3], float vmin, float vmax) {
+	ImGui::SliderFloat3(property, v, vmin, vmax);
+}
+
+void BaseGame::IGInputFloat3(const char* property, float v[3]) {
+	ImGui::InputFloat3(property, v);
+}
+
+void BaseGame::IGEnd() {
 	ImGui::End();
 }
 
-void BaseGame::ImguiText(const char* text) {
+void BaseGame::IGText(const char* text) {
 	ImGui::Text(text);
 }
 

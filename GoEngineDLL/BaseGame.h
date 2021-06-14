@@ -20,15 +20,17 @@ class Renderer;
 
 class ENGINEDLL_API BaseGame {
 protected:
+	virtual void OnStart();
+	virtual void OnStop();
 	virtual void Start() = 0;
-	virtual void Update(float deltaTime) = 0;
 	virtual void Stop() = 0;
+	virtual void Update(float deltaTime);
+	static BaseGame* singleton;
+private:
 	bool InitEngine();
 	bool DestroyEngine();
 	void LoopEngine();
 	void Render();
-	static BaseGame* singleton;
-private:
 	Window* window;
 	Renderer* renderer;
 	Input* input;
@@ -56,10 +58,12 @@ public:
 #pragma endregion
 
 #pragma region Imgui
-	void ImguiBegin(const char* panelName);
-	void ImguiSliderFloat(const char* property, float* v, float vmin, float vmax);
-	void ImguiEnd();
-	void ImguiText(const char* text);
+	static void IGBegin(const char* panelName);
+	static void IGSliderFloat(const char* property, float* v, float vmin, float vmax);
+	static void IGSliderFloat3(const char* property, float v[3], float vmin, float vmax);
+	static void IGInputFloat3(const char* property, float v[3]);
+	static void IGEnd();
+	static void IGText(const char* text);
 #pragma endregion
 
 };
