@@ -3,6 +3,8 @@
 #include "BaseGame.h"
 #include "GameCamera.h"
 #include "Tank.h"
+#include "TankBullet.h"
+#include "Mine.h"
 
 class Game :
 	public BaseGame
@@ -18,13 +20,16 @@ private:
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
 	SpatialMaterial* cubeMaterial;
-	Node3D* cat;
 	Tank* tank;
-	MeshInstance* minecraft;
-	MeshInstance* beer;
-	MeshInstance* wizard;
-	MeshInstance* reptile;
+	Node3D* minesParent;
+	TankBullet* tankBullet;
+	vector<TankBullet*> bullets;
+	vector<Mine*> mines;
+	void CreateBullets(int count);
+	void CreateMines(int count);
+	void ShowMinesGUI();
 public:
+	void Update(float delta) override;
 	void Start() override;
 	void Stop() override;
 	Game(int _screenWidth, int _screenHeight, const char* _screenTitle);

@@ -1,0 +1,2 @@
+C:/Users/Daniel/Documents/Proyectos/C++/GoEngineRepo/lib/glm-9.9.8/include/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Daniel/Documents/Proyectos/C++/GoEngineRepo/lib/glm-9.9.8/include/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

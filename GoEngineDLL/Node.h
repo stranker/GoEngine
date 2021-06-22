@@ -27,6 +27,8 @@ public:
 	virtual void Draw();
 	virtual void Update(float deltaTime);
 	virtual void Destroy();
+	virtual void ShowUI();
+	virtual void HideUI();
 	string GetClass() const;
 	Node();
 	Node(const string& _name);

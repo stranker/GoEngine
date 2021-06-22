@@ -21,17 +21,23 @@ Gizmo3D::Gizmo3D() {
 	lineMaterial = ResourceManager::LoadMaterial("Shaders/SimpleVertex3dShader.shader", "Shaders/LineFragmentShader.shader", "lineMaterial");
 	Line3D* redLine, *blueLine, *greenLine;
 	redLine = new Line3D(Vector3().Zero(), Vector3().Right() * 1.5f, Color().Red(), lineMaterial);
-	blueLine = new Line3D(Vector3().Zero(), Vector3().Foward() * 1.5f, Color().Blue(), lineMaterial);
+	blueLine = new Line3D(Vector3().Zero(), Vector3().Back() * 1.5f, Color().Blue(), lineMaterial);
 	greenLine = new Line3D(Vector3().Zero(), Vector3().Up() * 1.5f, Color().Green(), lineMaterial);
 	lines.push_back(redLine);
 	lines.push_back(blueLine);
 	lines.push_back(greenLine);
+	SetVisible(false);
 }
 
 void Node3D::UpdateChildrensTransform() {
 	if (parent){
 		Node3D* parent3D = (Node3D*)parent;
-		*globalTransform = *parent3D->GetGlobalTransform() * *transform;
+		if (parent3D->GetClass() == "Node3D") {
+			*globalTransform = *parent3D->GetGlobalTransform() * *transform;
+		}
+		else {
+			*globalTransform = *transform;
+		}
 	}
 	else{
 		*globalTransform = *transform;
@@ -45,6 +51,17 @@ void Node3D::UpdateChildrensTransform() {
 void Node3D::SetPosition(Vector3 position) {
 	transform->SetPosition(position);
 	UpdateChildrensTransform();
+}
+
+void Node3D::ShowUI() {
+	Node::ShowUI();
+	gizmo->SetVisible(true);
+	UILayer::ShowNode3D(this);
+}
+
+void Node3D::HideUI() {
+	Node::HideUI();
+	gizmo->SetVisible(false);
 }
 
 void Node3D::Translate(Vector3 position) {

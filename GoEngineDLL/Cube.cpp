@@ -16,7 +16,6 @@ void Cube::Draw() {
 
 Cube::Cube() {
     SetDefaultName("Cube");
-    cout << name << endl;
     float position_vertex_data[] = {
         -0.5f, -0.5f, -0.5f,
          0.5f, -0.5f, -0.5f,

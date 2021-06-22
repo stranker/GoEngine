@@ -11,7 +11,6 @@ void GameCamera::ProcessMousePosition() {
 	eulerAngles.y += offset.x;
 	eulerAngles.x += offset.y;
 	eulerAngles.x = Utils::Clamp(eulerAngles.x, -89.0f, 89.0f);
-	//SetEulerAngles(eulerAngles);
 	UpdateCameraVectors();
 }
 
@@ -52,7 +51,7 @@ void GameCamera::SetTarget(Node3D* _target) {
 }
 
 GameCamera::GameCamera(float screenWidth, float screenHeight) : Camera3D(screenWidth, screenHeight) {
-	name = "GameCamera";
+	className = "GameCamera";
 	lastMousePos = Vector2(screenWidth, screenHeight) * 0.5f;
 	Input::SetMouseScrollCallback(OnMouseScrollCallback);
 	eulerAngles = Vector3().Zero();

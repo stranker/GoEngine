@@ -1,8 +1,7 @@
 #pragma once
 #include "Utils.h"
 #include "Camera.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_impl_glfw.h"
+#include "UILayer.h"
 
 class Window;
 class Light;

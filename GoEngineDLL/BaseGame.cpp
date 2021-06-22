@@ -5,17 +5,17 @@
 #include "GlInclude.h"
 
 void BaseGame::OnStart() {
-	rootNode->Ready();
+	sceneRoot->Ready();
 	LoopEngine();
 }
 
 void BaseGame::OnStop() {
-	rootNode->Destroy();
+	sceneRoot->Destroy();
 	DestroyEngine();
 }
 
 void BaseGame::Update(float deltaTime) {
-	rootNode->Update(deltaTime);
+	sceneRoot->Update(deltaTime);
 }
 
 bool BaseGame::InitEngine() {
@@ -24,14 +24,11 @@ bool BaseGame::InitEngine() {
 	input->SetCurrentWindow(window);
 	currentFrame = glfwGetTime();
 	lastFrame = currentFrame;
-	rootNode = new Node3D("rootNode");
+	sceneRoot = new Node("sceneRoot");
 	return true;
 }
 
 bool BaseGame::DestroyEngine() {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
 	if (renderer) {
 		renderer->Destroy();
 		delete renderer;
@@ -45,6 +42,7 @@ bool BaseGame::DestroyEngine() {
 	}
 	ResourceManager::Clear();
 	NodeManager::Clear();
+	UILayer::Destroy();
 	return true;
 }
 
@@ -64,25 +62,23 @@ void BaseGame::LoopEngine() {
 		renderer->ClearScreen();
 		renderer->EnableClientState();
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		UILayer::NewFrame();
 
 		Update(deltaTime);
 
 		Render();
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		UILayer::Render();
 
 		renderer->DisableClientState();
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}
+	return OnStop();
 }
 
 void BaseGame::Render() {
-	rootNode->Draw();
+	sceneRoot->Draw();
 }
 
 BaseGame * BaseGame::GetSingleton(){
@@ -103,7 +99,6 @@ BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_t
 
 BaseGame::~BaseGame() {
 	singleton = NULL;
-	DestroyEngine();
 }
 
 #pragma region UserMethods
@@ -111,31 +106,34 @@ BaseGame::~BaseGame() {
 Camera3D* BaseGame::CreateCamera3D(float width, float height) {
 	Camera3D* camera = new Camera3D(width, height);
 	renderer->SetCurrentCamera(camera);
-	rootNode->AddChildren(camera);
+	sceneRoot->AddChildren(camera);
 	return camera;
 }
 
 Cube* BaseGame::CreateCube() {
 	Cube* c = new Cube();
-	rootNode->AddChildren(c);
+	sceneRoot->AddChildren(c);
 	return c;
 }
 
 DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction) {
 	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular, direction);
 	Renderer::GetSingleton()->AddLight(dl);
+	sceneRoot->AddChildren(dl);
 	return dl;
 }
 
 PointLight* BaseGame::CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation) {
 	PointLight* pl = new PointLight(lightColor, energy, specular, range, attenuation);
 	Renderer::GetSingleton()->AddLight(pl);
+	sceneRoot->AddChildren(pl);
 	return pl;
 }
 
 SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff) {
 	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, direction, attenuation, cutOff, outCutOff);
 	Renderer::GetSingleton()->AddLight(sl);
+	sceneRoot->AddChildren(sl);
 	return sl;
 }
 
@@ -144,28 +142,57 @@ Node3D* BaseGame::LoadModel(string const& path) {
 	return modelRootNode;
 }
 
-Node3D* BaseGame::GetRoot() {
-	return rootNode;
+Node* BaseGame::GetRoot() {
+	return sceneRoot;
 }
 
 Vector2 BaseGame::GetWindowSize(){
 	return window->GetSize();
 }
 
-void BaseGame::IGBegin(const char* panelName) {
-	ImGui::Begin(panelName);
+void BaseGame::IGBegin(const string& panelName, size_t flag) {
+	bool t = true;
+	ImGui::Begin(panelName.c_str(), &t, flag);
 }
 
-void BaseGame::IGSliderFloat(const char* property, float* v, float vmin, float vmax) {
-	ImGui::SliderFloat(property, v, vmin, vmax);
+void BaseGame::IGBeginChild(const string& id, Vector2 size, bool border) {
+	ImGui::BeginChild(id.c_str(), ImVec2(size.x, size.y), border);
 }
 
-void BaseGame::IGSliderFloat3(const char* property, float v[3], float vmin, float vmax) {
-	ImGui::SliderFloat3(property, v, vmin, vmax);
+void BaseGame::IGEndChild() {
+	ImGui::EndChild();
 }
 
-void BaseGame::IGInputFloat3(const char* property, float v[3]) {
-	ImGui::InputFloat3(property, v);
+void BaseGame::IGSameLine() {
+	ImGui::SameLine();
+}
+
+void BaseGame::IGSeparator() {
+	ImGui::Separator();
+}
+
+bool BaseGame::IGTreeNode(const string& name) {
+	return ImGui::TreeNode(name.c_str());
+}
+
+void BaseGame::IGTreePop() {
+	ImGui::TreePop();
+}
+
+bool BaseGame::IGSelectable(const string& id, bool isSelected) {
+	return ImGui::Selectable(id.c_str(), isSelected);
+}
+
+void BaseGame::IGSliderFloat(const string& property, float* v, float vmin, float vmax) {
+	ImGui::SliderFloat(property.c_str(), v, vmin, vmax);
+}
+
+void BaseGame::IGSliderFloat3(const string& property, float v[3], float vmin, float vmax) {
+	ImGui::SliderFloat3(property.c_str(), v, vmin, vmax);
+}
+
+void BaseGame::IGInputFloat3(const string& property, float v[3]) {
+	ImGui::InputFloat3(property.c_str(), v);
 }
 
 void BaseGame::IGEnd() {

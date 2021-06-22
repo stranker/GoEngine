@@ -30,6 +30,10 @@ vector<Node*> Node::GetChildrens() {
 }
 
 void Node::AddChildren(Node* child) {
+	if (child->parent) {
+		Node* p = (Node*)child->parent;
+		p->RemoveChildren(child);
+	}
 	childrens.push_back(child);
 	child->SetParent(this);
 }
@@ -102,6 +106,13 @@ void Node::Destroy() {
 		child->Destroy();
 	}
 	delete this;
+}
+
+void Node::ShowUI() {
+	UILayer::ShowNodeInfo(this);
+}
+
+void Node::HideUI() {
 }
 
 string Node::GetClass() const {

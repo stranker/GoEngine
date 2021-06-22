@@ -17,6 +17,7 @@ bool CanvasNode::IsVisible() const {
 }
 
 void CanvasNode::SetVisible(bool isVisible) {
+	if (isVisible == visible) { return; };
 	if (isVisible) {
 		Show();
 	}

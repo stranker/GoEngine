@@ -3,7 +3,6 @@
 
 class Tank : public Node3D {
 private:
-	Vector3 velocity;
 	float speed = 10;
 	float rotationAngle = 0;
 	float rotationSpeed = 100;
@@ -14,6 +13,6 @@ private:
 public:
 	void Ready();
 	void Update(float deltaTime);
-	Tank() {};
+	Tank();
 };
 

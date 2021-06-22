@@ -10,6 +10,7 @@ map<string, Texture*> ResourceManager::textures;
 map<string, SpatialMaterial*> ResourceManager::spatialMaterials;
 map<string, ADSSpatialMaterial*> ResourceManager::adsSpatialMaterials;
 map<string, Material*> ResourceManager::materials;
+map<string, Node3D*> ResourceManager::models;
 int ResourceManager::resourceCount = 0;
 
 Texture* ResourceManager::LoadTextureFromFile(string const& path) {
@@ -44,12 +45,19 @@ Material* ResourceManager::LoadMaterial(string const& pathVertexShader, string c
     return mat;
 }
 
+Node3D* ResourceManager::LoadModel(string const& filePath) {
+    Node3D* model = new Node3D();
+    model = ModelImporter::LoadModel(filePath);
+    resourceCount++;
+    return model;
+}
+
 ResourceManager* ResourceManager::GetSingleton() {
     return singleton;
 }
 
 Texture* ResourceManager::LoadTexture(string const& path, string const& name) {
-    if (textures.find(name) == textures.end()) 	{
+    if (textures.find(name) == textures.end()) {
         textures[name] = LoadTextureFromFile(path.c_str());
         textures[name]->SetName(name);
     }
@@ -88,6 +96,18 @@ Material* ResourceManager::LoadMaterial(string const& pathVertexShader, string c
 
 Material* ResourceManager::GetMaterial(string const& name) {
     return materials[name];
+}
+
+Node3D* ResourceManager::LoadModel(string const& path, string const& name) {
+    if (models.find(name) == models.end()) {
+        models[name] = LoadModel(path);
+        models[name]->SetName(name);
+    }
+    return models[name];
+}
+
+Node3D* ResourceManager::GetModel(string const& name) {
+    return models[name];
 }
 
 int ResourceManager::GetResourcesCount() {

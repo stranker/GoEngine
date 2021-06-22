@@ -22,10 +22,11 @@ protected:
 	Gizmo3D* gizmo;
 	Transform* transform;
 	Transform* globalTransform;
-	bool canScale = true;
 private:
 	void UpdateChildrensTransform();
 public:
+	virtual void ShowUI() override;
+	virtual void HideUI() override;
 	void SetPosition(Vector3 position);
 	void Translate(Vector3 position);
 	void Rotate(float angle, Vector3 axis);

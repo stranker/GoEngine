@@ -6,15 +6,63 @@ Game::Game(int _screenWidth, int _screenHeight, const char* _screenTitle) : Base
 	screenTitle = _screenTitle;
 }
 
+void Game::CreateBullets(int count) {
+	for (size_t i = 0; i < count; i++){
+		TankBullet* b = new TankBullet();
+		bullets.push_back(b);
+		GetRoot()->AddChildren(b);
+		b->SetPosition(Vector3(i * 2, 0, 0));
+		b->SetName("Bullet" + to_string(i + 1));
+	}
+}
+
+void Game::CreateMines(int count) {
+	for (size_t i = 0; i < count; i++) {
+		Mine* mine = new Mine();
+		mines.push_back(mine);
+		minesParent->AddChildren(mine);
+		mine->SetPosition(Vector3(0, 0 , i * 2));
+		mine->SetName("Mine" + to_string(i + 1));
+		mine->SetScale(Vector3().One() * 0.5f);
+	}
+	PRINT_DEBUG(mines.size());
+}
+
+void Game::ShowMinesGUI() {
+	IGBegin("Mines Hierarchy", 4);
+	UILayer::TreeNode(minesParent);
+	IGEnd();
+}
+
+void Game::Update(float delta) {
+	BaseGame::Update(delta);
+	ShowMinesGUI();
+	if (spotLight) {
+		const int spotSpeed = 7;
+		Vector3 spotVelocity = Vector3();
+		if (Input::IsKeyPressed(Input::KEY_UP)){
+			spotVelocity += Vector3().Foward();
+		}
+		if (Input::IsKeyPressed(Input::KEY_DOWN)) {
+			spotVelocity += Vector3().Foward() * -1;
+		}
+		if (Input::IsKeyPressed(Input::KEY_RIGHT)) {
+			spotVelocity += Vector3().Right();
+		}
+		if (Input::IsKeyPressed(Input::KEY_LEFT)) {
+			spotVelocity += Vector3().Right() * -1;
+		}
+		spotLight->Translate(spotVelocity.Normalize() * delta * spotSpeed);
+	}
+}
+
 void Game::Start() {
 	// Camera
 	camera = new GameCamera(screenWidth, screenHeight);
-	camera->SetPosition(Vector3(0, 0, 0));
 	GetRoot()->AddChildren(camera);
 	// Cubes
 	cube = CreateCube();
 	cube2 = CreateCube();
-	GetRoot()->AddChildren(cube);
 	cube->SetName("Cubo padre");
 	cube2->SetName("Cubo hijo");
 	cube->AddChildren(cube2);
@@ -25,29 +73,17 @@ void Game::Start() {
 	cube->SetPosition(Vector3(0, 3, 0));
 	cube2->SetPosition(Vector3(2, 0, 0));
 	// Lights
-	//spotLight = BaseGame::GetSingleton()->CreateSpotLight(Vector3(1, 1, 1), 1, 0.5f, 3, Vector3().Foward(), Vector3(1, 0.09, 0.032), 12, 15);
-	dirLight = BaseGame::GetSingleton()->CreateDirectional(Vector3(1, 1, 1), 1, 0.5f, Vector3().Foward());
+	spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3().Foward(), Vector3(1, 0.09, 0.032), 12, 15);
+	dirLight = CreateDirectional(Vector3(1, 1, 1), 1, 0.5f, Vector3().Foward());
 	dirLight->SetPosition(Vector3(0, 10, 5));
 	dirLight->SetScale(Vector3().One() * 0.2);
-	GetRoot()->AddChildren(dirLight);
 	// Models
-	cat = LoadModel("cat/cat.fbx");
-	GetRoot()->AddChildren(cat);
-	//minecraft = BaseGame::GetSingleton()->CreateMeshInstance("minecraft/scene.gltf");
-	//minecraft->SetScale(Vector3().One() * 0.1f);
-	//beer = BaseGame::GetSingleton()->CreateMeshInstance("beer/scene.gltf");
-	//beer->SetPosition(Vector3(-5, 0, 5));
-	//beer->Rotate(-90, Vector3().Right());
-	//wizard = BaseGame::GetSingleton()->CreateMeshInstance("wizard/scene.gltf");
-	//wizard->SetPosition(Vector3(5, 0, 5));
-	//wizard->Rotate(-90, Vector3().Right());
-	//reptile = BaseGame::GetSingleton()->CreateMeshInstance("reptile/scene.gltf");
-	//reptile->SetPosition(Vector3(5, 0, -2));
-	//reptile->SetScale(Vector3().One() * 0.01);
-	//reptile->Rotate(-90, Vector3().Right());
-	////
 	tank = new Tank();
 	GetRoot()->AddChildren(tank);
+	CreateBullets(5);
+	minesParent = new Node3D("MinesParent");
+	GetRoot()->AddChildren(minesParent);
+	CreateMines(10);
 	return OnStart();
 }
 

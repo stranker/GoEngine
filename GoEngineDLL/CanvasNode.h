@@ -17,6 +17,7 @@ protected:
 	void BindVertexObjects();
 	void BindVertexArray();
 	void SetVertexData(vector<Renderer::VertexData> vertexData);
+	bool canScale = true;
 public:
 	vector<Renderer::VertexData> GetVectorVertexData() const;
 	bool IsVisible() const;

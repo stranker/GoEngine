@@ -19,40 +19,19 @@ bool Renderer::Init(){
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	ImGui::StyleColorsDark();
-	// Setup Platform/Renderer bindings
-	ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)window->GetWindowPtr(), true);
-	ImGui_ImplOpenGL3_Init();
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-
+	UILayer::CreateContext(window);
 	return true;
 }
 
 bool Renderer::Destroy(){
 	cout << "Renderer Destroy" << endl;
 	if (!dirLights.empty()){
-		for (Light* light : dirLights) {
-			light->Destroy();
-			delete light;
-		}
 		dirLights.clear();
 	}
 	if (!pointLights.empty()) {
-		for (Light* light : pointLights) {
-			light->Destroy();
-			delete light;
-		}
 		pointLights.clear();
 	}
 	if (!spotLights.empty()) {
-		for (Light* light : spotLights) {
-			light->Destroy();
-			delete light;
-		}
 		spotLights.clear();
 	}
 	return true;
@@ -284,5 +263,4 @@ Renderer::Renderer(Window* _window){
 }
 
 Renderer::~Renderer(){
-
 }

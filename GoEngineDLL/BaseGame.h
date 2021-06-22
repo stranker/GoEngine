@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Exports.h"
+#include "UILayer.h"
 
 class Window;
 class Renderer;
@@ -34,7 +35,7 @@ private:
 	Window* window;
 	Renderer* renderer;
 	Input* input;
-	Node3D* rootNode;
+	Node* sceneRoot;
 	double currentFrame;
 	double lastFrame;
 	double deltaTime;
@@ -52,16 +53,23 @@ public:
 	PointLight* CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation);
 	SpotLight* CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff);
 	Node3D* LoadModel(string const& path);
-	Node3D* GetRoot();
+	Node* GetRoot();
 	//WINDOW
 	Vector2 GetWindowSize();
 #pragma endregion
 
 #pragma region Imgui
-	static void IGBegin(const char* panelName);
-	static void IGSliderFloat(const char* property, float* v, float vmin, float vmax);
-	static void IGSliderFloat3(const char* property, float v[3], float vmin, float vmax);
-	static void IGInputFloat3(const char* property, float v[3]);
+	static void IGBegin(const string& panelName, size_t flag);
+	static void IGBeginChild(const string& id, Vector2 size, bool border);
+	static void IGEndChild();
+	static void IGSameLine();
+	static void IGSeparator();
+	static bool IGTreeNode(const string& name);
+	static void IGTreePop();
+	static bool IGSelectable(const string& id, bool isSelected);
+	static void IGSliderFloat(const string& property, float* v, float vmin, float vmax);
+	static void IGSliderFloat3(const string& property, float v[3], float vmin, float vmax);
+	static void IGInputFloat3(const string& property, float v[3]);
 	static void IGEnd();
 	static void IGText(const char* text);
 #pragma endregion

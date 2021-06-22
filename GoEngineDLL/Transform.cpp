@@ -1,11 +1,8 @@
 #include "Transform.h"
 
 void Transform::UpdateUnitVectors() {
-	Vector3 newFoward;
-	newFoward.x = cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
-	newFoward.y = sin(glm::radians(rotation.x));
-	newFoward.z = sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
-	foward = newFoward.Normalize();
+	const glm::vec3 newFoward = normalize(glm::vec3(transform[2]));
+	foward = Vector3(newFoward.x, newFoward.y, newFoward.z);
 	right = foward.Cross(Vector3().Up()).Normalize();
 	up = right.Cross(foward).Normalize();
 }
@@ -51,15 +48,15 @@ void Transform::RotateX(float angle) {
 void Transform::RotateY(float angle) {
 	rotation.y += angle;
 	rotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y), glm::vec3(0, 1, 0));
-	UpdateUnitVectors();
 	UpdateTransform();
+	UpdateUnitVectors();
 }
 
 void Transform::RotateZ(float angle) {
 	rotation.z += angle;
 	rotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z), glm::vec3(0, 0, 1));
-	UpdateUnitVectors();
 	UpdateTransform();
+	UpdateUnitVectors();
 }
 
 void Transform::SetEulerAngles(Vector3 _eulerAngles) {
@@ -69,8 +66,8 @@ void Transform::SetEulerAngles(Vector3 _eulerAngles) {
 	rotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
 	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
 	rotateMatrix = glm::rotate(rotateMatrix, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
-	UpdateUnitVectors();
 	UpdateTransform();
+	UpdateUnitVectors();
 }
 
 void Transform::LookAt(Vector3 _target) {
@@ -141,5 +138,6 @@ Transform::Transform() {
 	translateMatrix = glm::mat4(1.0f);
 	rotateMatrix = glm::mat4(1.0f);
 	scaleMatrix = glm::mat4(1.0f);
+	UpdateTransform();
 	UpdateUnitVectors();
 }
