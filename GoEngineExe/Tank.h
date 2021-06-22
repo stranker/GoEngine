@@ -1,19 +1,17 @@
 #pragma once
 #include "BaseGame.h"
 
-class Tank {
+class Tank : public Node3D {
 private:
-	Vector3 velocity;
 	float speed = 10;
 	float rotationAngle = 0;
 	float rotationSpeed = 100;
-	MeshInstance* model;
-	SpotLight* spotlight;
-	Camera3D* camera;
-	const float cameraXOffset = -15;
-	const float cameraYOffset = 12;
-	const float aimDistance = 10;
+	float turretRotationAngle = 0;
+	float turretRotationSpeed = 100;
+	Node3D* model;
+	Node3D* turret;
 public:
+	void Ready();
 	void Update(float deltaTime);
 	Tank();
 };

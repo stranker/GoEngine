@@ -6,114 +6,78 @@ Game::Game(int _screenWidth, int _screenHeight, const char* _screenTitle) : Base
 	screenTitle = _screenTitle;
 }
 
-Game::~Game() {
+void Game::CreateBullets(int count) {
+	for (size_t i = 0; i < count; i++){
+		TankBullet* b = new TankBullet();
+		bullets.push_back(b);
+		GetRoot()->AddChildren(b);
+		b->SetPosition(Vector3(i * 2, 0, 0));
+		b->SetName("Bullet" + to_string(i + 1));
+	}
+}
 
+void Game::CreateMines(int count) {
+	for (size_t i = 0; i < count; i++) {
+		Mine* mine = new Mine();
+		mines.push_back(mine);
+		minesParent->AddChildren(mine);
+		mine->SetPosition(Vector3(0, 0 , i * 2));
+		mine->SetName("Mine" + to_string(i + 1));
+		mine->SetScale(Vector3().One() * 0.5f);
+	}
+}
+
+void Game::OnUpdate(float delta) {
+	if (spotLight) {
+		const int spotSpeed = 7;
+		Vector3 spotVelocity = Vector3();
+		if (Input::IsKeyPressed(Input::KEY_UP)){
+			spotVelocity += Vector3().Foward();
+		}
+		if (Input::IsKeyPressed(Input::KEY_DOWN)) {
+			spotVelocity += Vector3().Foward() * -1;
+		}
+		if (Input::IsKeyPressed(Input::KEY_RIGHT)) {
+			spotVelocity += Vector3().Right();
+		}
+		if (Input::IsKeyPressed(Input::KEY_LEFT)) {
+			spotVelocity += Vector3().Right() * -1;
+		}
+		spotLight->Translate(spotVelocity.Normalize() * delta * spotSpeed);
+	}
 }
 
 void Game::Start() {
-	InitEngine();
 	// Camera
-	//camera = new GameCamera(screenWidth, screenHeight);
-	//camera->SetPosition(Vector3(0, 0, -20));
+	camera = new GameCamera(screenWidth, screenHeight);
+	GetRoot()->AddChildren(camera);
 	// Cubes
-	cube = BaseGame::GetSingleton()->CreateCube();
-	cube2 = BaseGame::GetSingleton()->CreateCube();
-	cube3 = BaseGame::GetSingleton()->CreateCube();
-	cube->SetPosition(Vector3(20, 0, 1));
-	cube->SetScale(Vector3(10, 10, 2));
-	cube2->SetPosition(Vector3(5, 1, 3));
-	cube3->SetPosition(Vector3(-5, 1, 2));
-	cube2->Rotate(45.0f, Vector3().Right());
-	cube3->Rotate(70.0f, Vector3().Foward());
+	cube = CreateCube();
+	cube2 = CreateCube();
+	cube->SetName("Cubo padre");
+	cube2->SetName("Cubo hijo");
+	cube->AddChildren(cube2);
 	cubeMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/SpatialMaterial.fs", "cubeMaterial");
-	cubeMaterial.CreateMaterial(0.5f, 0.0f, "container2.png", "container2_specular.png");
+	cubeMaterial->CreateMaterial(0.5f, 0.0f, "container2.png", "container2_specular.png");
 	cube->SetMaterial(cubeMaterial);
 	cube2->SetMaterial(cubeMaterial);
-	cube3->SetMaterial(cubeMaterial);
+	cube->SetPosition(Vector3(0, 3, 0));
+	cube2->SetPosition(Vector3(2, 0, 0));
 	// Lights
-	spotLight = BaseGame::GetSingleton()->CreateSpotLight(Vector3(1, 1, 1), 1, 0.5f, 3, Vector3().Foward(), Vector3(1, 0.09, 0.032), 12, 15);
-	dirLight = BaseGame::GetSingleton()->CreateDirectional(Vector3(1, 1, 1), 1, 0.5f, Vector3().Foward());
-	dirLight->SetPosition(Vector3(0, 10, 0));
+	spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3(1, 0.09, 0.032), 12, 15);
+	dirLight = CreateDirectional(Vector3(1, 1, 1), 1, 0.5f);
+	dirLight->SetPosition(Vector3(0, 10, 5));
 	dirLight->SetScale(Vector3().One() * 0.2);
 	// Models
-	cat = BaseGame::GetSingleton()->CreateMeshInstance("cat/cat.fbx");
-	minecraft = BaseGame::GetSingleton()->CreateMeshInstance("minecraft/scene.gltf");
-	minecraft->SetScale(Vector3().One() * 0.1f);
-	beer = BaseGame::GetSingleton()->CreateMeshInstance("beer/scene.gltf");
-	beer->SetPosition(Vector3(-5, 0, 5));
-	beer->Rotate(-90, Vector3().Right());
-	wizard = BaseGame::GetSingleton()->CreateMeshInstance("wizard/scene.gltf");
-	wizard->SetPosition(Vector3(5, 0, 5));
-	wizard->Rotate(-90, Vector3().Right());
-	reptile = BaseGame::GetSingleton()->CreateMeshInstance("reptile/scene.gltf");
-	reptile->SetPosition(Vector3(5, 0, -2));
-	reptile->SetScale(Vector3().One() * 0.01);
-	reptile->Rotate(-90, Vector3().Right());
-	//
 	tank = new Tank();
-}
-
-void Game::Update(float deltaTime) {
-	timer += deltaTime;
-	if (spotLight){
-		const float velocity = 5 * deltaTime;
-		if (Input::IsKeyPressed(Input::KEY_UP)){
-			spotLight->Translate(spotLight->GetTransform()->GetFoward() * velocity);
-		}
-		if (Input::IsKeyPressed(Input::KEY_DOWN)) {
-			spotLight->Translate(spotLight->GetTransform()->GetFoward() * -velocity);
-		}
-		if (Input::IsKeyPressed(Input::KEY_RIGHT)) {
-			spotLight->Translate(spotLight->GetTransform()->GetRight() * velocity);
-		}
-		if (Input::IsKeyPressed(Input::KEY_LEFT)) {
-			spotLight->Translate(spotLight->GetTransform()->GetRight() * -velocity);
-		}
-	}
-	if (camera)	{
-		camera->Update(deltaTime);
-	}
-	if (cat){
-		float angle = sin(timer) * deltaTime * 10;
-		cat->Translate(Vector3().Left() * deltaTime * 0.5);
-		cat->Rotate(angle, Vector3().Foward());
-	}
-	if (tank){
-		tank->Update(deltaTime);
-	}
-	if (minecraft){
-		float dir = sin(timer);
-		minecraft->Translate(Vector3().Up() * dir * deltaTime);
-		minecraft->Rotate(deltaTime * 50, Vector3().Up());
-	}
-	if (beer){
-		beer->Rotate(deltaTime * -10, Vector3().Foward());
-	}
-	if (wizard){
-		float dir = sin(timer);
-		wizard->Rotate(dir * 10 * deltaTime, Vector3().Up());
-	}
+	GetRoot()->AddChildren(tank);
+	CreateBullets(5);
+	minesParent = new Node3D("MinesParent");
+	GetRoot()->AddChildren(minesParent);
+	CreateMines(10);
+	return OnStart();
 }
 
 void Game::Stop() {
-	if (cube){
-		cube->Destroy();
-		delete cube;
-	}
-	if (cube2){
-		cube2->Destroy();
-		delete cube2;
-	}
-	if (cube3) {
-		cube3->Destroy();
-		delete cube3;
-	}
-	if (camera)	{
-		delete camera;
-	}
-	DestroyEngine();
-}
-
-void Game::LoopGame() {
-	LoopEngine();
+	return OnStop();
 }

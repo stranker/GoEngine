@@ -7,11 +7,10 @@
 #include "TextureImporter.h"
 #include "Resource.h"
 
-class ENGINEDLL_API Material :
-	public Resource
+class ENGINEDLL_API Material : public Resource
 {
 protected:
-	unsigned int shaderID;
+	unsigned int shaderID = 0;
 public:
 	void SetMat4(string const& property, glm::mat4 matrix) const;
 	void SetVec2(string const& property, Vector2 vec) const;
@@ -25,6 +24,7 @@ public:
 	virtual void Use();
 	unsigned int GetID();
 	virtual void Destroy() {};
-	void LoadShaders(const char *vertex_file_path, const char *fragment_file_path);
-	Material() {};
+	void LoadShaders(string const& vertex_file_path, string const& fragment_file_path);
+	void ResetTextureActive();
+	Material();
 };

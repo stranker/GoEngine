@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Exports.h"
 #include "Utils.h"
 #include <glm/glm.hpp>
@@ -7,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class ENGINEDLL_API Transform {
-protected:
+private:
 	Vector3 position;
 	Vector3 rotation;
 	Vector3 localScale;
@@ -17,21 +16,21 @@ protected:
 	Vector3 foward;
 
 	glm::mat4 transform;
-	glm::mat4 matTrans;
-	glm::mat4 matRot;
-	glm::mat4 matScl;
+
+	glm::mat4 translateMatrix;
+	glm::mat4 rotateMatrix;
+	glm::mat4 scaleMatrix;
 
 	bool canScale = true;
 
-	void _UpdateTransform();
-	void _UpdateUnitVectors();
+	void UpdateUnitVectors();
+	void UpdateTransform();
 public:
-	void SetPosition(float x, float y, float z);
 	void SetPosition(Vector3 _position);
 	void Translate(Vector3 _position);
-	void SetScale(float x, float y, float z);
 	void SetScale(Vector3 _scale);
 	void SetRotation(float angle, Vector3 axis);
+	void SetEulerAngles(Vector3 _eulerAngles);
 	void RotateX(float angle);
 	void RotateY(float angle);
 	void RotateZ(float angle);
@@ -41,11 +40,13 @@ public:
 	void SetCanScale(bool value);
 	Vector3 GetFoward() const;
 	Vector3 GetRight() const;
+	Vector3 GetUp() const;
 	Vector3 GetPosition() const;
 	Vector3 GetRotation() const;
 	Vector3 GetScale() const;
-	glm::mat4 GetTransform();
+	glm::mat4 GetTransform() const;
+	void operator*=(const Transform& otherTransform);
+	Transform operator*(const Transform& otherTransform) const;
 	Transform();
-	~Transform();
 };
 

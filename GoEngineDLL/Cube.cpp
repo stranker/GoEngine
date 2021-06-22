@@ -1,19 +1,21 @@
 #include "Cube.h"
 
 void Cube::Draw() {
-    Primitive::Draw();
     BindVertexArray();
-    if (&spatialMaterial) {
-        spatialMaterial.Use(); // Uso el material
-        spatialMaterial.SetMat4("model", transform->GetTransform());
-        spatialMaterial.SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
-        spatialMaterial.SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-        spatialMaterial.SetVec3("viewPos", Renderer::GetSingleton()->GetCamera()->GetTransform()->GetPosition());
+    if (spatialMaterial) {
+        spatialMaterial->Use(); // Uso el material
+        spatialMaterial->SetMat4("model", globalTransform->GetTransform());
+        spatialMaterial->SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
+        spatialMaterial->SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
+        spatialMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCamera()->GetGlobalTransform().GetPosition());
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
+    spatialMaterial->ResetTextureActive();
+    Primitive::Draw();
 }
 
 Cube::Cube() {
+    SetDefaultName("Cube");
     float position_vertex_data[] = {
         -0.5f, -0.5f, -0.5f,
          0.5f, -0.5f, -0.5f,

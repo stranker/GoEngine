@@ -8,7 +8,6 @@ private:
 	int height = 0;
 	int nrChannels = 0;
 	string path;
-	string name;
 	bool isValid = false;
 public:
 	void CreateTexture(unsigned char* data, int _width, int _height, int _nrChannels, string const& path);
@@ -16,11 +15,9 @@ public:
 	int GetHeight() const { return height; }
 	int GetNrChannels() const {	return nrChannels; }
 	Vector2 GetSize() const { return Vector2(width, height); };
-	void SetName(string const& _name) { name = _name; };
 	unsigned int GetTextureID() const { return textureId; };
 	bool IsValid() { return isValid; };
 	string GetPath() const { return path; };
-	string GetName() const { return name; };
 	Texture() {};
 };
 

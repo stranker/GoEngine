@@ -4,7 +4,7 @@
 void Square::Draw() {
 	if (material) {
 		material->Use(); // Uso el material
-		material->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform->GetTransform()));
+		material->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
 	}
 	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, draw_vertices, true);
 }

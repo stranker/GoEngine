@@ -2,74 +2,35 @@
 #include "GlInclude.h"
 #include "Window.h"
 #include "Light.h"
-#include "SpatialMaterial.h"
+#include "Material.h"
 
 bool Renderer::Init(){
-	cout << "Renderer Init" << endl;
 	if (!window) {
-		cout << "Window ptr not created" << endl;
 		return false;
 	}
 	if (glewInit() != GLEW_OK){
-		cout << "Failed to init Glew" << endl;
 		return false;
 	}
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_FRONT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	UILayer::CreateContext(window);
 	return true;
 }
 
 bool Renderer::Destroy(){
-	cout << "Renderer Destroy" << endl;
 	if (!dirLights.empty()){
-		for (Light* light : dirLights) {
-			light->Destroy();
-			delete light;
-		}
 		dirLights.clear();
 	}
 	if (!pointLights.empty()) {
-		for (Light* light : pointLights) {
-			light->Destroy();
-			delete light;
-		}
 		pointLights.clear();
 	}
 	if (!spotLights.empty()) {
-		for (Light* light : spotLights) {
-			light->Destroy();
-			delete light;
-		}
 		spotLights.clear();
 	}
-	if (firstCamera){
-		firstCamera->Destroy();
-		delete firstCamera;
-		firstCamera = NULL;
-	}
-	if (camera) {
-		camera->Destroy();
-		delete camera;
-		camera = NULL;
-	}
 	return true;
-}
-
-unsigned int Renderer::CreateVertexBuffer(float *data, size_t dataSize, BufferType bufferType) {
-	unsigned int vertexBuffer;
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer((GLenum)bufferType, vertexBuffer);
-	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
-	return vertexBuffer;
-}
-
-unsigned int Renderer::CreateVertexBuffer(unsigned int * data, size_t dataSize, BufferType bufferType) {
-	unsigned int vertexBuffer;
-	glGenBuffers(1, &vertexBuffer);
-	glBindBuffer((GLenum)bufferType, vertexBuffer);
-	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
-	return vertexBuffer;
 }
 
 unsigned int Renderer::CreateVertexBuffer(void* data, size_t dataSize, BufferType bufferType) {
@@ -83,7 +44,7 @@ unsigned int Renderer::CreateVertexBuffer(void* data, size_t dataSize, BufferTyp
 unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels) {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
-	GLenum format;
+	GLenum format = GL_RED;
 	if (nrChannels == 1)
 		format = GL_RED;
 	else if (nrChannels == 3)
@@ -101,13 +62,7 @@ unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int 
 	return textureID;
 }
 
-void Renderer::UpdateVertexBuffer(unsigned int vbo, float * data, size_t dataSize, BufferType bufferType) {
-	glGenBuffers(1, &vbo);
-	glBindBuffer((GLenum)bufferType, vbo);
-	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
-}
-
-void Renderer::UpdateVertexBuffer(unsigned int vbo, unsigned int * data, size_t dataSize, BufferType bufferType) {
+void Renderer::UpdateVertexBuffer(unsigned int vbo, void * data, size_t dataSize, BufferType bufferType) {
 	glGenBuffers(1, &vbo);
 	glBindBuffer((GLenum)bufferType, vbo);
 	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
@@ -140,15 +95,8 @@ void Renderer::BindVertexData(VertexData vertexData) {
 	BindBufferWithAttribute(vertexData.vbo, vertexData.bufferType, vertexData.attributeID, vertexData.dataCount);
 }
 
-void Renderer::BindTexture(unsigned int textureBuffer) {
-	glBindTexture(GL_TEXTURE_2D, textureBuffer);
-}
-
 void Renderer::BindVertexArray(unsigned int vertexArrayID) {
 	glBindVertexArray(vertexArrayID);
-}
-
-void Renderer::SetTextureProperty(const char* propertyName, unsigned int id, unsigned int index) {
 }
 
 void Renderer::ActivateTexture(unsigned int index) {
@@ -160,7 +108,7 @@ void Renderer::SetClearColor(Color color) {
 }
 
 void Renderer::ClearScreen(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void Renderer::SwapBuffers(){
@@ -200,8 +148,8 @@ void Renderer::DisableClientState() {
 }
 
 void Renderer::DestroyVertexData(vector<VertexData> data) {
-	for (VertexData vertexData : data) {
-		DeleteBuffer(vertexData.vbo);
+	for (size_t i = 0; i < data.size(); i++){
+		DeleteBuffer(data[i].vbo);
 	}
 }
 
@@ -234,12 +182,12 @@ void Renderer::Draw(Primitive _primitive, int vertexCount, bool elementDraw) {
 	}
 }
 
-Camera * Renderer::GetCamera() {
-	return camera;
+Camera* Renderer::GetCamera() const{
+	return currentCamera;
 }
 
 void Renderer::SetCurrentCamera(Camera* _camera){
-	camera = _camera;
+	currentCamera = _camera;
 }
 
 void Renderer::AddLight(Light* light) {
@@ -265,13 +213,13 @@ int Renderer::GetSpotLights() const {
 	return spotLights.size();
 }
 
-void Renderer::ProcessLighting(SpatialMaterial* material) {
+void Renderer::ProcessLighting(Material* material) {
 	material->SetInt("dirLightSize", dirLights.size());
 	material->SetInt("pointLightSize", pointLights.size());
 	material->SetInt("spotLightSize", spotLights.size());
 	for (size_t i = 0; i < dirLights.size(); i++){
 		string dirArrayIdx = "dirLights[" + to_string(i) + "]";
-		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetDirection());
+		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetTransform()->GetFoward());
 		material->SetVec3(dirArrayIdx + ".ambient", dirLights[i]->GetLightColor());
 		material->SetFloat(dirArrayIdx + ".specular", dirLights[i]->GetSpecular());
 		material->SetFloat(dirArrayIdx + ".energy", dirLights[i]->GetEnergy());
@@ -297,16 +245,16 @@ void Renderer::ProcessLighting(SpatialMaterial* material) {
 		material->SetFloat(dirArrayIdx + ".constant", spotLights[i]->GetAttenuation().x);
 		material->SetFloat(dirArrayIdx + ".linear", spotLights[i]->GetAttenuation().y);
 		material->SetFloat(dirArrayIdx + ".quadratic", spotLights[i]->GetAttenuation().z);
-		material->SetFloat(dirArrayIdx + ".cutOff", spotLights[i]->GetCutOff());
-		material->SetFloat(dirArrayIdx + ".outerCutOff", spotLights[i]->GetOuterCutOff());
+		material->SetFloat(dirArrayIdx + ".cutOff", glm::cos(glm::radians(spotLights[i]->GetCutOff())));
+		material->SetFloat(dirArrayIdx + ".outerCutOff", glm::cos(glm::radians(spotLights[i]->GetOuterCutOff())));
 		material->SetFloat(dirArrayIdx + ".range", spotLights[i]->GetRange());
 	}
 }
 
 Renderer::Renderer(Window* _window){
 	window = _window;
-	firstCamera = new Camera(window->GetWidth(), window->GetHeight());
-	camera = firstCamera;
+	firstCamera = new Camera(window->GetSize().x, window->GetSize().y);
+	currentCamera = firstCamera;
 	singleton = this;
 }
 

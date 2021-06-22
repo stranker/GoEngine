@@ -3,39 +3,33 @@
 #include "BaseGame.h"
 #include "GameCamera.h"
 #include "Tank.h"
+#include "TankBullet.h"
+#include "Mine.h"
 
 class Game :
 	public BaseGame
 {
 private:
-	GameCamera* camera;
-	Cube* cube;
-	Cube* cube2;
-	Cube* cube3;
-	SpotLight* spotLight;
-	DirectionalLight* dirLight;
-	float cameraVelocity = 1;
-	float cameraFovIncrement = 1;
-	int dir = 1;
 	float timer = 0.0f;
-	float xLast;
-	float yLast;
 	int screenWidth;
 	int screenHeight;
 	const char* screenTitle;
-	SpatialMaterial cubeMaterial;
-	MeshInstance* cat;
+	GameCamera* camera;
+	Cube* cube;
+	Cube* cube2;
+	SpotLight* spotLight;
+	DirectionalLight* dirLight;
+	SpatialMaterial* cubeMaterial;
 	Tank* tank;
-	MeshInstance* minecraft;
-	MeshInstance* beer;
-	MeshInstance* wizard;
-	MeshInstance* reptile;
+	Node3D* minesParent;
+	TankBullet* tankBullet;
+	vector<TankBullet*> bullets;
+	vector<Mine*> mines;
+	void CreateBullets(int count);
+	void CreateMines(int count);
 public:
+	void OnUpdate(float delta) override;
 	void Start() override;
-	void Update(float deltaTime) override;
 	void Stop() override;
-	void LoopGame();
 	Game(int _screenWidth, int _screenHeight, const char* _screenTitle);
-	~Game();
 };
-

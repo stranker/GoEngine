@@ -21,6 +21,13 @@ Color::Color(float _r, float _g, float _b) {
 	a = 1.0f;
 }
 
+Color::Color(Vector3 vec) {
+	r = vec.x;
+	g = vec.y;
+	b = vec.z;
+	a = 1.0f;
+}
+
 Color Color::Red() const {
 	return Color(1, 0, 0);
 }

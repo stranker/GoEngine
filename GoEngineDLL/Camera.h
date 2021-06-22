@@ -1,29 +1,25 @@
 #pragma once
-#include "Exports.h"
+#include "Utils.h"
 #include "Transform.h"
 
 class ENGINEDLL_API Camera {
 protected:
-	Transform* transform; // view
-	glm::mat4 projection;
-	float width;
-	float heigth;
+    glm::mat4 projection = glm::mat4(1.0f);
+    float width = 0;
+    float heigth = 0;
 public:
-	string name;
-	glm::mat4 GetProjection();
-	glm::mat4 GetView();
-	glm::mat4 GetMVPOf(glm::mat4 model);
-	void SetSize(float _width, float _height);
-	Vector2 GetSize() const;
-	void Destroy();
-	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
-	void LookAt(Vector3 _target, Vector3 _upVector);
-	void LookAt(Vector3 _target);
-	Vector3 GetFoward() const;
-	Vector3 GetRight() const;
-	Vector3 GetPosition() const;
-	Transform* GetTransform() const;
-	Camera(float _width, float _height);
-	~Camera();
+    virtual glm::mat4 GetView() const { return glm::mat4(1.0f); };
+    virtual glm::mat4 GetProjection() const { return projection; };
+    virtual glm::mat4 GetMVPOf(const Transform& _transform) const { return glm::mat4(1.0f); };
+    virtual Transform GetTransform() const { return Transform(); };
+    virtual Transform GetGlobalTransform() const { return Transform(); } ;
+    void UpdateProjection(float _fov, float aspect, float _near, float _far);
+    void SetSize(Vector2 size) {width = size.x; heigth = size.y;};
+    Camera() { };
+    Camera(float _width, float _heigth) {
+        width = _width; 
+        heigth = _heigth;
+        projection = glm::mat4(1.0f);
+    };
 };
 

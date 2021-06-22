@@ -5,8 +5,12 @@
 void SpatialMaterial::Use() {
 	Material::Use();
 	SetFloat("material.metallic", metallic);
-	SetTexture("material.diffuse", diffuseTexture.GetTextureID(), 0);
-	SetTexture("material.specular", specularTexture.GetTextureID(), 1);
+	if (diffuseTexture){
+		SetTexture("material.diffuse", diffuseTexture->GetTextureID(), 0);
+	}
+	if (specularTexture) {
+		SetTexture("material.specular", specularTexture->GetTextureID(), 1);
+	}
 	Renderer::GetSingleton()->ProcessLighting(this);
 }
 
@@ -16,10 +20,6 @@ void SpatialMaterial::SetDiffuseMap(const char* filePath) {
 
 void SpatialMaterial::SetSpecularMap(const char* filePath) {
 	specularTexture = ResourceManager::LoadTexture(filePath, filePath);
-}
-
-void SpatialMaterial::ResetTextureActive() {
-	glActiveTexture(GL_TEXTURE0);
 }
 
 void SpatialMaterial::CreateMaterial(float _specular, float _metallic, string const& diffusePath, string const& specularPath) {
@@ -35,12 +35,17 @@ void ADSSpatialMaterial::Use() {
 	SetVec3("material.diffuse", diffuse);
 	SetVec3("material.specular", specular);
 	SetFloat("material.metallic", shininess);
+	if (diffuseTexture->IsValid()){
+		SetBool("material.hasTexture", true);
+		SetTexture("material." + name, diffuseTexture->GetTextureID(), 0);
+	}
 	Renderer::GetSingleton()->ProcessLighting(this);
 }
 
-ADSSpatialMaterial::ADSSpatialMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular, float _shininess){
+void ADSSpatialMaterial::CreateMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular, float _shininess, Texture* _texture) {
 	ambient = _ambient;
 	diffuse = _diffuse;
 	specular = _specular;
 	shininess = _shininess;
+	diffuseTexture = _texture;
 }

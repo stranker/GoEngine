@@ -1,11 +1,7 @@
 #pragma once
 
 #include "Exports.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <list>
-#include <iterator>
+#include "UILayer.h"
 
 class Window;
 class Renderer;
@@ -25,23 +21,26 @@ class Renderer;
 
 class ENGINEDLL_API BaseGame {
 protected:
+	virtual void OnStart();
+	virtual void OnStop();
+	virtual void OnUpdate(float delta) = 0;
 	virtual void Start() = 0;
-	virtual void Update(float deltaTime) = 0;
 	virtual void Stop() = 0;
+	virtual void Update(float delta);
+	static BaseGame* singleton;
+private:
 	bool InitEngine();
 	bool DestroyEngine();
 	void LoopEngine();
-	void DrawEntities();
-	static BaseGame* singleton;
-private:
+	void Render();
 	Window* window;
 	Renderer* renderer;
 	Input* input;
-	list<Entity*>* entityList;
-	list<Entity*>::iterator entityIterator;
+	Node* sceneRoot;
 	double currentFrame;
 	double lastFrame;
 	double deltaTime;
+	void ShowDebugUI();
 public:
 	static BaseGame* GetSingleton();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
@@ -52,12 +51,12 @@ public:
 	//ENTITIES
 	Camera3D* CreateCamera3D(float width, float height);
 	Cube* CreateCube();
-	DirectionalLight* CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction);
+	DirectionalLight* CreateDirectional(Vector3 lightColor, float energy, float specular);
 	PointLight* CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation);
-	SpotLight* CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff);
-	MeshInstance* CreateMeshInstance(string const& path);
+	SpotLight* CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation, float cutOff, float outCutOff);
+	Node3D* LoadModel(string const& path);
+	Node* GetRoot();
 	//WINDOW
 	Vector2 GetWindowSize();
-
 #pragma endregion
 };

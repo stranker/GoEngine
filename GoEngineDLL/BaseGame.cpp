@@ -4,18 +4,33 @@
 #include "Renderer.h"
 #include "GlInclude.h"
 
+void BaseGame::OnStart() {
+	sceneRoot->Ready();
+	LoopEngine();
+}
+
+void BaseGame::OnStop() {
+	sceneRoot->Destroy();
+	DestroyEngine();
+}
+
+void BaseGame::Update(float deltaTime) {
+	ShowDebugUI();
+	sceneRoot->Update(deltaTime);
+	return OnUpdate(deltaTime);
+}
+
 bool BaseGame::InitEngine() {
 	window->Init();
 	renderer->Init();
-	entityList = new list<Entity*>();
 	input->SetCurrentWindow(window);
 	currentFrame = glfwGetTime();
 	lastFrame = currentFrame;
+	sceneRoot = new Node("sceneRoot");
 	return true;
 }
 
 bool BaseGame::DestroyEngine() {
-	delete entityList;
 	if (renderer) {
 		renderer->Destroy();
 		delete renderer;
@@ -27,6 +42,9 @@ bool BaseGame::DestroyEngine() {
 		window->Destroy();
 		delete window;
 	}
+	ResourceManager::Clear();
+	NodeManager::Clear();
+	UILayer::Destroy();
 	return true;
 }
 
@@ -46,21 +64,29 @@ void BaseGame::LoopEngine() {
 		renderer->ClearScreen();
 		renderer->EnableClientState();
 
+		UILayer::NewFrame();
+
 		Update(deltaTime);
 
-		DrawEntities();
+		Render();
+
+		UILayer::Render();
 
 		renderer->DisableClientState();
 		renderer->SwapBuffers();
 		window->PoolEvents();
 	}
+	return OnStop();
 }
 
-void BaseGame::DrawEntities() {
-	for (entityIterator = entityList->begin(); entityIterator != entityList->end(); entityIterator++) {
-		Entity *entity = *entityIterator;
-		entity->Draw();
-	}
+void BaseGame::Render() {
+	sceneRoot->Draw();
+}
+
+void BaseGame::ShowDebugUI() {
+	UILayer::Begin("Node Hierarchy", 0, 4);
+	UILayer::TreeNode(sceneRoot);
+	UILayer::End();
 }
 
 BaseGame * BaseGame::GetSingleton(){
@@ -74,6 +100,9 @@ BaseGame::BaseGame(int _screen_width, int _screen_height, const char * _screen_t
 	renderer = new Renderer(window);
 	input = new Input();
 	singleton = this;
+	if (!InitEngine()){
+		DestroyEngine();
+	}
 }
 
 BaseGame::~BaseGame() {
@@ -85,40 +114,44 @@ BaseGame::~BaseGame() {
 Camera3D* BaseGame::CreateCamera3D(float width, float height) {
 	Camera3D* camera = new Camera3D(width, height);
 	renderer->SetCurrentCamera(camera);
+	sceneRoot->AddChildren(camera);
 	return camera;
 }
 
 Cube* BaseGame::CreateCube() {
 	Cube* c = new Cube();
-	entityList->push_back(c);
+	sceneRoot->AddChildren(c);
 	return c;
 }
 
-DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction) {
-	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular, direction);
+DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular) {
+	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular);
 	Renderer::GetSingleton()->AddLight(dl);
-	entityList->push_back(dl);
+	sceneRoot->AddChildren(dl);
 	return dl;
 }
 
 PointLight* BaseGame::CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation) {
 	PointLight* pl = new PointLight(lightColor, energy, specular, range, attenuation);
 	Renderer::GetSingleton()->AddLight(pl);
-	entityList->push_back(pl);
+	sceneRoot->AddChildren(pl);
 	return pl;
 }
 
-SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff) {
-	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, direction, attenuation, cutOff, outCutOff);
+SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation, float cutOff, float outCutOff) {
+	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, attenuation, cutOff, outCutOff);
 	Renderer::GetSingleton()->AddLight(sl);
-	entityList->push_back(sl);
+	sceneRoot->AddChildren(sl);
 	return sl;
 }
 
-MeshInstance* BaseGame::CreateMeshInstance(string const& path) {
-	MeshInstance* mi = new MeshInstance(path);
-	entityList->push_back(mi);
-	return mi;
+Node3D* BaseGame::LoadModel(string const& path) {
+	Node3D* modelRootNode = ModelImporter::LoadModel(path);
+	return modelRootNode;
+}
+
+Node* BaseGame::GetRoot() {
+	return sceneRoot;
 }
 
 Vector2 BaseGame::GetWindowSize(){

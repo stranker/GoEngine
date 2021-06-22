@@ -2,9 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
-bool Window::Init()
-{
-	cout << "Windows Init" << endl;
+bool Window::Init(){
 	/* Initialize the library */
 	if (!glfwInit()) {
 		cout << "Falla al inicialiar GLFW" << endl;
@@ -26,7 +24,6 @@ bool Window::Init()
 }
 
 bool Window::Destroy(){
-	cout << "Windows Destroy" << endl;
 	if (window) {
 		glfwDestroyWindow((GLFWwindow*)window);
 	}
@@ -77,5 +74,4 @@ Window::Window(int _width, int _height, const char * _title){
 }
 
 Window::~Window(){
-
 }

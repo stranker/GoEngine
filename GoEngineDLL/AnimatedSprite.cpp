@@ -50,6 +50,7 @@ void AnimatedSprite::Update(float deltaTime) {
 }
 
 AnimatedSprite::AnimatedSprite(){
+	SetDefaultName("AnimatedSprite");
 }
 
 AnimatedSprite::~AnimatedSprite() {
