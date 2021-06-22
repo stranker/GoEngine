@@ -5,26 +5,22 @@
 #include "Material.h"
 
 bool Renderer::Init(){
-	cout << "Renderer Init" << endl;
 	if (!window) {
-		cout << "Window ptr not created" << endl;
 		return false;
 	}
 	if (glewInit() != GLEW_OK){
-		cout << "Failed to init Glew" << endl;
 		return false;
 	}
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	//glCullFace(GL_FRONT);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	UILayer::CreateContext(window);
 	return true;
 }
 
 bool Renderer::Destroy(){
-	cout << "Renderer Destroy" << endl;
 	if (!dirLights.empty()){
 		dirLights.clear();
 	}
@@ -112,7 +108,7 @@ void Renderer::SetClearColor(Color color) {
 }
 
 void Renderer::ClearScreen(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void Renderer::SwapBuffers(){
@@ -223,7 +219,7 @@ void Renderer::ProcessLighting(Material* material) {
 	material->SetInt("spotLightSize", spotLights.size());
 	for (size_t i = 0; i < dirLights.size(); i++){
 		string dirArrayIdx = "dirLights[" + to_string(i) + "]";
-		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetDirection());
+		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetTransform()->GetFoward());
 		material->SetVec3(dirArrayIdx + ".ambient", dirLights[i]->GetLightColor());
 		material->SetFloat(dirArrayIdx + ".specular", dirLights[i]->GetSpecular());
 		material->SetFloat(dirArrayIdx + ".energy", dirLights[i]->GetEnergy());
@@ -249,8 +245,8 @@ void Renderer::ProcessLighting(Material* material) {
 		material->SetFloat(dirArrayIdx + ".constant", spotLights[i]->GetAttenuation().x);
 		material->SetFloat(dirArrayIdx + ".linear", spotLights[i]->GetAttenuation().y);
 		material->SetFloat(dirArrayIdx + ".quadratic", spotLights[i]->GetAttenuation().z);
-		material->SetFloat(dirArrayIdx + ".cutOff", spotLights[i]->GetCutOff());
-		material->SetFloat(dirArrayIdx + ".outerCutOff", spotLights[i]->GetOuterCutOff());
+		material->SetFloat(dirArrayIdx + ".cutOff", glm::cos(glm::radians(spotLights[i]->GetCutOff())));
+		material->SetFloat(dirArrayIdx + ".outerCutOff", glm::cos(glm::radians(spotLights[i]->GetOuterCutOff())));
 		material->SetFloat(dirArrayIdx + ".range", spotLights[i]->GetRange());
 	}
 }

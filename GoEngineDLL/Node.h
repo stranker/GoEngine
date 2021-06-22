@@ -11,6 +11,7 @@ protected:
 	void SetDefaultName(const string& _name);
 	void GetNode(const string& nodeName, vector<Node*>& res);
 	string className;
+	bool uiLocked = false;
 public:
 	void SetName(const string& _name);
 	string GetName() const;
@@ -22,6 +23,7 @@ public:
 	Node* GetChild(int childIndex) const;
 	void PrintTree();
 	void SetParent(Node* _parent);
+	bool IsUILocked() const;
 	unsigned int GetNodeID() const;
 	virtual void Ready();
 	virtual void Draw();

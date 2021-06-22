@@ -79,6 +79,10 @@ void Node::SetParent(Node* _parent) {
 	parent = _parent;
 }
 
+bool Node::IsUILocked() const {
+	return uiLocked;
+}
+
 unsigned int Node::GetNodeID() const {
 	return nodeID;
 }

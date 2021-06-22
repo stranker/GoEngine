@@ -24,6 +24,11 @@ void Light::SetEnergy(float _energy) {
     energy = Utils::Clamp(energy, 0, 10);
 }
 
+void Light::ShowUI() {
+    Node3D::ShowUI();
+    UILayer::ShowLightInfo(this);
+}
+
 Vector3 Light::GetLightColor() const {
     return lightColor;
 }
@@ -102,9 +107,8 @@ Light::Light() {
 Light::~Light() {
 }
 
-DirectionalLight::DirectionalLight(Vector3 _color, float _energy, float _specular, Vector3 _direction) : Light(_color, _energy, _specular) {
+DirectionalLight::DirectionalLight(Vector3 _color, float _energy, float _specular) : Light(_color, _energy, _specular) {
     type = Renderer::DIRECTIONAL;
-    direction = _direction;
     SetDefaultName("DirectionalLight");
 }
 
@@ -113,7 +117,6 @@ DirectionalLight::DirectionalLight() {
     lightColor = Vector3().One();
     energy = 1.0f;
     specular = 0.5f;
-    direction = GetTransform()->GetFoward();
     SetDefaultName("DirectionalLight");
 }
 
@@ -144,19 +147,17 @@ PointLight::PointLight() {
 PointLight::~PointLight() {
 }
 
-SpotLight::SpotLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 _direction, Vector3 _attenuation, float _cutOff, float _outerCutOff) :
+SpotLight::SpotLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 _attenuation, float _cutOff, float _outerCutOff) :
     PointLight(_color, _energy, _specular, _range, _attenuation) {
     type = Renderer::SPOT;
-    cutOff = glm::cos(glm::radians(_cutOff));
-    outerCutOff = glm::cos(glm::radians(_outerCutOff));
-    direction = _direction;
+    cutOff = _cutOff;
+    outerCutOff = _outerCutOff;
     SetDefaultName("SpotLight");
 }
 
 SpotLight::SpotLight() {
     type = Renderer::SPOT;
     lightColor = Vector3().One();
-    direction = GetTransform()->GetFoward();
     energy = 1.0f;
     specular = 0.5f;
     kConstant = 1.0f;

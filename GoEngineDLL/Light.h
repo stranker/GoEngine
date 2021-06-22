@@ -8,7 +8,7 @@ protected:
     Vector3 lightColor;
     float energy;
     float specular;
-    const int drawVertices = 12 * 3;
+    const int drawVertices = 36;
 private:
 
 public:
@@ -16,6 +16,7 @@ public:
     void SetLightColor(Vector3 _color);
     void SetSpecular(float _specular);
     void SetEnergy(float _energy);
+    virtual void ShowUI() override;
     Vector3 GetLightColor() const;
     float GetSpecular() const;
     float GetEnergy() const;
@@ -28,11 +29,8 @@ public:
 
 class ENGINEDLL_API DirectionalLight : 
     public Light {
-protected:
-    Vector3 direction;
 public:
-    Vector3 GetDirection() const { return direction; };
-    DirectionalLight(Vector3 _color, float _energy, float _specular, Vector3 _direction);
+    DirectionalLight(Vector3 _color, float _energy, float _specular);
     DirectionalLight();
     ~DirectionalLight();
 };
@@ -57,12 +55,12 @@ class ENGINEDLL_API SpotLight :
 protected:
     float cutOff;
     float outerCutOff;
-    Vector3 direction;
 public:
-    Vector3 GetDirection() const { return direction; };
     float GetCutOff() const { return cutOff; };
     float GetOuterCutOff() const { return outerCutOff; };
-    SpotLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 direction, Vector3 _attenuation, float _cutOff, float _outerCutOff);
+    void SetCutOff(float _cutOff) { cutOff = _cutOff;};
+    void SetOuterCutOff(float _outerCutOff) { outerCutOff = _outerCutOff; };
+    SpotLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 _attenuation, float _cutOff, float _outerCutOff);
     SpotLight();
     ~SpotLight();
 };

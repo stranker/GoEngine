@@ -8,6 +8,10 @@
 class Window;
 class Node;
 class Node3D;
+class Light;
+class SpotLight;
+class DirectionalLight;
+class PointLight;
 
 class ENGINEDLL_API UILayer {
 private:
@@ -23,6 +27,7 @@ public:
 	static void ShowNode3D(Node3D* node3d);
 	static void ShowTransform(Node3D* node);
 	static void ShowNodeInfo(Node* node);
+	static void ShowLightInfo(Light* light);
 	static void Text(const string& text);
 	static void Begin(const string& windowName, bool opened, size_t flags);
 	static void End();

@@ -55,4 +55,5 @@ GameCamera::GameCamera(float screenWidth, float screenHeight) : Camera3D(screenW
 	lastMousePos = Vector2(screenWidth, screenHeight) * 0.5f;
 	Input::SetMouseScrollCallback(OnMouseScrollCallback);
 	eulerAngles = Vector3().Zero();
+	uiLocked = true;
 }

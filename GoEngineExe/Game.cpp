@@ -25,18 +25,9 @@ void Game::CreateMines(int count) {
 		mine->SetName("Mine" + to_string(i + 1));
 		mine->SetScale(Vector3().One() * 0.5f);
 	}
-	PRINT_DEBUG(mines.size());
 }
 
-void Game::ShowMinesGUI() {
-	IGBegin("Mines Hierarchy", 4);
-	UILayer::TreeNode(minesParent);
-	IGEnd();
-}
-
-void Game::Update(float delta) {
-	BaseGame::Update(delta);
-	ShowMinesGUI();
+void Game::OnUpdate(float delta) {
 	if (spotLight) {
 		const int spotSpeed = 7;
 		Vector3 spotVelocity = Vector3();
@@ -73,8 +64,8 @@ void Game::Start() {
 	cube->SetPosition(Vector3(0, 3, 0));
 	cube2->SetPosition(Vector3(2, 0, 0));
 	// Lights
-	spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3().Foward(), Vector3(1, 0.09, 0.032), 12, 15);
-	dirLight = CreateDirectional(Vector3(1, 1, 1), 1, 0.5f, Vector3().Foward());
+	spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3(1, 0.09, 0.032), 12, 15);
+	dirLight = CreateDirectional(Vector3(1, 1, 1), 1, 0.5f);
 	dirLight->SetPosition(Vector3(0, 10, 5));
 	dirLight->SetScale(Vector3().One() * 0.2);
 	// Models

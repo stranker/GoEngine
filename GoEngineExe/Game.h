@@ -27,9 +27,8 @@ private:
 	vector<Mine*> mines;
 	void CreateBullets(int count);
 	void CreateMines(int count);
-	void ShowMinesGUI();
 public:
-	void Update(float delta) override;
+	void OnUpdate(float delta) override;
 	void Start() override;
 	void Stop() override;
 	Game(int _screenWidth, int _screenHeight, const char* _screenTitle);

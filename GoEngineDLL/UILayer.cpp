@@ -1,6 +1,7 @@
 #include "UILayer.h"
 #include "Window.h"
 #include "Node3D.h"
+#include "Light.h"
 
 Node* UILayer::lastSelected;
 Node* UILayer::currentSelected;
@@ -20,6 +21,7 @@ void UILayer::TreeNode(Node* node) {
 }
 
 void UILayer::_TreeNode(Node* node) {
+	if (node->IsUILocked()) { return; }
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
 	if (node == currentSelected) {
 		flags |= ImGuiTreeNodeFlags_Selected;
@@ -110,6 +112,37 @@ void UILayer::ShowNodeInfo(Node* node) {
 		node->SetName(string(buf));
 	}
 	memset(buf, 0, 254);
+	ImGui::Separator();
+}
+
+void UILayer::ShowLightInfo(Light* light) {
+	ImGui::Text("Light");
+	Color lColor = Color(light->GetLightColor());
+	float newColor[3] = { lColor.r, lColor.g, lColor.b };
+	ImGui::ColorEdit3("Color", newColor, ImGuiColorEditFlags_NoAlpha);
+	light->SetLightColor(Vector3(newColor[0], newColor[1], newColor[2]));
+	float specular = light->GetSpecular();
+	ImGui::InputFloat("Specular", &specular);
+	light->SetSpecular(specular);
+	if (light->GetType() == Renderer::LightType::SPOT) {
+		float cutOff = ((SpotLight*)light)->GetCutOff();
+		float outerCutOff = ((SpotLight*)light)->GetOuterCutOff();
+		ImGui::InputFloat("CutOff", &cutOff);
+		ImGui::InputFloat("Outer CutOff", &outerCutOff);
+		((SpotLight*)light)->SetCutOff(cutOff);
+		((SpotLight*)light)->SetOuterCutOff(outerCutOff);
+	}
+	//switch (light->GetType()) {
+	//case Renderer::LightType::DIRECTIONAL:
+
+	//	break;
+	//case Renderer::LightType::SPOT:
+	//	break;
+	//case Renderer::LightType::POINT:
+	//	break;
+	//default:
+	//	break;
+	//}
 	ImGui::Separator();
 }
 

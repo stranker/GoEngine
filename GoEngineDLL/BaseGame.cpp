@@ -15,7 +15,9 @@ void BaseGame::OnStop() {
 }
 
 void BaseGame::Update(float deltaTime) {
+	ShowDebugUI();
 	sceneRoot->Update(deltaTime);
+	return OnUpdate(deltaTime);
 }
 
 bool BaseGame::InitEngine() {
@@ -81,6 +83,12 @@ void BaseGame::Render() {
 	sceneRoot->Draw();
 }
 
+void BaseGame::ShowDebugUI() {
+	UILayer::Begin("Node Hierarchy", 0, 4);
+	UILayer::TreeNode(sceneRoot);
+	UILayer::End();
+}
+
 BaseGame * BaseGame::GetSingleton(){
 	return singleton;
 }
@@ -116,8 +124,8 @@ Cube* BaseGame::CreateCube() {
 	return c;
 }
 
-DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular, Vector3 direction) {
-	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular, direction);
+DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular) {
+	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular);
 	Renderer::GetSingleton()->AddLight(dl);
 	sceneRoot->AddChildren(dl);
 	return dl;
@@ -130,8 +138,8 @@ PointLight* BaseGame::CreatePointLight(Vector3 lightColor, float energy, float s
 	return pl;
 }
 
-SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 direction, Vector3 attenuation, float cutOff, float outCutOff) {
-	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, direction, attenuation, cutOff, outCutOff);
+SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation, float cutOff, float outCutOff) {
+	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, attenuation, cutOff, outCutOff);
 	Renderer::GetSingleton()->AddLight(sl);
 	sceneRoot->AddChildren(sl);
 	return sl;
@@ -148,59 +156,6 @@ Node* BaseGame::GetRoot() {
 
 Vector2 BaseGame::GetWindowSize(){
 	return window->GetSize();
-}
-
-void BaseGame::IGBegin(const string& panelName, size_t flag) {
-	bool t = true;
-	ImGui::Begin(panelName.c_str(), &t, flag);
-}
-
-void BaseGame::IGBeginChild(const string& id, Vector2 size, bool border) {
-	ImGui::BeginChild(id.c_str(), ImVec2(size.x, size.y), border);
-}
-
-void BaseGame::IGEndChild() {
-	ImGui::EndChild();
-}
-
-void BaseGame::IGSameLine() {
-	ImGui::SameLine();
-}
-
-void BaseGame::IGSeparator() {
-	ImGui::Separator();
-}
-
-bool BaseGame::IGTreeNode(const string& name) {
-	return ImGui::TreeNode(name.c_str());
-}
-
-void BaseGame::IGTreePop() {
-	ImGui::TreePop();
-}
-
-bool BaseGame::IGSelectable(const string& id, bool isSelected) {
-	return ImGui::Selectable(id.c_str(), isSelected);
-}
-
-void BaseGame::IGSliderFloat(const string& property, float* v, float vmin, float vmax) {
-	ImGui::SliderFloat(property.c_str(), v, vmin, vmax);
-}
-
-void BaseGame::IGSliderFloat3(const string& property, float v[3], float vmin, float vmax) {
-	ImGui::SliderFloat3(property.c_str(), v, vmin, vmax);
-}
-
-void BaseGame::IGInputFloat3(const string& property, float v[3]) {
-	ImGui::InputFloat3(property.c_str(), v);
-}
-
-void BaseGame::IGEnd() {
-	ImGui::End();
-}
-
-void BaseGame::IGText(const char* text) {
-	ImGui::Text(text);
 }
 
 #pragma endregion

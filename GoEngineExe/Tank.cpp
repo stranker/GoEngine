@@ -33,6 +33,6 @@ Tank::Tank() {
 	model = ResourceManager::LoadModel("concept_tank/scene.gltf", "Tank");
 	AddChildren(model);
 	model->SetScale(Vector3().One() * 0.01);
-	turret = (Node3D*)model->GetNode("MeshInstance241");
+	turret = (Node3D*)model->GetNode("MeshInstance216");
 	model->RotateY(-90);
 }
