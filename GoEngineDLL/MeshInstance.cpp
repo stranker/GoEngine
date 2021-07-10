@@ -2,16 +2,18 @@
 #include "SpatialMaterial.h"
 
 void MeshInstance::Draw() {
-	BindVertexArray();
+	if (!IsInsideFrustum()) {
+		return Node3D::Draw();
+	}
 	if (mesh->adsMaterial) {
 		mesh->adsMaterial->Use();
 		mesh->adsMaterial->SetMat4("model", globalTransform->GetTransform());
 		mesh->adsMaterial->SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
 		mesh->adsMaterial->SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-		mesh->adsMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCamera()->GetTransform().GetPosition());
+		mesh->adsMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCameraTransform()->GetPosition());
 	}
-	Renderer::GetSingleton()->Draw(primitive, mesh->indices.size(), true);
-	Primitive::Draw();
+	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, mesh->indices.size(), true);
+	Node3D::Draw();
 }
 
 void MeshInstance::SetMesh(MeshData* _mesh) {
@@ -30,6 +32,8 @@ void MeshInstance::SetMesh(MeshData* _mesh) {
 	}
 	BindVertexObjects();
 	primitive = Renderer::TRIANGLES;
+	AddBBox(mesh->boundingBox);
+	AddGlobalBBox(mesh->boundingBox);
 }
 
 MeshInstance::MeshInstance() {

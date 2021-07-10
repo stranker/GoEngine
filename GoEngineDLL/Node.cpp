@@ -126,9 +126,10 @@ string Node::GetClass() const {
 Node::Node() {
 	nodeID = NodeManager::CreateNode(this);
 	className = "Node";
+	SetDefaultName(className);
 }
 
-Node::Node(const string& _name) {
+Node::Node(const string& _name) : Node() {
 	name = _name;
 }
 

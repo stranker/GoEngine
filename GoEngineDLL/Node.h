@@ -16,8 +16,8 @@ public:
 	void SetName(const string& _name);
 	string GetName() const;
 	vector<Node*> GetChildrens();
-	void AddChildren(Node* child);
-	void RemoveChildren(Node* child);
+	virtual void AddChildren(Node* child);
+	virtual void RemoveChildren(Node* child);
 	Node* GetNode(const string& nodeName);
 	Node* GetParent() const;
 	Node* GetChild(int childIndex) const;

@@ -12,9 +12,13 @@ public:
 	vector<Vector3> position_data;
 	vector<Vector3> normal_data;
 	vector<Vector2> texCoord_data;
+	BoundingBox boundingBox;
 	vector<unsigned int> indices;
 	ADSSpatialMaterial* adsMaterial;
+	vector<Line3D*> boxLines;
+	void CreateBBox();
 	MeshData() {};
+	void DrawBBox(const Transform& transform);
 };
 
 class ENGINEDLL_API ModelImporter {

@@ -9,8 +9,6 @@ protected:
     float energy;
     float specular;
     const int drawVertices = 36;
-private:
-
 public:
     void Draw() override;
     void SetLightColor(Vector3 _color);
@@ -44,6 +42,7 @@ protected:
     float kQuadratic;
 public:
     float GetRange() const { return range; };
+    void SetRange(float _range) { range = _range; };
     Vector3 GetAttenuation() const { return Vector3(kConstant, kLinear, kQuadratic); };
     PointLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 _attenuation);
     PointLight();

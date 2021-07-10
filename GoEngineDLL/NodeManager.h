@@ -1,5 +1,6 @@
 #pragma once
 #include "Utils.h"
+#include "Profiler.h"
 
 class Node;
 

@@ -46,10 +46,8 @@ Material* ResourceManager::LoadMaterial(string const& pathVertexShader, string c
 }
 
 Node3D* ResourceManager::LoadModel(string const& filePath) {
-    Node3D* model = new Node3D();
-    model = ModelImporter::LoadModel(filePath);
     resourceCount++;
-    return model;
+    return ModelImporter::LoadModel(filePath);;
 }
 
 ResourceManager* ResourceManager::GetSingleton() {
@@ -65,14 +63,18 @@ Texture* ResourceManager::LoadTexture(string const& path, string const& name) {
 }
 
 SpatialMaterial* ResourceManager::LoadSpatialMaterial(string const& pathVertexShader, string const& pathFragmentShader, string const& name) {
-    spatialMaterials[name] = LoadSpatialMaterialFromFile(pathVertexShader, pathFragmentShader);
-    spatialMaterials[name]->SetName(name);
+    if (spatialMaterials.find(name) == spatialMaterials.end()) {
+        spatialMaterials[name] = LoadSpatialMaterialFromFile(pathVertexShader, pathFragmentShader);
+        spatialMaterials[name]->SetName(name);
+    }
     return spatialMaterials[name];
 }
 
 ADSSpatialMaterial* ResourceManager::LoadADSSpatialMaterial(string const& pathVertexShader, string const& pathFragmentShader, string const& name) {
-    adsSpatialMaterials[name] = LoadADSSpatialMaterialFromFile(pathVertexShader, pathFragmentShader);
-    adsSpatialMaterials[name]->SetName(name);
+    if (adsSpatialMaterials.find(name) == adsSpatialMaterials.end()) {
+        adsSpatialMaterials[name] = LoadADSSpatialMaterialFromFile(pathVertexShader, pathFragmentShader);
+        adsSpatialMaterials[name]->SetName(name);
+    }
     return adsSpatialMaterials[name];
 }
 
@@ -89,8 +91,10 @@ ADSSpatialMaterial* ResourceManager::GetADSSpatialMaterial(string const& name) {
 }
 
 Material* ResourceManager::LoadMaterial(string const& pathVertexShader, string const& pathFragmentShader, string const& name) {
-    materials[name] = LoadMaterial(pathVertexShader, pathFragmentShader);
-    materials[name]->SetName(name);
+    if (materials.find(name) == materials.end()) {
+        materials[name] = LoadMaterial(pathVertexShader, pathFragmentShader);
+        materials[name]->SetName(name);
+    }
     return materials[name];
 }
 

@@ -168,6 +168,12 @@
     <ClInclude Include="UILayer.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="CameraFrustum.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseGame.cpp">
@@ -309,6 +315,12 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="UILayer.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraFrustum.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

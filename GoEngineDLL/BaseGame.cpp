@@ -75,12 +75,14 @@ void BaseGame::LoopEngine() {
 		renderer->DisableClientState();
 		renderer->SwapBuffers();
 		window->PoolEvents();
+		Profiler::Clear();
 	}
 	return OnStop();
 }
 
 void BaseGame::Render() {
 	sceneRoot->Draw();
+	UILayer::ShowDebug();
 }
 
 void BaseGame::ShowDebugUI() {

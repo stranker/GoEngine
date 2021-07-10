@@ -1,17 +1,19 @@
 #include "Cube.h"
 
 void Cube::Draw() {
-    BindVertexArray();
+    if (!IsInsideFrustum()) {
+        return Node3D::Draw();
+    }
     if (spatialMaterial) {
         spatialMaterial->Use(); // Uso el material
         spatialMaterial->SetMat4("model", globalTransform->GetTransform());
         spatialMaterial->SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
         spatialMaterial->SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-        spatialMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCamera()->GetGlobalTransform().GetPosition());
+        spatialMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCameraTransform()->GetPosition());
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
     spatialMaterial->ResetTextureActive();
-    Primitive::Draw();
+    Node3D::Draw();
 }
 
 Cube::Cube() {

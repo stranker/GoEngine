@@ -1,7 +1,7 @@
 #pragma once
 #include "Node.h"
-#include "Renderer.h"
 #include "Material.h"
+#include "Renderer.h"
 
 class ENGINEDLL_API CanvasNode : public Node {
 private:
@@ -22,6 +22,7 @@ public:
 	vector<Renderer::VertexData> GetVectorVertexData() const;
 	bool IsVisible() const;
 	void SetVisible(bool isVisible);
+	virtual bool IsInsideFrustum() { return false; };
 	void Show();
 	void Hide();
 	void Draw() override;

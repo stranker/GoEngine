@@ -1,6 +1,7 @@
 #include "ModelImporter.h"
 #include "MeshInstance.h"
 #include "SpatialMaterial.h"
+#include "Line3D.h"
 
 string ModelImporter::tempOutDirectory;
 vector<Texture*> ModelImporter::tempTextures;
@@ -25,22 +26,27 @@ Node3D* ModelImporter::ProcessScene(string const& path) {
 
 void ModelImporter::ProcessNode(Node3D* parentNode, aiNode* node, const aiScene* scene) {
     // process each mesh located at the current node
-    for (unsigned int i = 0; i < node->mNumMeshes; i++)
-    {
-        // the node object only contains indices to index the actual objects in the scene. 
-        // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
+    for (unsigned int i = 0; i < node->mNumMeshes; i++){
+        aiVector3D trans, rot, scl;
+        node->mTransformation.Decompose(scl, rot, trans);
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         MeshInstance* meshInstance = new MeshInstance();
         MeshData* meshData = new MeshData();
+        meshInstance->Translate(Vector3(trans.x, trans.y, trans.z));
+        meshInstance->SetScale(Vector3(scl.x, scl.y, scl.z));
+        meshInstance->SetEulerAngles(Vector3(rot.x, rot.y, rot.z));
         *meshData = ProcessMesh(mesh, scene);
         meshInstance->SetMesh(meshData);
         parentNode->AddChildren((Node*)meshInstance);
     }
-    // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
-    for (unsigned int i = 0; i < node->mNumChildren; i++)
-    {
+    for (unsigned int i = 0; i < node->mNumChildren; i++){
+        aiVector3D trans, rot, scl;
+        node->mTransformation.Decompose(scl, rot, trans);
         Node3D* childNode = new Node3D();
         childNode->SetName(node->mChildren[i]->mName.C_Str());
+        childNode->Translate(Vector3(trans.x, trans.y, trans.z));
+        childNode->SetScale(Vector3(scl.x, scl.y, scl.z));
+        childNode->SetEulerAngles(Vector3(rot.x, rot.y, rot.z));
         parentNode->AddChildren((Node*)childNode);
         ProcessNode(childNode, node->mChildren[i], scene);
     }
@@ -53,7 +59,9 @@ MeshData ModelImporter::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     // walk through each of the mesh's vertices
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
-        meshData.position_data.push_back(Vector3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z));
+        if (mesh->HasPositions()) {
+            meshData.position_data.push_back(Vector3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z));
+        }
         if (mesh->HasNormals()) {
             meshData.normal_data.push_back(Vector3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
         }
@@ -92,6 +100,7 @@ MeshData ModelImporter::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     Texture* diffuseTexture = LoadMaterialTexture(material, aiTextureType_DIFFUSE, "texture_diffuse");
     adsMaterial->SetDiffuseTexture(diffuseTexture);
     meshData.adsMaterial = adsMaterial;
+    meshData.CreateBBox();
     //textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     //// 2. specular maps
     //vector<Texture> specularMaps = LoadMaterialTextures(rootNode, material, aiTextureType_SPECULAR, "texture_specular");
@@ -119,4 +128,27 @@ Texture* ModelImporter::LoadMaterialTexture(aiMaterial* mat, aiTextureType type,
 
 Node3D* ModelImporter::LoadModel(string const& path) {
     return ProcessScene(path);
+}
+
+void MeshData::CreateBBox() {
+    Vector3 minVtx = Vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+    Vector3 maxVtx = Vector3(FLT_MIN, FLT_MIN, FLT_MIN);
+    for (size_t i = 0; i < position_data.size(); i++) {
+        minVtx.x = min(minVtx.x, position_data[i].x);    // Find smallest x value in model
+        minVtx.y = min(minVtx.y, position_data[i].y);    // Find smallest y value in model
+        minVtx.z = min(minVtx.z, position_data[i].z);    // Find smallest z value in model
+
+        //Get the largest vertex 
+        maxVtx.x = max(maxVtx.x, position_data[i].x);    // Find largest x value in model
+        maxVtx.y = max(maxVtx.y, position_data[i].y);    // Find largest y value in model
+        maxVtx.z = max(maxVtx.z, position_data[i].z);    // Find largest z value in model
+    }
+    boundingBox = BoundingBox(minVtx, maxVtx);
+}
+
+void MeshData::DrawBBox(const Transform& transform) {
+    if (boxLines.empty()) { return; };
+    for (Line3D* line : boxLines) {
+        line->Draw(transform);
+    }
 }

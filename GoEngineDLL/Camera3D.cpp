@@ -14,17 +14,17 @@ glm::mat4 Camera3D::GetMVPOf(const Transform& _transform) const{
 
 void Camera3D::SetFov(float _fov){
     fov = _fov;
-    _UpdateProjection();
+    UpdateProjection();
 }
 
 void Camera3D::SetNear(float _near){
     near = _near;
-    _UpdateProjection();
+    UpdateProjection();
 }
 
 void Camera3D::SetFar(float _far){
     far = _far;
-    _UpdateProjection();
+    UpdateProjection();
 }
 
 Vector3 Camera3D::GetFoward() const {
@@ -53,24 +53,37 @@ float Camera3D::GetFar() const {
 
 void Camera3D::SetAspect(float _width, float _height){
     aspect = _width / _height;
-    _UpdateProjection();
+    UpdateProjection();
 }
 
-void Camera3D::_UpdateProjection(){
-    UpdateProjection(fov, aspect, near, far);
+void Camera3D::UpdateProjection(){
+    _UpdateProjection(fov, aspect, near, far);
+    frustum.CalculateFrustum(this);
+}
+
+void Camera3D::OnTransformUpdate() {
+    frustum.CalculateFrustum(this);
+}
+
+bool Camera3D::IsPointInFrustum(const Vector3& pos) {
+    return frustum.IsPointInside(pos);
+}
+
+bool Camera3D::IsBoxVisible(const Transform& transform, const BoundingBox& bbox) {
+    return frustum.IsBBoxInside(transform, bbox);
 }
 
 Camera3D::Camera3D(float _width, float _height, float _fov, float _near, float _far) : Camera3D(_width, _height){
     fov = _fov;
     near = _near;
     far = _far;
-    _UpdateProjection();
 }
 
 Camera3D::Camera3D(float _width, float _height) : Camera(_width, _height) {
     SetDefaultName("Camera3D");
     aspect = _width / _height;
     Renderer::GetSingleton()->SetCurrentCamera(this);
-    _UpdateProjection();
+    UpdateProjection();
     SetGizmoVisible(false);
+    frustum.CalculateFrustum(this);
 }

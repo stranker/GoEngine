@@ -25,6 +25,7 @@ private:
 	TankBullet* tankBullet;
 	vector<TankBullet*> bullets;
 	vector<Mine*> mines;
+	Mine* mine;
 	void CreateBullets(int count);
 	void CreateMines(int count);
 public:
