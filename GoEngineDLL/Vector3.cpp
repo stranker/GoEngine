@@ -19,12 +19,22 @@ bool Vector3::operator==(const Vector3 & vec) const {
 	return x == vec.x && y == vec.y && z == vec.z;
 }
 
+bool Vector3::operator!=(const Vector3& vec) const {
+	return x != vec.x || y != vec.y || z != vec.z;
+}
+
 Vector3 Vector3::operator*(const float k) const {
 	return Vector3(x * k, y * k, z * k);
 }
 
 Vector3 Vector3::operator/(const float k) const {
 	return Vector3(x / k, y / k, z / k);
+}
+
+Vector3::Vector3(const Rect2& rect) {
+	x = rect.x;
+	y = rect.y;
+	z = rect.width;
 }
 
 Vector3 Vector3::Normalize() {
@@ -79,6 +89,11 @@ Vector3 Vector3::Right(){
 
 Vector3 Vector3::Left(){
 	return Vector3(-1, 0, 0);
+}
+
+float Vector3::Length() const {
+	float n = x * x + y * y + z * z;
+	return sqrt(n);
 }
 
 string Vector3::ToString() {

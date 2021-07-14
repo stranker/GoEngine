@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Light.h"
 #include "Material.h"
+#include "Camera3D.h"
 
 bool Renderer::Init(){
 	if (!window) {
@@ -63,7 +64,6 @@ unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int 
 }
 
 void Renderer::UpdateVertexBuffer(unsigned int vbo, void * data, size_t dataSize, BufferType bufferType) {
-	glGenBuffers(1, &vbo);
 	glBindBuffer((GLenum)bufferType, vbo);
 	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
 }
@@ -171,6 +171,7 @@ Renderer* Renderer::GetSingleton() {
 void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw) {
 	BindVertexArray(vao);
 	Draw(_primitive, vertexCount, elementDraw);
+	Profiler::objectsDrawing++;
 }
 
 void Renderer::Draw(Primitive _primitive, int vertexCount, bool elementDraw) {
@@ -249,6 +250,33 @@ void Renderer::ProcessLighting(Material* material) {
 		material->SetFloat(dirArrayIdx + ".outerCutOff", glm::cos(glm::radians(spotLights[i]->GetOuterCutOff())));
 		material->SetFloat(dirArrayIdx + ".range", spotLights[i]->GetRange());
 	}
+}
+
+bool Renderer::IsInsideFrustum(const Vector3& pos) {
+	Camera3D* camera = (Camera3D*)currentCamera;
+	return camera->IsPointInFrustum(pos);
+}
+
+bool Renderer::IsInsideFrustum(const Transform& transform, const BoundingBox& bbox) {
+	Camera3D* camera = (Camera3D*)currentCamera;
+	return camera->IsBoxVisible(transform, bbox);
+}
+
+bool Renderer::IsInsideFrustum(const BoundingBox& bbox) {
+	Camera3D* camera = (Camera3D*)currentCamera;
+	return camera->IsBoxVisible(bbox);
+}
+
+bool Renderer::GetBBoxDrawDebug() const {
+	return bboxDrawDebug;
+}
+
+void Renderer::EnableBBoxDrawDebug(bool enabled) {
+	bboxDrawDebug = enabled;
+}
+
+Transform* Renderer::GetCameraTransform() const {
+	return ((Camera3D*)currentCamera)->GetGlobalTransform();
 }
 
 Renderer::Renderer(Window* _window){

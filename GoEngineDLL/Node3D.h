@@ -22,11 +22,17 @@ protected:
 	Gizmo3D* gizmo;
 	Transform* transform;
 	Transform* globalTransform;
-private:
-	void UpdateChildrensTransform();
+	BoundingBox boundingBox;
+	BoundingBox globalBoundingBox;
+	vector<Line3D*> boxLines;
+	virtual void OnTransformUpdate() {};
+	bool dirtyBBox = false;
 public:
+	virtual void AddChildren(Node* node) override;
 	virtual void ShowUI() override;
 	virtual void HideUI() override;
+	void UpdateChildrensTransform();
+	void UpdateGlobalBBoxChildren();
 	void SetPosition(Vector3 position);
 	void Translate(Vector3 position);
 	void Rotate(float angle, Vector3 axis);
@@ -39,6 +45,15 @@ public:
 	void LookAt(Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _target);
 	void SetGizmoVisible(bool gizmoVisible);
+	BoundingBox GetBBox() const;
+	BoundingBox GetGlobalBBox() const;
+	void AddBBox(const BoundingBox& bbox);
+	void AddGlobalBBox(const BoundingBox& bbox);
+	void SetBBox(const BoundingBox& bbox);
+	void SetGlobalBBox(const BoundingBox& bbox);
+	void UpdateParentBBox();
+	void UpdateGlobalBBox();
+	virtual bool IsInsideFrustum() override;
 	Vector3 GetScale() const;
 	Vector3 GetPosition() const;
 	Vector3 GetRotation() const;

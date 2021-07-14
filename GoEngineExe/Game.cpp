@@ -51,7 +51,7 @@ void Game::Start() {
 	// Camera
 	camera = new GameCamera(screenWidth, screenHeight);
 	GetRoot()->AddChildren(camera);
-	// Cubes
+	//// Cubes
 	cube = CreateCube();
 	cube2 = CreateCube();
 	cube->SetName("Cubo padre");
@@ -63,18 +63,22 @@ void Game::Start() {
 	cube2->SetMaterial(cubeMaterial);
 	cube->SetPosition(Vector3(0, 3, 0));
 	cube2->SetPosition(Vector3(2, 0, 0));
-	// Lights
-	spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3(1, 0.09, 0.032), 12, 15);
+	//// Lights
+	//spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3(1, 0.09, 0.032), 12, 15);
 	dirLight = CreateDirectional(Vector3(1, 1, 1), 1, 0.5f);
 	dirLight->SetPosition(Vector3(0, 10, 5));
 	dirLight->SetScale(Vector3().One() * 0.2);
-	// Models
+	//// Models
 	tank = new Tank();
 	GetRoot()->AddChildren(tank);
-	CreateBullets(5);
-	minesParent = new Node3D("MinesParent");
-	GetRoot()->AddChildren(minesParent);
-	CreateMines(10);
+	//CreateBullets(5);
+	//minesParent = new Node3D("MinesParent");
+	//GetRoot()->AddChildren(minesParent);
+	//CreateMines(10);
+	//mine = new Mine();
+	//GetRoot()->AddChildren(mine);
+	//Node3D* ship = ResourceManager::LoadModel("escorpion/tank.gltf", "Ship");
+	//GetRoot()->AddChildren(ship);
 	return OnStart();
 }
 

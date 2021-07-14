@@ -120,7 +120,21 @@ void Transform::operator*=(const Transform& otherTransform) {
 Transform Transform::operator*(const Transform& otherTransform) const {
 	Transform t = *this;
 	t *= otherTransform;
+	t.position += otherTransform.position;
 	return t;
+}
+
+Vector3 Transform::operator*(const Vector3& vec) const {
+	glm::vec4 vec4 = glm::vec4(vec.x, vec.y, vec.z, 1.0f);
+	glm::vec4 newVec4 = transform * vec4;
+	return Vector3(newVec4.x, newVec4.y, newVec4.z);
+}
+
+BoundingBox Transform::operator*(const BoundingBox& bbox) const {
+	Transform t = *this;
+	Vector3 min = t * bbox.min;
+	Vector3 max = t * bbox.max;
+	return BoundingBox(min, max);
 }
 
 glm::mat4 Transform::GetTransform() const{

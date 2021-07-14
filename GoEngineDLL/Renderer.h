@@ -1,7 +1,8 @@
 #pragma once
 #include "Utils.h"
-#include "Camera.h"
 #include "UILayer.h"
+#include "Profiler.h"
+#include "Camera.h"
 
 class Window;
 class Light;
@@ -9,7 +10,7 @@ class DirectionalLight;
 class PointLight;
 class SpotLight;
 class Material;
-class Camera;
+class Camera3D;
 
 class ENGINEDLL_API Renderer
 {
@@ -20,6 +21,7 @@ private:
 	vector<SpotLight*> spotLights;
 	Camera* firstCamera;
 	Camera* currentCamera;
+	bool bboxDrawDebug = false;
 protected:
 	Window* window;
 public:
@@ -84,6 +86,12 @@ public:
 	int GetPointLights() const;
 	int GetSpotLights() const;
 	void ProcessLighting(Material* material);
+	bool IsInsideFrustum(const Vector3& pos);
+	bool IsInsideFrustum(const Transform& transform, const BoundingBox& bbox);
+	bool IsInsideFrustum(const BoundingBox& bbox);
+	bool GetBBoxDrawDebug() const;
+	void EnableBBoxDrawDebug(bool enabled);
+	Transform* GetCameraTransform() const;
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

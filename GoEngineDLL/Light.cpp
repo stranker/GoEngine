@@ -1,13 +1,15 @@
 #include "Light.h"
 
 void Light::Draw() {
+    if (IsInsideFrustum()) { 
+        if (spatialMaterial) {
+            spatialMaterial->Use();
+            spatialMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
+            spatialMaterial->SetVec3("lightColor", lightColor);
+        }
+        Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
+    };
     Primitive::Draw();
-    if (spatialMaterial){
-        spatialMaterial->Use();
-        spatialMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
-        spatialMaterial->SetVec3("lightColor", lightColor);
-    }
-    Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
 }
 
 void Light::SetLightColor(Vector3 _color) {

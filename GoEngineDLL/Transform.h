@@ -47,6 +47,8 @@ public:
 	glm::mat4 GetTransform() const;
 	void operator*=(const Transform& otherTransform);
 	Transform operator*(const Transform& otherTransform) const;
+	Vector3 operator*(const Vector3& vec) const;
+	BoundingBox operator*(const BoundingBox& bbox) const;
 	Transform();
 };
 

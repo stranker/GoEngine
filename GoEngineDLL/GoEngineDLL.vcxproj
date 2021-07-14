@@ -156,6 +156,7 @@
     <ClInclude Include="BaseGame.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Camera3D.h" />
+    <ClInclude Include="CameraFrustum.h" />
     <ClInclude Include="CanvasNode.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Color.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Primitive.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="Rect2.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Material.h" />
@@ -208,6 +210,7 @@
     <ClCompile Include="BaseGame.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Camera3D.cpp" />
+    <ClCompile Include="CameraFrustum.cpp" />
     <ClCompile Include="CanvasNode.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Color.cpp" />
@@ -223,6 +226,7 @@
     <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="Rect2.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Material.cpp" />

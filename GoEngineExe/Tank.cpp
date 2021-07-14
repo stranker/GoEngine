@@ -30,9 +30,11 @@ void Tank::Update(float deltaTime) {
 }
 
 Tank::Tank() {
-	model = ResourceManager::LoadModel("concept_tank/scene.gltf", "Tank");
+	name = "TankNode";
+	//model = ResourceManager::LoadModel("concept_tank/scene.gltf", "Tank");
+	model = ResourceManager::LoadModel("escorpion/tank.gltf", "Tank");
 	AddChildren(model);
-	model->SetScale(Vector3().One() * 0.01);
-	turret = (Node3D*)model->GetNode("MeshInstance216");
-	model->RotateY(-90);
+	//model->SetScale(Vector3().One() * 0.01);
+	//model->RotateY(-90);
+	turret = (Node3D*)model->GetNode("Torreta");
 }
