@@ -30,8 +30,8 @@ Gizmo3D::Gizmo3D() {
 }
 
 void Node3D::UpdateChildrensTransform() {
-	if (parent){
-		if (parent->GetClass() == "Node3D" || parent->GetClass() == "MeshInstance") {
+	if (parent) {
+		if (parent->GetClass() != "Node") {
 			Node3D* parent3D = (Node3D*)parent;
 			*globalTransform = *parent3D->GetGlobalTransform() * *transform;
 		}
@@ -39,38 +39,36 @@ void Node3D::UpdateChildrensTransform() {
 			*globalTransform = *transform;
 		}
 	}
-	else{
+	else {
 		*globalTransform = *transform;
 	}
-	for (Node* node : childrens){
+	globalBoundingBox = *globalTransform * boundingBox;
+	for (Node* node : childrens) {
 		Node3D* node3d = (Node3D*)node;
 		node3d->UpdateChildrensTransform();
 	}
+	UpdateGlobalBBoxChildren();
 	return OnTransformUpdate();
 }
 
 void Node3D::SetPosition(Vector3 position) {
 	transform->SetPosition(position);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 
 void Node3D::Translate(Vector3 position) {
 	transform->Translate(position);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 
 void Node3D::SetEulerAngles(Vector3 eulerAngles) {
 	transform->SetEulerAngles(eulerAngles);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 
 void Node3D::Rotate(float angle, Vector3 axis) {
 	transform->SetRotation(angle, axis);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 
 void Node3D::UpdateParentBBox() {
@@ -83,30 +81,25 @@ void Node3D::UpdateParentBBox() {
 }
 
 void Node3D::UpdateGlobalBBox() {
-	globalBoundingBox = *transform * boundingBox;
+	globalBoundingBox = *globalTransform * boundingBox;
 }
 
 void Node3D::UpdateGlobalBBoxChildren() {
-	boundingBox = GetClass() == "Node3D" ? BoundingBox() : boundingBox;
-	globalBoundingBox = BoundingBox();
+	if (childrens.empty() || GetClass() != "Node3D") { return UpdateParentBBox(); }
+	boundingBox = BoundingBox();
 	for (Node* child : childrens) {
 		if (child->GetClass() == "Node3D" || child->GetClass() == "MeshInstance") {
 			Node3D* child3D = (Node3D*)child;
-			if (GetClass() == "Node3D") {
-				AddBBox(child3D->GetGlobalBBox());
-			}
-			AddGlobalBBox(*child3D->GetTransform() * child3D->GetBBox());
+			AddBBox(*child3D->GetTransform() * child3D->GetBBox());
 		}
 	}
+	UpdateGlobalBBox();
 	UpdateParentBBox();
 }
 
 void Node3D::AddChildren(Node* child) {
 	Node::AddChildren(child);
-	Node3D* c = (Node3D*)child;
-	AddBBox(c->GetBBox());
-	AddGlobalBBox(c->GetGlobalBBox());
-	UpdateParentBBox();
+	UpdateChildrensTransform();
 }
 
 void Node3D::AddBBox(const BoundingBox& bbox) {
@@ -125,27 +118,27 @@ void Node3D::SetBBox(const BoundingBox& bbox) {
 	boundingBox = bbox;
 }
 
+void Node3D::SetGlobalBBox(const BoundingBox& bbox) {
+	globalBoundingBox = bbox;
+}
+
 void Node3D::RotateX(float angle) {
 	transform->RotateX(angle);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 void Node3D::RotateY(float angle) {
 	transform->RotateY(angle);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 
 void Node3D::RotateZ(float angle) {
 	transform->RotateZ(angle);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 
 void Node3D::SetScale(Vector3 scale) {
 	transform->SetScale(scale);
 	UpdateChildrensTransform();
-	UpdateBBox();
 }
 
 void Node3D::LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector) {
@@ -194,20 +187,14 @@ Transform* Node3D::GetGlobalTransform() {
 }
 
 void Node3D::Draw() {
+	if (!IsInsideFrustum()) {return;}
+	Profiler::nodesDrawing.push_back(GetName());
 	gizmo->Draw(*globalTransform);
-	if (!IsInsideFrustum()) {
-		return;
-	}
 	CanvasNode::Draw();
 }
 
 bool Node3D::IsInsideFrustum() {
-	return Renderer::GetSingleton()->IsInsideFrustum(*globalTransform, boundingBox);
-}
-
-void Node3D::UpdateBBox() {
-	UpdateGlobalBBox();
-	UpdateParentBBox();
+	return Renderer::GetSingleton()->IsInsideFrustum(globalBoundingBox);
 }
 
 void Node3D::ShowUI() {

@@ -69,16 +69,16 @@ void Game::Start() {
 	dirLight->SetPosition(Vector3(0, 10, 5));
 	dirLight->SetScale(Vector3().One() * 0.2);
 	//// Models
-	//tank = new Tank();
-	//GetRoot()->AddChildren(tank);
+	tank = new Tank();
+	GetRoot()->AddChildren(tank);
 	//CreateBullets(5);
 	//minesParent = new Node3D("MinesParent");
 	//GetRoot()->AddChildren(minesParent);
 	//CreateMines(10);
 	//mine = new Mine();
 	//GetRoot()->AddChildren(mine);
-	Node3D* ship = ResourceManager::LoadModel("escorpion/ship.gltf", "Ship");
-	GetRoot()->AddChildren(ship);
+	//Node3D* ship = ResourceManager::LoadModel("escorpion/tank.gltf", "Ship");
+	//GetRoot()->AddChildren(ship);
 	return OnStart();
 }
 

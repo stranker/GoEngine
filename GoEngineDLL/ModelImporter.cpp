@@ -34,9 +34,10 @@ void ModelImporter::ProcessNode(Node3D* parentNode, aiNode* node, const aiScene*
         MeshData* meshData = new MeshData();
         meshInstance->Translate(Vector3(trans.x, trans.y, trans.z));
         meshInstance->SetScale(Vector3(scl.x, scl.y, scl.z));
-        meshInstance->SetEulerAngles(Vector3(rot.x, rot.y, rot.z));
+        meshInstance->SetEulerAngles(Vector3(Utils::RadToDeg(rot.x), Utils::RadToDeg(rot.y), Utils::RadToDeg(rot.z)));
         *meshData = ProcessMesh(mesh, scene);
         meshInstance->SetMesh(meshData);
+        meshInstance->SetName("Mesh" + parentNode->GetName());
         parentNode->AddChildren((Node*)meshInstance);
     }
     for (unsigned int i = 0; i < node->mNumChildren; i++){
@@ -46,7 +47,7 @@ void ModelImporter::ProcessNode(Node3D* parentNode, aiNode* node, const aiScene*
         childNode->SetName(node->mChildren[i]->mName.C_Str());
         childNode->Translate(Vector3(trans.x, trans.y, trans.z));
         childNode->SetScale(Vector3(scl.x, scl.y, scl.z));
-        childNode->SetEulerAngles(Vector3(rot.x, rot.y, rot.z));
+        childNode->SetEulerAngles(Vector3(Utils::RadToDeg(rot.x), Utils::RadToDeg(rot.y), Utils::RadToDeg(rot.z)));
         parentNode->AddChildren((Node*)childNode);
         ProcessNode(childNode, node->mChildren[i], scene);
     }

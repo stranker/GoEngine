@@ -73,6 +73,10 @@ bool Camera3D::IsBoxVisible(const Transform& transform, const BoundingBox& bbox)
     return frustum.IsBBoxInside(transform, bbox);
 }
 
+bool Camera3D::IsBoxVisible(const BoundingBox& bbox) {
+    return frustum.IsBBoxInside(bbox);
+}
+
 Camera3D::Camera3D(float _width, float _height, float _fov, float _near, float _far) : Camera3D(_width, _height){
     fov = _fov;
     near = _near;

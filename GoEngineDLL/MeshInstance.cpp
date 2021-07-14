@@ -2,9 +2,8 @@
 #include "SpatialMaterial.h"
 
 void MeshInstance::Draw() {
-	if (!IsInsideFrustum()) {
-		return Node3D::Draw();
-	}
+	if (!IsVisible()) { return Node3D::Draw(); }
+	if (!IsInsideFrustum()) {return Node3D::Draw(); }
 	if (mesh->adsMaterial) {
 		mesh->adsMaterial->Use();
 		mesh->adsMaterial->SetMat4("model", globalTransform->GetTransform());
@@ -32,8 +31,8 @@ void MeshInstance::SetMesh(MeshData* _mesh) {
 	}
 	BindVertexObjects();
 	primitive = Renderer::TRIANGLES;
-	AddBBox(mesh->boundingBox);
-	AddGlobalBBox(mesh->boundingBox);
+	SetBBox(mesh->boundingBox);
+	SetGlobalBBox(mesh->boundingBox);
 }
 
 MeshInstance::MeshInstance() {

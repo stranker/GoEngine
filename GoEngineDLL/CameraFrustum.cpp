@@ -68,33 +68,28 @@ vector<Plane> CameraFrustum::GetPlanes() {
 }
 
 bool CameraFrustum::IsBBoxInside(const Transform& transform, const BoundingBox& bbox) {
+	BoundingBox transformedBbox = transform * bbox;
+	return IsBBoxInside(transformedBbox);
+}
+
+bool CameraFrustum::IsBBoxInside(const BoundingBox& bbox) {
 	int totalIn = 0;
 	vector<Vector3> corners = bbox.corners;
 	for (int p = 0; p < 6; ++p) {
 		int countIn = 8;
 		int partialIn = 1;
 		for (int i = 0; i < 8; ++i) {
-
-			// test this point against the planes
-			if (planes[p].DistanceToPoint(transform * corners[i]) < 0) {
+			if (planes[p].DistanceToPoint(corners[i]) < 0) {
 				partialIn = 0;
 				--countIn;
 			}
 		}
-
-		// were all the points outside of plane p?
-		if(countIn == 0)
+		if (countIn == 0)
 			return false;
-
-		// check if they were all on the right side of the plane
 		countIn += partialIn;
 	}
-
-	// so if iTotalIn is 6, then all are inside the view
 	if (totalIn == 6)
 		return true;
-
-	// we must be partly in then otherwise
 	return true;
 }
 

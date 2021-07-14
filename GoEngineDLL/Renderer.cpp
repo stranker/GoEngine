@@ -64,7 +64,6 @@ unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int 
 }
 
 void Renderer::UpdateVertexBuffer(unsigned int vbo, void * data, size_t dataSize, BufferType bufferType) {
-	glGenBuffers(1, &vbo);
 	glBindBuffer((GLenum)bufferType, vbo);
 	glBufferData((GLenum)bufferType, dataSize, data, GL_STATIC_DRAW);
 }
@@ -261,6 +260,11 @@ bool Renderer::IsInsideFrustum(const Vector3& pos) {
 bool Renderer::IsInsideFrustum(const Transform& transform, const BoundingBox& bbox) {
 	Camera3D* camera = (Camera3D*)currentCamera;
 	return camera->IsBoxVisible(transform, bbox);
+}
+
+bool Renderer::IsInsideFrustum(const BoundingBox& bbox) {
+	Camera3D* camera = (Camera3D*)currentCamera;
+	return camera->IsBoxVisible(bbox);
 }
 
 bool Renderer::GetBBoxDrawDebug() const {

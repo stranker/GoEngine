@@ -59,6 +59,7 @@ void UILayer::_TreeNode(Node* node) {
 
 void UILayer::DrawBBox(Node3D* node) {
 	if (Renderer::GetSingleton()->GetBBoxDrawDebug()) {
+		UpdateBBoxLines();
 		for (size_t i = 0; i < 12; i++) {
 			boxLines[i]->Draw(*node->GetGlobalTransform());
 		}
@@ -66,7 +67,7 @@ void UILayer::DrawBBox(Node3D* node) {
 }
 
 void UILayer::UpdateBBoxLines() {
-	PRINT_DEBUG("UpdateBBoxLines");
+	if (currentSelected->GetClass() == "Node") return;
 	Vector3 minVtx = ((Node3D*)currentSelected)->GetBBox().min;
 	Vector3 maxVtx = ((Node3D*)currentSelected)->GetBBox().max;
 	boxLines[0]->SetLine(Vector3(minVtx.x, minVtx.y, minVtx.z), Vector3(maxVtx.x, minVtx.y, minVtx.z));
@@ -127,6 +128,10 @@ void UILayer::ShowNode3D(Node3D* node3D) {
 }
 
 void UILayer::ShowTransform(Node3D* node) {
+	bool visible = node->IsVisible();
+	if (ImGui::Checkbox("Visible", &visible)) {
+		node->SetVisible(visible);
+	}
 	Vector3 pos = node->GetPosition();
 	Vector3 rot = node->GetRotation();
 	Vector3 scl = node->GetScale();
@@ -143,6 +148,17 @@ void UILayer::ShowTransform(Node3D* node) {
 	if (ImGui::InputFloat3("Scale", newScl, "%.3f", ImGuiInputTextFlags_CharsDecimal || ImGuiInputTextFlags_EnterReturnsTrue)) {
 		node->SetScale(Vector3(newScl[0], newScl[1], newScl[2]));
 	}
+	ImGui::Separator();
+	ImGui::Text("Global Transform");
+	Vector3 gPos = node->GetGlobalTransform()->GetPosition();
+	Vector3 gRot = node->GetGlobalTransform()->GetRotation();
+	Vector3 gScl = node->GetGlobalTransform()->GetScale();
+	float newGPos[3] = { gPos.x, gPos.y, gPos.z };
+	float newGRot[3] = { gRot.x, gRot.y, gRot.z };
+	float newGScl[3] = { gScl.x, gScl.y, gScl.z };
+	ImGui::InputFloat3("GPosition", newGPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
+	ImGui::InputFloat3("GRotation", newGRot, "%.3f", ImGuiInputTextFlags_ReadOnly);
+	ImGui::InputFloat3("GScale", newGScl, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::Separator();
 	ImGui::Text("Local AABB");
 	Vector3 minAABB = node->GetBBox().min;
@@ -204,6 +220,7 @@ void UILayer::ShowProfiler() {
 	ImGui::Begin("Profiler");
 	ImGui::Text(string("Objects Drawing:" + to_string(Profiler::objectsDrawing)).c_str());
 	ImGui::Text(string("Total objects:" + to_string(Profiler::totalObjects)).c_str());
+
 	ImGui::End();
 }
 
@@ -215,7 +232,15 @@ void UILayer::ShowDebug() {
 	}
 	ImGui::Separator();
 	ImGui::Text(string("Objects Drawing:" + to_string(Profiler::objectsDrawing)).c_str());
+	ImGui::Separator();
 	ImGui::Text(string("Total objects:" + to_string(Profiler::totalObjects)).c_str());
+	ImGui::Separator();
+	ImGui::Text("Drawing node names:");
+	if (!Profiler::nodesDrawing.empty()) {
+		for (size_t i = 0; i < Profiler::nodesDrawing.size(); i++) {
+			ImGui::Text(Profiler::nodesDrawing[i].c_str());
+		}
+	}
 	ImGui::End();
 }
 

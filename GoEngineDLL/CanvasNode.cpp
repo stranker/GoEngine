@@ -57,7 +57,7 @@ void CanvasNode::UpdateVertexData(void* _vertex, size_t dataSize, size_t attribu
 	for (Renderer::VertexData vertexData : vectorVertexData) {
 		if (vertexData.attributeID == attributeID) {
 			Renderer::GetSingleton()->BindVertexArray(vertexArrayID);
-			vertexData.vbo = Renderer::GetSingleton()->CreateVertexBuffer(_vertex, dataSize, vertexData.bufferType); // Update el VBO
+			Renderer::GetSingleton()->UpdateVertexBuffer(vertexData.vbo, _vertex, dataSize, vertexData.bufferType);
 			Renderer::GetSingleton()->BindVertexData(vertexData);
 			break;
 		}

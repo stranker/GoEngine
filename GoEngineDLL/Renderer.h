@@ -88,6 +88,7 @@ public:
 	void ProcessLighting(Material* material);
 	bool IsInsideFrustum(const Vector3& pos);
 	bool IsInsideFrustum(const Transform& transform, const BoundingBox& bbox);
+	bool IsInsideFrustum(const BoundingBox& bbox);
 	bool GetBBoxDrawDebug() const;
 	void EnableBBoxDrawDebug(bool enabled);
 	Transform* GetCameraTransform() const;

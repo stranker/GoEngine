@@ -28,6 +28,7 @@ public:
     void SetAspect(float _width, float _height);
     bool IsPointInFrustum(const Vector3& pos);
     bool IsBoxVisible(const Transform& transform, const BoundingBox& bbox);
+    bool IsBoxVisible(const BoundingBox& bbox);
     Camera3D(float _width, float _height, float _fov, float _near, float _far);
     Camera3D(float _width, float _height);
 };
