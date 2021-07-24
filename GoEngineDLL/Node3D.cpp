@@ -85,7 +85,7 @@ void Node3D::UpdateGlobalBBox() {
 }
 
 void Node3D::UpdateGlobalBBoxChildren() {
-	if (childrens.empty() || GetClass() != "Node3D") { return UpdateParentBBox(); }
+	if (childrens.empty()) { return UpdateParentBBox(); }
 	boundingBox = BoundingBox();
 	for (Node* child : childrens) {
 		if (child->GetClass() == "Node3D" || child->GetClass() == "MeshInstance") {
