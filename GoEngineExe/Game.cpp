@@ -52,25 +52,25 @@ void Game::Start() {
 	camera = new GameCamera(screenWidth, screenHeight);
 	GetRoot()->AddChildren(camera);
 	//// Cubes
-	cube = CreateCube();
-	cube2 = CreateCube();
-	cube->SetName("Cubo padre");
-	cube2->SetName("Cubo hijo");
-	cube->AddChildren(cube2);
-	cubeMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/SpatialMaterial.fs", "cubeMaterial");
-	cubeMaterial->CreateMaterial(0.5f, 0.0f, "container2.png", "container2_specular.png");
-	cube->SetMaterial(cubeMaterial);
-	cube2->SetMaterial(cubeMaterial);
-	cube->SetPosition(Vector3(0, 3, 0));
-	cube2->SetPosition(Vector3(2, 0, 0));
+	//cube = CreateCube();
+	//cube2 = CreateCube();
+	//cube->SetName("Cubo padre");
+	//cube2->SetName("Cubo hijo");
+	//cube->AddChildren(cube2);
+	//cubeMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/SpatialMaterial.fs", "cubeMaterial");
+	//cubeMaterial->CreateMaterial(0.5f, 0.0f, "container2.png", "container2_specular.png");
+	//cube->SetMaterial(cubeMaterial);
+	//cube2->SetMaterial(cubeMaterial);
+	//cube->SetPosition(Vector3(0, 3, 0));
+	//cube2->SetPosition(Vector3(2, 0, 0));
 	//// Lights
 	//spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3(1, 0.09, 0.032), 12, 15);
 	dirLight = CreateDirectional(Vector3(1, 1, 1), 1, 0.5f);
 	dirLight->SetPosition(Vector3(0, 10, 5));
 	dirLight->SetScale(Vector3().One() * 0.2);
 	//// Models
-	tank = new Tank();
-	GetRoot()->AddChildren(tank);
+	//tank = new Tank();
+	//GetRoot()->AddChildren(tank);
 	//CreateBullets(5);
 	//minesParent = new Node3D("MinesParent");
 	//GetRoot()->AddChildren(minesParent);
@@ -79,6 +79,8 @@ void Game::Start() {
 	//GetRoot()->AddChildren(mine);
 	//Node3D* ship = ResourceManager::LoadModel("escorpion/tank.gltf", "Ship");
 	//GetRoot()->AddChildren(ship);
+	Quad* quad = new Quad();
+	GetRoot()->AddChildren(quad);
 	return OnStart();
 }
 

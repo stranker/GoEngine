@@ -14,6 +14,7 @@ class Renderer;
 #include "CollisionManager.h"
 #include "Camera3D.h"
 #include "Cube.h"
+#include "Quad.h"
 #include "Line3D.h"
 #include "Light.h"
 #include "SpatialMaterial.h"

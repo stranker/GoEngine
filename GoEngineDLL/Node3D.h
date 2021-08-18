@@ -24,9 +24,7 @@ protected:
 	Transform* globalTransform;
 	BoundingBox boundingBox;
 	BoundingBox globalBoundingBox;
-	vector<Line3D*> boxLines;
 	virtual void OnTransformUpdate() {};
-	bool dirtyBBox = false;
 public:
 	virtual void AddChildren(Node* node) override;
 	virtual void ShowUI() override;
