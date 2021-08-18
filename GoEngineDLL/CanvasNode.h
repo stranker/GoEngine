@@ -26,6 +26,7 @@ public:
 	void Show();
 	void Hide();
 	void Draw() override;
+	void ToogleRenderMode();
 	CanvasNode();
 };
 

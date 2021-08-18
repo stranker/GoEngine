@@ -1,6 +1,5 @@
 #pragma once
 #include "Primitive.h"
-#include "Light.h"
 
 class ENGINEDLL_API Cube : 
 	public Primitive {

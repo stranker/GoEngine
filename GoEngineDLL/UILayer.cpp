@@ -149,7 +149,7 @@ void UILayer::ShowTransform(Node3D* node) {
 		node->SetScale(Vector3(newScl[0], newScl[1], newScl[2]));
 	}
 	ImGui::Separator();
-	ImGui::Text("Global Transform");
+	/*ImGui::Text("Global Transform");
 	Vector3 gPos = node->GetGlobalTransform()->GetPosition();
 	Vector3 gRot = node->GetGlobalTransform()->GetRotation();
 	Vector3 gScl = node->GetGlobalTransform()->GetScale();
@@ -159,7 +159,8 @@ void UILayer::ShowTransform(Node3D* node) {
 	ImGui::InputFloat3("GPosition", newGPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("GRotation", newGRot, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("GScale", newGScl, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::Separator();
+	ImGui::Separator();*/
+	/*
 	ImGui::Text("Local AABB");
 	Vector3 minAABB = node->GetBBox().min;
 	Vector3 maxAABB = node->GetBBox().max;
@@ -173,7 +174,10 @@ void UILayer::ShowTransform(Node3D* node) {
 	float minG[3] = { minGlobalAABB.x,minGlobalAABB.y,minGlobalAABB.z };
 	float maxG[3] = { maxGlobalAABB.x,maxGlobalAABB.y,maxGlobalAABB.z };
 	ImGui::InputFloat3("Min", minG, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputFloat3("Max", maxG, "%.3f", ImGuiInputTextFlags_ReadOnly);
+	ImGui::InputFloat3("Max", maxG, "%.3f", ImGuiInputTextFlags_ReadOnly);*/
+	if (ImGui::Button("Toggle Render mode")) {
+		node->ToogleRenderMode();
+	}
 	ImGui::Separator();
 }
 

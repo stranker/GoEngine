@@ -39,6 +39,10 @@ void CanvasNode::Draw() {
 	Node::Draw();
 }
 
+void CanvasNode::ToogleRenderMode() {
+	primitive = primitive == Renderer::TRIANGLES ? Renderer::LINE_STRIP : Renderer::TRIANGLES;
+}
+
 CanvasNode::CanvasNode() {
 	className = "CanvasNode";
 	SetDefaultName(className);

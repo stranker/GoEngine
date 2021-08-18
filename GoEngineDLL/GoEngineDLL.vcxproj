@@ -173,6 +173,7 @@
     <ClInclude Include="MeshInstance.h" />
     <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="Quad.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="Rect2.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="MeshInstance.cpp" />
     <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="Rect2.cpp" />

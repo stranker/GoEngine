@@ -6,9 +6,10 @@ class ENGINEDLL_API Primitive :
     public VisualInstance3D {
 protected:
     SpatialMaterial* spatialMaterial;
+    SpatialMaterial* defaultMaterial;
 public:
     void SetMaterial(SpatialMaterial* spatialMaterial);
     void Draw() override;
-    Primitive() {};
+    Primitive();
 };
 
