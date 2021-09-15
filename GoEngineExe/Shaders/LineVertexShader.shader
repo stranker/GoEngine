@@ -1,9 +1,9 @@
 #version 330 core
+layout (location = 0) in vec3 aPos;
 
-out vec4 FragColor;  
-uniform vec4 lineColor;
-  
+uniform mat4 mvp;
+
 void main()
 {
-    FragColor = lineColor;
+    gl_Position = mvp * vec4(aPos, 1.0f);
 }

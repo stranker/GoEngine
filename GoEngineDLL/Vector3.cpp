@@ -55,8 +55,8 @@ Vector3 Vector3::Cross(Vector3 vec2){
 	return result;
 }
 
-float Vector3::Dot(Vector3 vec2){
-	return (x * vec2.x) + (y * vec2.y) + (z * vec2.z);
+float Vector3::Dot(Vector3 vec){
+	return x * vec.x + y * vec.y + z * vec.z;
 }
 
 Vector3 Vector3::Zero() {

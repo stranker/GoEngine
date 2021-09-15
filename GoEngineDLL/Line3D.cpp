@@ -27,6 +27,10 @@ void Line3D::CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor
 	primitive = Renderer::LINES;
 }
 
+void Line3D::CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor) {
+	CreateLine(_startPoint, _endPoint, _lineColor, lineMaterial);
+}
+
 void Line3D::SetLine(Vector3 _startPoint, Vector3 _endPoint) {
 	startPoint = _startPoint;
 	endPoint = _endPoint;
@@ -35,6 +39,11 @@ void Line3D::SetLine(Vector3 _startPoint, Vector3 _endPoint) {
 		endPoint.x, endPoint.y, endPoint.z,
 	};
 	UpdateVertexData(position_vertex_data, sizeof(position_vertex_data), 0);
+}
+
+void Line3D::SetLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor) {
+	SetLine(_startPoint, _endPoint);
+	lineColor = _lineColor;
 }
 
 Line3D::Line3D(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor) : Line3D(){

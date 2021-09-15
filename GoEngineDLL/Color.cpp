@@ -32,6 +32,10 @@ Color Color::Red() const {
 	return Color(1, 0, 0);
 }
 
+Color Color::Orange() const {
+	return Color(1, 0.5f, 0);
+}
+
 Color Color::Green() const {
 	return Color(0, 1, 0);
 }

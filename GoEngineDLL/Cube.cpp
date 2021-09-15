@@ -1,7 +1,7 @@
 #include "Cube.h"
 
 void Cube::Draw() {
-    if (!IsInsideFrustum()) {
+    if (!CanBeDrawed()) {
         return Node3D::Draw();
     }
     if (spatialMaterial) {
@@ -17,6 +17,7 @@ void Cube::Draw() {
 }
 
 Cube::Cube() {
+    className = "Cube";
     SetDefaultName("Cube");
     float position_vertex_data[] = {
         -0.5f, -0.5f, -0.5f,
@@ -153,6 +154,7 @@ Cube::Cube() {
     CreateVertexData(normal_vertex_data, sizeof(normal_vertex_data), 3, Renderer::ARRAY_BUFFER, 1); // VBO
     CreateVertexData(uv_vertex_data, sizeof(uv_vertex_data), 2, Renderer::ARRAY_BUFFER, 2); // VBO
     BindVertexObjects(); // Bindeo VAO
+    CreateBBox(position_vertex_data, 36);
     primitive = Renderer::TRIANGLES;
 }
 

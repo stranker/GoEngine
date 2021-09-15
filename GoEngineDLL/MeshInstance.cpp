@@ -2,8 +2,7 @@
 #include "SpatialMaterial.h"
 
 void MeshInstance::Draw() {
-	if (!IsVisible()) { return Node3D::Draw(); }
-	if (!IsInsideFrustum()) {return Node3D::Draw(); }
+	if (!CanBeDrawed()) { return Node3D::Draw(); }
 	if (mesh->adsMaterial) {
 		mesh->adsMaterial->Use();
 		mesh->adsMaterial->SetMat4("model", globalTransform->GetTransform());
@@ -33,6 +32,11 @@ void MeshInstance::SetMesh(MeshData* _mesh) {
 	primitive = Renderer::TRIANGLES;
 	SetBBox(mesh->boundingBox);
 	SetGlobalBBox(mesh->boundingBox);
+}
+
+Plane MeshInstance::GetPlane() {
+	float d = transform->GetFoward().Dot(globalTransform->GetPosition());
+	return Plane(transform->GetFoward(), d);
 }
 
 MeshInstance::MeshInstance() {

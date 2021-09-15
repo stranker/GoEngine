@@ -21,11 +21,8 @@ private:
 	DirectionalLight* dirLight;
 	SpatialMaterial* cubeMaterial;
 	Tank* tank;
-	Node3D* minesParent;
-	TankBullet* tankBullet;
-	vector<TankBullet*> bullets;
-	vector<Mine*> mines;
-	Mine* mine;
+	Node3D* blenderScene;
+	Node3D* link;
 	void CreateBullets(int count);
 	void CreateMines(int count);
 public:

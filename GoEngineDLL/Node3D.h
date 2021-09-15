@@ -2,6 +2,7 @@
 #include "CanvasNode.h"
 #include "Transform.h"
 #include "Material.h"
+#include "BSP.h"
 
 class Line3D;
 
@@ -24,6 +25,7 @@ protected:
 	Transform* globalTransform;
 	BoundingBox boundingBox;
 	BoundingBox globalBoundingBox;
+	bool bspEnabled = true;
 	virtual void OnTransformUpdate() {};
 public:
 	virtual void AddChildren(Node* node) override;
@@ -57,7 +59,10 @@ public:
 	Vector3 GetRotation() const;
 	Transform* GetTransform();
 	Transform* GetGlobalTransform();
+	void SetBSPEnabled(bool value);
+	bool IsBSPEnabled() const;
 	void Draw() override;
+	bool CanBeDrawed();
 	Node3D();
 	Node3D(const string& _name);
 };

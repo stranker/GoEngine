@@ -6,6 +6,9 @@
 #include "Renderer.h"
 #include "SpatialMaterial.h"
 #include "Node3D.h"
+#include "Quad.h"
+
+class MeshInstance;
 
 class ENGINEDLL_API MeshData : public Resource {
 public:
@@ -15,10 +18,8 @@ public:
 	BoundingBox boundingBox;
 	vector<unsigned int> indices;
 	ADSSpatialMaterial* adsMaterial;
-	vector<Line3D*> boxLines;
 	void CreateBBox();
 	MeshData() {};
-	void DrawBBox(const Transform& transform);
 };
 
 class ENGINEDLL_API ModelImporter {
@@ -29,6 +30,8 @@ private:
 	static void ProcessNode(Node3D* node3d, aiNode* node, const aiScene* scene);
 	static MeshData ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	static Texture* LoadMaterialTexture(aiMaterial* mat, aiTextureType type, string typeName);
+	static MeshInstance* CreateMeshInstance(aiVector3D _trans, aiVector3D _rot, aiVector3D _scl, MeshData* _meshData, const string& name);
+	static Node3D* CreateNode(aiVector3D _trans, aiVector3D _rot, aiVector3D _scl, const string& _name);
 public:
 	static Node3D* LoadModel(string const& path);
 };

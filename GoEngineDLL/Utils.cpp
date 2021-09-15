@@ -31,7 +31,15 @@ float Utils::Max(float v1, float v2) {
 	return v1 > v2 ? v1 : v2;
 }
 
+float Utils::Max(double v1, double v2) {
+	return v1 > v2 ? v1 : v2;
+}
+
 float Utils::Min(float v1, float v2) {
+	return v1 < v2 ? v1 : v2;
+}
+
+float Utils::Min(double v1, double v2) {
 	return v1 < v2 ? v1 : v2;
 }
 
@@ -93,9 +101,36 @@ BoundingBox BoundingBox::operator*(Vector3 vec) const{
 	return bb;
 }
 
-BoundingBox::BoundingBox(Vector3 _min, Vector3 _max) {
-	min = _min;
-	max = _max;
+bool BoundingBox::Intersects(Ray ray) {
+	float tx1 = (min.x - ray.origin.x) * ray.invDir.x;
+	float tx2 = (max.x - ray.origin.x) * ray.invDir.x;
+
+	float tmin = Utils::Min(tx1, tx2);
+	float tmax = Utils::Max(tx1, tx2);
+
+	float ty1 = (min.y - ray.origin.y) * ray.invDir.y;
+	float ty2 = (max.y - ray.origin.y) * ray.invDir.y;
+
+	tmin = Utils::Max(tmin, Utils::Min(ty1, ty2));
+	tmax = Utils::Min(tmax, Utils::Max(ty1, ty2));
+
+	float tz1 = (min.z - ray.origin.z) * ray.invDir.z;
+	float tz2 = (max.z - ray.origin.z) * ray.invDir.z;
+
+	tmin = Utils::Max(tmin, Utils::Min(tz1, tz2));
+	tmax = Utils::Min(tmax, Utils::Max(tz1, tz2));
+
+	return tmax >= tmin;
+}
+
+BoundingBox::BoundingBox(Vector3 v1, Vector3 v2) {
+	min.x = Utils::Min(v1.x, v2.x);
+	min.y = Utils::Min(v1.y, v2.y);
+	min.z = Utils::Min(v1.z, v2.z);
+
+	max.x = Utils::Max(v1.x, v2.x);
+	max.y = Utils::Max(v1.y, v2.y);
+	max.z = Utils::Max(v1.z, v2.z);
 	GenerateCorners();
 }
 
@@ -132,12 +167,20 @@ void Plane::Normalize() {
 }
 
 float Plane::DistanceToPoint(const Vector3& point) {
-	return a * point.x + b * point.y + c * point.z + d;
+	return Normal().Dot(point) + d;
 }
 
 Plane::Halfspace Plane::ClassifyPoint(const Vector3& point) {
 	float dist;
 	dist = DistanceToPoint(point);
+	if (dist < 0) return Plane::NEGATIVE;
+	if (dist > 0) return Plane::POSITIVE;
+	return Plane::ON_PLANE;
+}
+
+Plane::Halfspace Plane::ClassifyPoint2(const Vector3& point) {
+	float dist;
+	dist = Normal().Dot(point) - d;
 	if (dist < 0) return Plane::NEGATIVE;
 	if (dist > 0) return Plane::POSITIVE;
 	return Plane::ON_PLANE;
@@ -154,18 +197,22 @@ Plane::Plane() {
 	d = 0;
 }
 
-Plane::Plane(const Vector3& normal, float _d) {
-	a = normal.x;
-	b = normal.y;
-	c = normal.z;
+Plane::Plane(const Vector3& _normal, float _d) {
+	a = _normal.x;
+	b = _normal.y;
+	c = _normal.z;
 	d = _d;
 }
 
-Plane::Plane(float _a, float _b, float _c, float _d) {
+Plane::Plane(float _a, float _b, float _c, float _d){
 	a = _a;
 	b = _b;
 	c = _c;
 	d = _d;
+}
+
+string Plane::ToString() {
+	return string("Plane: normal(" + to_string(a) + "," + to_string(b) + "," + to_string(c) + ") d:" + to_string(d));
 }
 
 Plane::Plane(const Vector3& vA, const Vector3& vB, const Vector3& vC) {

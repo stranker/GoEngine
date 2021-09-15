@@ -10,7 +10,9 @@ private:
 public:
     void Draw(const Transform& transform);
     void CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor, Material* material);
+    void CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor);
     void SetLine(Vector3 _startPoint, Vector3 _endPoint);
+    void SetLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor);
     Line3D(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor);
     Line3D();
 };

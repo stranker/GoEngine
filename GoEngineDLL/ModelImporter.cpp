@@ -2,6 +2,8 @@
 #include "MeshInstance.h"
 #include "SpatialMaterial.h"
 #include "Line3D.h"
+#include "MeshInstance.h"
+
 
 string ModelImporter::tempOutDirectory;
 vector<Texture*> ModelImporter::tempTextures;
@@ -30,24 +32,15 @@ void ModelImporter::ProcessNode(Node3D* parentNode, aiNode* node, const aiScene*
         aiVector3D trans, rot, scl;
         node->mTransformation.Decompose(scl, rot, trans);
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        MeshInstance* meshInstance = new MeshInstance();
         MeshData* meshData = new MeshData();
-        meshInstance->Translate(Vector3(trans.x, trans.y, trans.z));
-        meshInstance->SetScale(Vector3(scl.x, scl.y, scl.z));
-        meshInstance->SetEulerAngles(Vector3(Utils::RadToDeg(rot.x), Utils::RadToDeg(rot.y), Utils::RadToDeg(rot.z)));
         *meshData = ProcessMesh(mesh, scene);
-        meshInstance->SetMesh(meshData);
-        meshInstance->SetName("Mesh" + parentNode->GetName());
+        MeshInstance* meshInstance = CreateMeshInstance(trans, rot, scl, meshData, node->mName.C_Str());
         parentNode->AddChildren((Node*)meshInstance);
     }
     for (unsigned int i = 0; i < node->mNumChildren; i++){
         aiVector3D trans, rot, scl;
         node->mTransformation.Decompose(scl, rot, trans);
-        Node3D* childNode = new Node3D();
-        childNode->SetName(node->mChildren[i]->mName.C_Str());
-        childNode->Translate(Vector3(trans.x, trans.y, trans.z));
-        childNode->SetScale(Vector3(scl.x, scl.y, scl.z));
-        childNode->SetEulerAngles(Vector3(Utils::RadToDeg(rot.x), Utils::RadToDeg(rot.y), Utils::RadToDeg(rot.z)));
+        Node3D* childNode = CreateNode(trans, rot, scl, node->mChildren[i]->mName.C_Str());
         parentNode->AddChildren((Node*)childNode);
         ProcessNode(childNode, node->mChildren[i], scene);
     }
@@ -127,6 +120,27 @@ Texture* ModelImporter::LoadMaterialTexture(aiMaterial* mat, aiTextureType type,
     return texture;
 }
 
+MeshInstance* ModelImporter::CreateMeshInstance(aiVector3D _trans, aiVector3D _rot, aiVector3D _scl, MeshData* _meshData, const string& name) {
+    MeshInstance* meshInstance = new MeshInstance();
+    meshInstance->Translate(Vector3(_trans.x, _trans.y, _trans.z));
+    meshInstance->SetScale(Vector3(_scl.x, _scl.y, _scl.z));
+    meshInstance->SetEulerAngles(Vector3(Utils::RadToDeg(_rot.x), Utils::RadToDeg(_rot.y), Utils::RadToDeg(_rot.z)));
+    meshInstance->SetMesh(_meshData);
+    meshInstance->SetName("Mesh" + name);
+    if (BSP::IsBSPMesh(name)) {
+        meshInstance->SetAsPartitionPlane(true);
+    }
+    return meshInstance;
+}
+
+Node3D* ModelImporter::CreateNode(aiVector3D _trans, aiVector3D _rot, aiVector3D _scl, const string& _name) {
+    Node3D* node = new Node3D(_name);
+    node->Translate(Vector3(_trans.x, _trans.y, _trans.z));
+    node->SetScale(Vector3(_scl.x, _scl.y, _scl.z));
+    node->SetEulerAngles(Vector3(Utils::RadToDeg(_rot.x), Utils::RadToDeg(_rot.y), Utils::RadToDeg(_rot.z)));
+    return node;
+}
+
 Node3D* ModelImporter::LoadModel(string const& path) {
     return ProcessScene(path);
 }
@@ -145,11 +159,4 @@ void MeshData::CreateBBox() {
         maxVtx.z = max(maxVtx.z, position_data[i].z);    // Find largest z value in model
     }
     boundingBox = BoundingBox(minVtx, maxVtx);
-}
-
-void MeshData::DrawBBox(const Transform& transform) {
-    if (boxLines.empty()) { return; };
-    for (Line3D* line : boxLines) {
-        line->Draw(transform);
-    }
 }
