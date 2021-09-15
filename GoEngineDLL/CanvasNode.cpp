@@ -39,7 +39,7 @@ void CanvasNode::Draw() {
 	Node::Draw();
 }
 
-void CanvasNode::ToogleRenderMode() {
+void CanvasNode::ToggleRenderMode() {
 	primitive = primitive == Renderer::TRIANGLES ? Renderer::LINE_STRIP : Renderer::TRIANGLES;
 }
 

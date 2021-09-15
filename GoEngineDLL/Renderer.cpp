@@ -14,8 +14,8 @@ bool Renderer::Init(){
 	}
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	UILayer::CreateContext(window);
 	return true;
@@ -175,12 +175,14 @@ void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, boo
 }
 
 void Renderer::Draw(Primitive _primitive, int vertexCount, bool elementDraw) {
+	glStencilFunc(GL_ALWAYS, 0, 0xFFFF);
 	if (elementDraw) {
 		DrawElements(_primitive, vertexCount);
 	}
 	else {
 		Draw(_primitive, vertexCount);
 	}
+	glStencilFunc(GL_ALWAYS, 0, 0xFFFF);
 }
 
 Camera* Renderer::GetCamera() const{
@@ -273,6 +275,10 @@ bool Renderer::GetBBoxDrawDebug() const {
 
 void Renderer::EnableBBoxDrawDebug(bool enabled) {
 	bboxDrawDebug = enabled;
+}
+
+void Renderer::SetStencilID(unsigned int id) {
+	glStencilFunc(GL_ALWAYS, id, 0xFFFF);
 }
 
 Transform* Renderer::GetCameraTransform() const {

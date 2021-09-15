@@ -23,6 +23,7 @@ private:
 	static void OnMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 	void ProcessMousePosition();
 	void UpdateCameraVectors();
+	void OnMouseClick();
 public:
 	void Update(float deltaTime) override;
 	void SetTarget(Node3D* _target);

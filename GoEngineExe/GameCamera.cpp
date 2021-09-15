@@ -26,7 +26,21 @@ void GameCamera::UpdateCameraVectors() {
 	up = right.Cross(foward).Normalize();
 }
 
+void GameCamera::OnMouseClick() {
+	Vector2 mousePos = Input::GetMousePosition();
+	float x = (2.0f * mousePos.x) / width - 1.0f;
+	float y = 1.0f - (2.0f * mousePos.y) / heigth;
+	float z = 1.0f;
+	Vector3 rayNds = Vector3(x, y, z);
+	glm::vec4 rayClip = glm::vec4(rayNds.x, rayNds.y, -1.0f, 0.0f);
+	glm::vec4 rayInv = glm::inverse(GetView()) * rayClip;
+	Vector3 rayWor = Vector3(rayInv.x, rayInv.y, rayInv.z).Normalize();
+}
+
 void GameCamera::Update(float deltaTime) {
+	if (Input::IsMouseButtonPressed(Input::MOUSE_BUTTON_1)) {
+		OnMouseClick();
+	}
 	if (Input::IsMouseButtonPressed(Input::MOUSE_BUTTON_2)){
 		Vector3 velocity = Vector3().Zero();
 		if (Input::IsKeyPressed(Input::KEY_W)) {

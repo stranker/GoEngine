@@ -91,6 +91,7 @@ public:
 	bool IsInsideFrustum(const BoundingBox& bbox);
 	bool GetBBoxDrawDebug() const;
 	void EnableBBoxDrawDebug(bool enabled);
+	void SetStencilID(unsigned int id);
 	Transform* GetCameraTransform() const;
 	Renderer(Window* _window);
 	virtual ~Renderer();

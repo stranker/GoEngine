@@ -123,6 +123,14 @@ string Node::GetClass() const {
 	return className;
 }
 
+bool Node::Is3DNode() const {
+	return is3DNode;
+}
+
+bool Node::IsBSPPlane() const {
+	return isBspPlane;
+}
+
 Node::Node() {
 	nodeID = NodeManager::CreateNode(this);
 	className = "Node";

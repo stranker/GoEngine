@@ -67,9 +67,10 @@ void UILayer::DrawBBox(Node3D* node) {
 }
 
 void UILayer::UpdateBBoxLines() {
-	if (currentSelected->GetClass() == "Node") return;
-	Vector3 minVtx = ((Node3D*)currentSelected)->GetBBox().min;
-	Vector3 maxVtx = ((Node3D*)currentSelected)->GetBBox().max;
+	if (!currentSelected->Is3DNode()) return;
+	float acc = currentSelected->IsBSPPlane() ? 10 : 1;
+	Vector3 minVtx = ((Node3D*)currentSelected)->GetBBox().min * acc;
+	Vector3 maxVtx = ((Node3D*)currentSelected)->GetBBox().max * acc;
 	boxLines[0]->SetLine(Vector3(minVtx.x, minVtx.y, minVtx.z), Vector3(maxVtx.x, minVtx.y, minVtx.z));
 	boxLines[1]->SetLine(Vector3(minVtx.x, minVtx.y, minVtx.z), Vector3(minVtx.x, maxVtx.y, minVtx.z));
 	boxLines[2]->SetLine(Vector3(minVtx.x, minVtx.y, minVtx.z), Vector3(minVtx.x, minVtx.y, maxVtx.z));
@@ -101,7 +102,7 @@ void UILayer::CreateContext(Window* window) {
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 	for (size_t i = 0; i < 12; i++) {
-		boxLines.push_back(new Line3D(Vector3().Zero(), Vector3().Zero(), Color().Cyan()));
+		boxLines.push_back(new Line3D(Vector3().Zero(), Vector3().Zero(), Color().Orange()));
 	}
 }
 
@@ -120,17 +121,27 @@ void UILayer::NewFrame() {
 void UILayer::Render() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	if (currentSelected && currentSelected->Is3DNode()) {
+		Node3D* node = (Node3D*)currentSelected;
+		DrawBBox(node);
+	}
 }
 
 void UILayer::ShowNode3D(Node3D* node3D) {
 	ShowTransform(node3D);
-	DrawBBox(node3D);
 }
 
 void UILayer::ShowTransform(Node3D* node) {
 	bool visible = node->IsVisible();
 	if (ImGui::Checkbox("Visible", &visible)) {
 		node->SetVisible(visible);
+	}
+	if (ImGui::Button("Toggle Render mode")) {
+		node->ToggleRenderMode();
+	}
+	bool bspEnabled = node->IsBSPEnabled();
+	if (ImGui::Checkbox("BSP Enabled", &bspEnabled)) {
+		//node->ToggleBspEnabled();
 	}
 	Vector3 pos = node->GetPosition();
 	Vector3 rot = node->GetRotation();
@@ -149,7 +160,7 @@ void UILayer::ShowTransform(Node3D* node) {
 		node->SetScale(Vector3(newScl[0], newScl[1], newScl[2]));
 	}
 	ImGui::Separator();
-	/*ImGui::Text("Global Transform");
+	ImGui::Text("Global Transform");
 	Vector3 gPos = node->GetGlobalTransform()->GetPosition();
 	Vector3 gRot = node->GetGlobalTransform()->GetRotation();
 	Vector3 gScl = node->GetGlobalTransform()->GetScale();
@@ -159,24 +170,30 @@ void UILayer::ShowTransform(Node3D* node) {
 	ImGui::InputFloat3("GPosition", newGPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("GRotation", newGRot, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("GScale", newGScl, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::Separator();*/
-	/*
-	ImGui::Text("Local AABB");
+	ImGui::Separator();
+	
+	/*ImGui::Text("Local AABB");
 	Vector3 minAABB = node->GetBBox().min;
 	Vector3 maxAABB = node->GetBBox().max;
 	float min[3] = { minAABB.x,minAABB.y,minAABB.z };
 	float max[3] = { maxAABB.x,maxAABB.y,maxAABB.z };
-	ImGui::InputFloat3("Min", min, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputFloat3("Max", max, "%.3f", ImGuiInputTextFlags_ReadOnly);
+	ImGui::InputFloat3("GMin", min, "%.3f", ImGuiInputTextFlags_ReadOnly);
+	ImGui::InputFloat3("GMax", max, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::Text("Global AABB");
 	Vector3 minGlobalAABB = node->GetGlobalBBox().min;
 	Vector3 maxGlobalAABB = node->GetGlobalBBox().max;
 	float minG[3] = { minGlobalAABB.x,minGlobalAABB.y,minGlobalAABB.z };
 	float maxG[3] = { maxGlobalAABB.x,maxGlobalAABB.y,maxGlobalAABB.z };
-	ImGui::InputFloat3("Min", minG, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputFloat3("Max", maxG, "%.3f", ImGuiInputTextFlags_ReadOnly);*/
-	if (ImGui::Button("Toggle Render mode")) {
-		node->ToogleRenderMode();
+	ImGui::InputFloat3("GMin", minG, "%.3f", ImGuiInputTextFlags_ReadOnly);
+	ImGui::InputFloat3("GMax", maxG, "%.3f", ImGuiInputTextFlags_ReadOnly);*/
+	if (node->GetClass() == "BSPQuad" || (node->GetClass()  == "MeshInstance" && (node->GetName().find("BSPPlane") >=0 && node->GetName().find("BSPPlane") <= 140))) {
+		ImGui::Text("Plane");
+		Primitive* prim = (Primitive*)node;
+		Plane plane = prim->GetPlane();
+		float d = plane.d;
+		float normal[3] = { plane.a, plane.b, plane.c };
+		ImGui::InputFloat("D", &d, ImGuiInputTextFlags_ReadOnly);
+		ImGui::InputFloat3("Normal", normal, "%.1f", ImGuiInputTextFlags_ReadOnly);
 	}
 	ImGui::Separator();
 }

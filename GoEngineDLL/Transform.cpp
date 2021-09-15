@@ -115,12 +115,14 @@ Vector3 Transform::GetScale() const {
 
 void Transform::operator*=(const Transform& otherTransform) {
 	transform *= otherTransform.GetTransform();
+	position = Vector3(transform[3].x, transform[3].y, transform[3].z);
+	rotation += otherTransform.rotation;
+	localScale = Vector3(localScale.x * otherTransform.localScale.x, localScale.y * otherTransform.localScale.y, localScale.z * otherTransform.localScale.z);
 }
 
 Transform Transform::operator*(const Transform& otherTransform) const {
 	Transform t = *this;
 	t *= otherTransform;
-	t.position += otherTransform.position;
 	return t;
 }
 
@@ -132,9 +134,9 @@ Vector3 Transform::operator*(const Vector3& vec) const {
 
 BoundingBox Transform::operator*(const BoundingBox& bbox) const {
 	Transform t = *this;
-	Vector3 min = t * bbox.min;
-	Vector3 max = t * bbox.max;
-	return BoundingBox(min, max);
+	Vector3 v1 = t * bbox.min;
+	Vector3 v2 = t * bbox.max;
+	return BoundingBox(v1, v2);
 }
 
 glm::mat4 Transform::GetTransform() const{

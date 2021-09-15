@@ -1,14 +1,13 @@
 #pragma once
-#include "Primitive.h"
+#include "Cube.h"
 
 class ENGINEDLL_API Light :
-    public Primitive {
+    public Cube {
 protected:
     Renderer::LightType type;
     Vector3 lightColor;
-    float energy;
-    float specular;
-    const int drawVertices = 36;
+    float energy = 0;
+    float specular = 0.5f;
 public:
     void Draw() override;
     void SetLightColor(Vector3 _color);

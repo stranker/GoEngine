@@ -7,9 +7,14 @@ class ENGINEDLL_API Primitive :
 protected:
     SpatialMaterial* spatialMaterial;
     SpatialMaterial* defaultMaterial;
+    void CreateBBox(float* data, size_t data_size);
+    void CreateBBox(vector<Vector3> posData);
+    bool isPartitionPlane = false;
 public:
     void SetMaterial(SpatialMaterial* spatialMaterial);
     void Draw() override;
+    virtual Plane GetPlane() { return Plane(); };
+    void SetAsPartitionPlane(bool value);
     Primitive();
 };
 
