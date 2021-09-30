@@ -51,6 +51,6 @@ Line3D::Line3D(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor) : Line3
 }
 
 Line3D::Line3D() {
-	lineMaterial = ResourceManager::LoadMaterial("Shaders/SimpleVertex3dShader.shader", "Shaders/LineFragmentShader.shader", "lineMaterial");
+	lineMaterial = ResourceManager::LoadMaterial("Shaders/Simple3D.vs", "Shaders/LineFragmentShader.shader", "lineMaterial");
 	SetDefaultName("Line3D");
 }

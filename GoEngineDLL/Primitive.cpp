@@ -21,6 +21,11 @@ void Primitive::Draw() {
 //    return Plane(globalTransform->GetFoward(), d);
 //}
 
+void Primitive::ShowUI() {
+    Node3D::ShowUI();
+    UILayer::ShowMaterial(spatialMaterial);
+}
+
 void Primitive::SetAsPartitionPlane(bool value) {
     isPartitionPlane = value;
     isBspPlane = true;

@@ -1,18 +1,21 @@
 #include "Quad.h"
 
 void Quad::Draw() {
-    if (!IsInsideFrustum()) {
-        return Node3D::Draw();
-    }
+    if (!CanBeDrawed()) { return Node3D::Draw();}
     if (spatialMaterial) {
         spatialMaterial->Use(); // Uso el material
         spatialMaterial->SetMat4("model", globalTransform->GetTransform());
-        spatialMaterial->SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
-        spatialMaterial->SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-        spatialMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCameraTransform()->GetPosition());
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, true);
-    spatialMaterial->ResetTextureActive();
+    Node3D::Draw();
+}
+
+void Quad::ForceDraw() {
+    if (spatialMaterial) {
+        spatialMaterial->Use(); // Uso el material
+        spatialMaterial->SetMat4("model", globalTransform->GetTransform());
+    }
+    Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, true);
     Node3D::Draw();
 }
 
@@ -30,26 +33,26 @@ Quad::Quad() : Primitive() {
 	SetDefaultName("Quad");
     className = "Quad";
     float position_vertex_data[] = {
-    -0.5f, 0.5f, 0.f,
-    -0.5f,-0.5f, 0.f,
-     0.5f,-0.5f, 0.f,
-     0.5f, 0.5f, 0.f
+        -1.0f, 1.0f, 0.f,
+        -1.0f,-1.0f, 0.f,
+         1.0f,-1.0f, 0.f,
+         1.0f, 1.0f, 0.f
     };
     float normal_vertex_data[] = {
-     0.0f,  0.0f, -1.0f,
-     0.0f,  0.0f, -1.0f,
-     0.0f,  0.0f, -1.0f,
-     0.0f,  0.0f, -1.0f
+         0.0f,  0.0f, -1.0f,
+         0.0f,  0.0f, -1.0f,
+         0.0f,  0.0f, -1.0f,
+         0.0f,  0.0f, -1.0f
     };
     float uv_vertex_data[] = {
-     0.0f,  1.0f,
-     0.0f,  0.0f,
-     1.0f,  0.0f,
-     1.0f,  1.0f
+         0.0f,  1.0f,
+         0.0f,  0.0f,
+         1.0f,  0.0f,
+         1.0f,  1.0f
     };
     int indices_vertex_data[] = {
-     0, 1, 2,
-     2, 3, 0
+         0, 1, 2,
+         2, 3, 0
     };
     CreateVertexArrayID(); //crea el VAO
     BindVertexArray();

@@ -4,6 +4,7 @@
 #include "Light.h"
 #include "Material.h"
 #include "Camera3D.h"
+#include "Quad.h"
 
 bool Renderer::Init(){
 	if (!window) {
@@ -13,11 +14,58 @@ bool Renderer::Init(){
 		return false;
 	}
 	glEnable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	UILayer::CreateContext(window);
+	
+	viewport = new Quad();
+	viewport->SetName("Viewport");
+
+	// colors
+	glGenTextures(4, colorTex);
+	for (size_t i = 0; i < 4; i++) {
+		glBindTexture(GL_TEXTURE_2D, colorTex[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window->GetWidth(), window->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	}
+	// depth
+	glGenTextures(1, &depthTex);
+	glBindTexture(GL_TEXTURE_2D, depthTex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, window->GetWidth(), window->GetHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+	// FBO
+	fbo = GenFrameBuffer();
+	BindFrameBuffer(fbo);
+
+	for (size_t i = 0; i < 4; i++) {
+		FrameBufferTexture(colorTex[i], i);
+	}
+	glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTex, 0);
+
+	if (!CheckFrameBuffer()) {
+		PRINT_DEBUG("FAIL TO CREATE RENDER BUFFER");
+	}
+	GLuint attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+	glDrawBuffers(3, attachments);
+
+	viewportTexture = new Texture();
+	viewportTexture->CreateTexture(NULL, window->GetWidth(), window->GetHeight(), 3, "");
+	FrameBufferTexture(viewportTexture->GetTextureID(), 0);
+	BindDefaultFrameBuffer();
+	SpatialMaterial* mat = ResourceManager::LoadSpatialMaterial("Shaders/Framebuffer.vs","Shaders/Framebuffer.fs", "viewport");
+	viewport->SetMaterial(mat);
+	mat->AddTexture("screenTexture", viewportTexture);
+
+	/*rbo = GenRenderBuffer();
+	BindRenderBuffer(rbo);
+	RenderbufferStorage(window->GetWidth(), window->GetHeight());
+	AttachRenderbuffer(rbo);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, viewportTexture->GetTextureID(), 0);
+	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
+	if (!CheckFrameBuffer()) {
+		PRINT_DEBUG("FAIL TO CREATE RENDER BUFFER");
+	}*/
 	return true;
 }
 
@@ -283,6 +331,70 @@ void Renderer::SetStencilID(unsigned int id) {
 
 Transform* Renderer::GetCameraTransform() const {
 	return ((Camera3D*)currentCamera)->GetGlobalTransform();
+}
+
+unsigned int Renderer::GenFrameBuffer() {
+	unsigned int fbo;
+	glGenFramebuffers(1, &fbo);
+	return fbo;
+}
+
+void Renderer::BindFrameBuffer(unsigned int fbo) {
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+}
+
+void Renderer::BindDefaultFrameBuffer() {
+	BindFrameBuffer(0);
+}
+
+void Renderer::DeleteFrameBuffer(unsigned int fbo) {
+	glDeleteFramebuffers(1, &fbo);
+}
+
+void Renderer::FrameBufferTexture(unsigned int textureId, short index) {
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, GL_TEXTURE_2D, textureId, 0);
+}
+
+unsigned int Renderer::GenRenderBuffer() {
+	unsigned int rbo;
+	glGenRenderbuffers(1, &rbo);
+	return rbo;
+}
+
+void Renderer::BindRenderBuffer(unsigned int rbo) {
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+}
+
+void Renderer::RenderbufferStorage(int _width, int _height) {
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height);
+}
+
+void Renderer::AttachRenderbuffer(unsigned int rbo) {
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+}
+
+bool Renderer::CheckFrameBuffer() {
+	return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+}
+
+void Renderer::BeginRender() {
+	BindFrameBuffer(fbo);
+	glEnable(GL_DEPTH_TEST);
+	SetClearColor(Color(0.1, 0.1, 0.1, 1));
+	ClearScreen();
+	EnableClientState();
+}
+
+void Renderer::EndRender() {
+	BindDefaultFrameBuffer();
+	glDisable(GL_DEPTH_TEST);
+	SetClearColor(Color(0.1, 0.1, 0.1, 1));
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	viewport->ForceDraw();
+	glBindTexture(GL_TEXTURE_2D, viewportTexture->GetTextureID());
+	DisableClientState();
+	SwapBuffers();
 }
 
 Renderer::Renderer(Window* _window){

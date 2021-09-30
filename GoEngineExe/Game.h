@@ -2,9 +2,7 @@
 
 #include "BaseGame.h"
 #include "GameCamera.h"
-#include "Tank.h"
-#include "TankBullet.h"
-#include "Mine.h"
+#include "Card3D.h"
 
 class Game :
 	public BaseGame
@@ -16,11 +14,9 @@ private:
 	const char* screenTitle;
 	GameCamera* camera;
 	Cube* cube;
-	Cube* cube2;
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
 	SpatialMaterial* cubeMaterial;
-	Tank* tank;
 	Node3D* blenderScene;
 	Node3D* link;
 	void CreateBullets(int count);

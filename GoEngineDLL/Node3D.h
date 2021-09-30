@@ -62,6 +62,7 @@ public:
 	void SetBSPEnabled(bool value);
 	bool IsBSPEnabled() const;
 	void Draw() override;
+	void ForceDraw() override;
 	bool CanBeDrawed();
 	Node3D();
 	Node3D(const string& _name);

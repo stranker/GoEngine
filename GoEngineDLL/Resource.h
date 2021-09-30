@@ -1,6 +1,7 @@
 #pragma once
 #include "Exports.h"
 #include "Utils.h"
+#include "TimeApi.h"
 
 class ENGINEDLL_API Resource  {
 protected:

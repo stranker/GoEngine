@@ -14,6 +14,7 @@ public:
     void SetMaterial(SpatialMaterial* spatialMaterial);
     void Draw() override;
     virtual Plane GetPlane() { return Plane(); };
+    virtual void ShowUI() override;
     void SetAsPartitionPlane(bool value);
     Primitive();
 };

@@ -99,6 +99,12 @@ void Node::Draw() {
 	}
 }
 
+void Node::ForceDraw() {
+	for (Node* child : childrens) {
+		child->ForceDraw();
+	}
+}
+
 void Node::Update(float deltaTime) {
 	for (Node* child : childrens) {
 		child->Update(deltaTime);

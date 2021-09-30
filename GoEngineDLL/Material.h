@@ -7,8 +7,21 @@
 #include "TextureImporter.h"
 #include "Resource.h"
 
+enum PropertyType{
+	INT,
+	FLOAT,
+	BOOL,
+	VECTOR2,
+	VECTOR3,
+	VECTOR4,
+	MAT4,
+	TEXTURE,
+};
+
 class ENGINEDLL_API Material : public Resource
 {
+public:
+	Material* nextPass;
 protected:
 	unsigned int shaderID = 0;
 public:
@@ -21,6 +34,8 @@ public:
 	void SetInt(string const& property, int value) const;
 	void SetFloat(string const& property, float value) const;
 	void SetTexture(string const& property, unsigned int textureId, unsigned int index);
+	void SetNextPass(Material* _mat);
+	Material* GetNextPass() const;
 	virtual void Use();
 	unsigned int GetID();
 	virtual void Destroy() {};

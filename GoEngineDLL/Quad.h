@@ -7,6 +7,7 @@ protected:
     const int drawVertices = 6;
 public:
     virtual void Draw() override;
+    virtual void ForceDraw() override;
     void UpdateQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4);
     Quad();
     ~Quad();

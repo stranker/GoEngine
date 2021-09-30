@@ -14,6 +14,7 @@ class SpotLight;
 class DirectionalLight;
 class PointLight;
 class Line3D;
+class SpatialMaterial;
 
 class ENGINEDLL_API UILayer {
 private:
@@ -32,6 +33,7 @@ public:
 	static void TreeNode(Node* node);
 	static void ShowNode3D(Node3D* node3d);
 	static void ShowTransform(Node3D* node);
+	static void ShowMaterial(SpatialMaterial* material);
 	static void ShowNodeInfo(Node* node);
 	static void ShowLightInfo(Light* light);
 	static void ShowProfiler();

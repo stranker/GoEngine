@@ -43,12 +43,26 @@ void Material::SetFloat(string const& property, float value) const {
 }
 
 void Material::SetTexture(string const& property, unsigned int textureId, unsigned int index) {
+	unsigned int location = glGetUniformLocation(shaderID, property.c_str());
+	glUniform1i(location, index);
 	glActiveTexture(GL_TEXTURE0 + index);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
+void Material::SetNextPass(Material* _mat) {
+	nextPass = _mat;
+}
+
+Material* Material::GetNextPass() const {
+	return nextPass;
+}
+
 void Material::Use(){
 	glUseProgram(shaderID);
+	SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
+	SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
+	SetVec3("viewPos", Renderer::GetSingleton()->GetCameraTransform()->GetPosition());
+	SetFloat("time", Time::ElapsedTime());
 }
 
 unsigned int Material::GetID() {

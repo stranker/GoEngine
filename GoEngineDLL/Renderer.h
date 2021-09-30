@@ -11,9 +11,10 @@ class PointLight;
 class SpotLight;
 class Material;
 class Camera3D;
+class Quad;
+class Texture;
 
-class ENGINEDLL_API Renderer
-{
+class ENGINEDLL_API Renderer {
 private:
 	static Renderer* singleton;
 	vector<DirectionalLight*> dirLights;
@@ -22,6 +23,12 @@ private:
 	Camera* firstCamera;
 	Camera* currentCamera;
 	bool bboxDrawDebug = false;
+	Quad* viewport;
+	Texture* viewportTexture;
+	vector<unsigned int> colorTex;
+	unsigned int depthTex;
+	unsigned int fbo = 0;
+	unsigned int rbo = 0;
 protected:
 	Window* window;
 public:
@@ -53,9 +60,9 @@ public:
 	};
 	bool Init();
 	bool Destroy();
-	unsigned int CreateVertexBuffer(void *data, size_t dataSize, BufferType bufferType);
-	unsigned int CreateTextureBuffer(unsigned char * data, int width, int height, int nrChannels);
-	void UpdateVertexBuffer(unsigned int vbo, void *data, size_t dataSize, BufferType bufferType);
+	unsigned int CreateVertexBuffer(void* data, size_t dataSize, BufferType bufferType);
+	unsigned int CreateTextureBuffer(unsigned char* data, int width, int height, int nrChannels);
+	void UpdateVertexBuffer(unsigned int vbo, void* data, size_t dataSize, BufferType bufferType);
 	unsigned int CreateVertexArrayID();
 	void BindBuffer(unsigned int bufferID, BufferType bufferType);
 	void BindBufferWithAttribute(unsigned int bufferID, BufferType bufferType, int attributeID, unsigned int vertexCount);
@@ -93,6 +100,18 @@ public:
 	void EnableBBoxDrawDebug(bool enabled);
 	void SetStencilID(unsigned int id);
 	Transform* GetCameraTransform() const;
+	unsigned int GenFrameBuffer();
+	void BindFrameBuffer(unsigned int fbo);
+	void BindDefaultFrameBuffer();
+	void DeleteFrameBuffer(unsigned int fbo);
+	void FrameBufferTexture(unsigned int textureId, short index);
+	unsigned int GenRenderBuffer();
+	void BindRenderBuffer(unsigned int rbo);
+	void RenderbufferStorage(int _width, int _height);
+	void AttachRenderbuffer(unsigned int rbo);
+	bool CheckFrameBuffer();
+	void BeginRender();
+	void EndRender();
 	Renderer(Window* _window);
 	virtual ~Renderer();
 };

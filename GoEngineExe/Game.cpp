@@ -6,12 +6,6 @@ Game::Game(int _screenWidth, int _screenHeight, const char* _screenTitle) : Base
 	screenTitle = _screenTitle;
 }
 
-void Game::CreateBullets(int count) {
-}
-
-void Game::CreateMines(int count) {
-}
-
 void Game::OnUpdate(float delta) {
 	if (link) {
 		const int spotSpeed = 7;
@@ -44,7 +38,7 @@ void Game::Start() {
 	cube = new Cube();
 	cube->SetName("CuboCentro");
 	cube->SetMaterial(cubeMaterial);
-	cube->SetPosition(Vector3(0, 0, 0));
+	cube->SetPosition(Vector3(3, 0, 0));
 	cube->SetScale(Vector3().One() * 0.7);
 	spatialNode->AddChildren(cube);
 	//// Lights
@@ -55,14 +49,12 @@ void Game::Start() {
 	dirLight->SetScale(Vector3().One() * 0.2);
 	spatialNode->AddChildren(dirLight);
 	//// Models
-	/*tank = new Tank();
-	GetRoot()->AddChildren(tank);*/
-	blenderScene = ResourceManager::LoadModel("Models/Link.gltf", "LinkScene");
+	/*blenderScene = ResourceManager::LoadModel("Models/Link.gltf", "LinkScene");
 	blenderScene->SetScale(Vector3().One() * 0.4f);
 	link = (Node3D*)blenderScene->GetNode("Link");
-	spatialNode->AddChildren(blenderScene);
-	//RayCast3D* rayCast = new RayCast3D(Vector3().Zero(), Vector3().Right(), 5, Color().Magenta());
-	//spatialNode->AddChildren(rayCast);
+	spatialNode->AddChildren(blenderScene);*/
+	Card3D* card = new Card3D();
+	spatialNode->AddChildren(card);
 	return OnStart();
 }
 

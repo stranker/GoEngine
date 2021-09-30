@@ -68,7 +68,7 @@ void UILayer::DrawBBox(Node3D* node) {
 
 void UILayer::UpdateBBoxLines() {
 	if (!currentSelected->Is3DNode()) return;
-	float acc = currentSelected->IsBSPPlane() ? 10 : 1;
+	float acc = currentSelected->IsBSPPlane() ? 10 : 1.015f;
 	Vector3 minVtx = ((Node3D*)currentSelected)->GetBBox().min * acc;
 	Vector3 maxVtx = ((Node3D*)currentSelected)->GetBBox().max * acc;
 	boxLines[0]->SetLine(Vector3(minVtx.x, minVtx.y, minVtx.z), Vector3(maxVtx.x, minVtx.y, minVtx.z));
@@ -139,9 +139,9 @@ void UILayer::ShowTransform(Node3D* node) {
 	if (ImGui::Button("Toggle Render mode")) {
 		node->ToggleRenderMode();
 	}
-	bool bspEnabled = node->IsBSPEnabled();
-	if (ImGui::Checkbox("BSP Enabled", &bspEnabled)) {
-		//node->ToggleBspEnabled();
+	if (BSP::HasPartitionPlanes()) 	{
+		bool bspEnabled = node->IsBSPEnabled();
+		ImGui::Checkbox("BSP Enabled", &bspEnabled);
 	}
 	Vector3 pos = node->GetPosition();
 	Vector3 rot = node->GetRotation();
@@ -170,7 +170,6 @@ void UILayer::ShowTransform(Node3D* node) {
 	ImGui::InputFloat3("GPosition", newGPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("GRotation", newGRot, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("GScale", newGScl, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::Separator();
 	
 	/*ImGui::Text("Local AABB");
 	Vector3 minAABB = node->GetBBox().min;
@@ -196,6 +195,22 @@ void UILayer::ShowTransform(Node3D* node) {
 		ImGui::InputFloat3("Normal", normal, "%.1f", ImGuiInputTextFlags_ReadOnly);
 	}
 	ImGui::Separator();
+}
+
+void UILayer::ShowMaterial(SpatialMaterial* material) {
+	if (ImGui::TreeNode("SpatialMaterial")) {
+		ImGui::Text(string("Name: " + material->GetName()).c_str());
+		map<string, Vector3> floatValues = material->GetFloats();
+		map<string, Vector3>::iterator iter = floatValues.begin();
+		while (iter != floatValues.end()) {
+			float f = iter->second.x;
+			if (ImGui::SliderFloat(iter->first.c_str(), &f, iter->second.y, iter->second.z)) {
+				material->AddFloat(iter->first, f, iter->second.y, iter->second.z);
+			}
+			iter++;
+		}
+		ImGui::TreePop();
+	}
 }
 
 void UILayer::ShowNodeInfo(Node* node) {

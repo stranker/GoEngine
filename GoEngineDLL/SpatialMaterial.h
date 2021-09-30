@@ -5,6 +5,9 @@
 class ENGINEDLL_API SpatialMaterial :
     public Material {
 private:
+    map<string, Texture*> textures;
+    map<string, Vector3> floatValues;
+    map<string, Vector3> vec3Values;
     float specular = 0;
     float metallic = 0;
     Texture* diffuseTexture;
@@ -15,6 +18,11 @@ protected:
 public:
     void Use() override;
     void CreateMaterial(float _specular, float _metallic, string const& diffusePath, string const& specularPath);
+    void AddTexture(const string& name, Texture* texture);
+    void AddFloat(const string& name, float value, float min, float max);
+    void AddVector3(const string& name, Vector3 value);
+    map<string, Texture*> GetTextures() { return textures; };
+    map<string, Vector3> GetFloats() { return floatValues; };
     SpatialMaterial() {};
 };
 

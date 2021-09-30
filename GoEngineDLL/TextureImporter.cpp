@@ -8,6 +8,7 @@ Texture TextureImporter::LoadTexture(string const& filePath) {
 	int width;
 	int height;
 	int nrChannels;
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
 	if (data) {
 		texture.CreateTexture(data, width, height, nrChannels, filePath);

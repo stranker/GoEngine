@@ -58,11 +58,11 @@ void BaseGame::LoopEngine() {
 		// Calculo deltaTime
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
+		Time::SetDeltaTime(deltaTime);
+		Time::AddElapsedTime(deltaTime);
 		lastFrame = currentFrame;
 
-		renderer->SetClearColor(Color(0.1,0.1,0.1,1));
-		renderer->ClearScreen();
-		renderer->EnableClientState();
+		renderer->BeginRender();
 
 		UILayer::NewFrame();
 
@@ -72,8 +72,8 @@ void BaseGame::LoopEngine() {
 
 		UILayer::Render();
 
-		renderer->DisableClientState();
-		renderer->SwapBuffers();
+		renderer->EndRender();
+
 		window->PoolEvents();
 		Profiler::Clear();
 	}

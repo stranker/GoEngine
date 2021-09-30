@@ -197,9 +197,15 @@ bool Node3D::IsBSPEnabled() const {
 
 void Node3D::Draw() {
 	gizmo->Draw(*globalTransform);
-	if (!CanBeDrawed()) {return;}
+	if (!CanBeDrawed()) {return CanvasNode::Draw();}
 	Profiler::nodesDrawing.push_back(GetName());
 	CanvasNode::Draw();
+}
+
+void Node3D::ForceDraw() {
+	gizmo->Draw(*globalTransform);
+	Profiler::nodesDrawing.push_back(GetName());
+	CanvasNode::ForceDraw();
 }
 
 bool Node3D::CanBeDrawed() {

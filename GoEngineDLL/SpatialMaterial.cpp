@@ -4,12 +4,33 @@
 
 void SpatialMaterial::Use() {
 	Material::Use();
+	ResetTextureActive();
 	SetFloat("material.metallic", metallic);
 	if (diffuseTexture){
 		SetTexture("material.diffuse", diffuseTexture->GetTextureID(), 0);
 	}
 	if (specularTexture) {
 		SetTexture("material.specular", specularTexture->GetTextureID(), 1);
+	}
+	if (!textures.empty()) {
+		map<string, Texture*>::iterator it;
+		int cont = 0;
+		for (it = textures.begin(); it != textures.end(); it++) {
+			SetTexture(it->first, it->second->GetTextureID(), cont);
+			cont++;
+		}
+	}
+	if (!floatValues.empty()) {
+		map<string, Vector3>::iterator it;
+		for (it = floatValues.begin(); it !=  floatValues.end(); it++) {
+			SetFloat(it->first, it->second.x);
+		}
+	}
+	if (!vec3Values.empty()) {
+		map<string, Vector3>::iterator it;
+		for (it = vec3Values.begin(); it != vec3Values.end(); it++) {
+			SetVec3(it->first, it->second);
+		}
 	}
 	Renderer::GetSingleton()->ProcessLighting(this);
 }
@@ -27,6 +48,18 @@ void SpatialMaterial::CreateMaterial(float _specular, float _metallic, string co
 	metallic = _metallic;
 	SetDiffuseMap(diffusePath.c_str());
 	SetSpecularMap(specularPath.c_str());
+}
+
+void SpatialMaterial::AddTexture(const string& name, Texture* texture) {
+	textures[name] = texture;
+}
+
+void SpatialMaterial::AddFloat(const string& name, float value, float min, float max) {
+	floatValues[name] = Vector3(value, min,max);
+}
+
+void SpatialMaterial::AddVector3(const string& name, Vector3 value) {
+	vec3Values[name] = value;
 }
 
 void ADSSpatialMaterial::Use() {
