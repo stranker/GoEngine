@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "CanvasNode.h"
 #include "Transform.h"
@@ -20,7 +21,9 @@ public:
 	Vector2 GetScale() const;
 	void SetModulate(Color _new_modulate);
 	Color GetModulate() const;
-	Transform *GetTransform();
+	Transform* GetTransform();
 	Node2D();
 };
+#endif // !ENGINE_3D
+
 

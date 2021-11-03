@@ -5,25 +5,23 @@
 class ENGINEDLL_API SpatialMaterial :
     public Material {
 private:
-    map<string, Texture*> textures;
-    map<string, Vector3> floatValues;
-    map<string, Vector3> vec3Values;
     float specular = 0;
     float metallic = 0;
-    Texture* diffuseTexture;
+    Color albedo;
+    Texture* albedoTexture;
     Texture* specularTexture;
-protected:
-    void SetDiffuseMap(const char* filePath);
-    void SetSpecularMap(const char* filePath);
+    bool unshaded = false;
 public:
     void Use() override;
-    void CreateMaterial(float _specular, float _metallic, string const& diffusePath, string const& specularPath);
-    void AddTexture(const string& name, Texture* texture);
-    void AddFloat(const string& name, float value, float min, float max);
-    void AddVector3(const string& name, Vector3 value);
-    map<string, Texture*> GetTextures() { return textures; };
-    map<string, Vector3> GetFloats() { return floatValues; };
-    SpatialMaterial() {};
+    void SetAlbedo(Color color);
+    void SetSpecular(float _specular);
+    void SetAlbedoMap(const string& filePath);
+    void SetSpecularMap(const string& filePath);
+    void SetUnshaded(bool value);
+    bool IsUnshaded() const;
+    Texture* GetAlbedoTexture() { return albedoTexture; };
+    Texture* GetSpecularTexture() { return specularTexture; };
+    SpatialMaterial(string const& vertexShader, string const& fragmentShader, const string& name);
 };
 
 class ENGINEDLL_API ADSSpatialMaterial :
@@ -41,6 +39,7 @@ public:
     void SetShininess(float _shininess) {shininess = _shininess ; };
     void SetDiffuseTexture(Texture* _texture) { diffuseTexture = _texture; };
     void Use() override;
-    void CreateMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular, float _shininess, Texture* _diffuseTexture);
-    ADSSpatialMaterial() {};
+    ADSSpatialMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular);
+    ADSSpatialMaterial(string const& albedoPath, string const& specularPath);
+    ADSSpatialMaterial();
 };

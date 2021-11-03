@@ -4,7 +4,6 @@
 class Card3D :
     public Quad {
 private:
-	vector<Resource*> resources;
 	Texture* main;
 	Texture* noise;
 	Texture* foil;

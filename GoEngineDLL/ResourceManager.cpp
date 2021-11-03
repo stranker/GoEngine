@@ -4,6 +4,7 @@
 #include "SpatialMaterial.h"
 #include "ModelImporter.h"
 #include "MeshInstance.h"
+#include "Shader.h"
 
 ResourceManager* ResourceManager::singleton = NULL;
 map<string, Texture*> ResourceManager::textures;
@@ -11,6 +12,7 @@ map<string, SpatialMaterial*> ResourceManager::spatialMaterials;
 map<string, ADSSpatialMaterial*> ResourceManager::adsSpatialMaterials;
 map<string, Material*> ResourceManager::materials;
 map<string, Node3D*> ResourceManager::models;
+map<string, Shader*> ResourceManager::shaders;
 int ResourceManager::resourceCount = 0;
 
 Texture* ResourceManager::LoadTextureFromFile(string const& path) {
@@ -21,25 +23,22 @@ Texture* ResourceManager::LoadTextureFromFile(string const& path) {
     return texture;
 }
 
-SpatialMaterial* ResourceManager::LoadSpatialMaterialFromFile(string const& pathVertexShader, string const& pathFragmentShader) {
-    SpatialMaterial* sm = new SpatialMaterial();
-    sm->LoadShaders(pathVertexShader, pathFragmentShader);
+SpatialMaterial* ResourceManager::_LoadSpatialMaterial(string const& pathVertexShader, string const& pathFragmentShader, const string& name) {
+    SpatialMaterial* sm = new SpatialMaterial(pathVertexShader, pathFragmentShader, name);
     resourceCount++;
     sm->SetID(resourceCount);
     return sm;
 }
 
-ADSSpatialMaterial* ResourceManager::LoadADSSpatialMaterialFromFile(string const& pathVertexShader, string const& pathFragmentShader) {
+ADSSpatialMaterial* ResourceManager::_LoadADSSpatialMaterial(string const& pathVertexShader, string const& pathFragmentShader, const string& name) {
     ADSSpatialMaterial* sm = new ADSSpatialMaterial();
-    sm->LoadShaders(pathVertexShader, pathFragmentShader);
     resourceCount++;
     sm->SetID(resourceCount);
     return sm;
 }
 
-Material* ResourceManager::LoadMaterial(string const& pathVertexShader, string const& pathFragmentShader) {
-    Material* mat = new Material();
-    mat->LoadShaders(pathVertexShader, pathFragmentShader);
+Material* ResourceManager::_LoadMaterial(string const& pathVertexShader, string const& pathFragmentShader, const string& name) {
+    Material* mat = new Material(pathVertexShader, pathFragmentShader, name);
     resourceCount++;
     mat->SetID(resourceCount);
     return mat;
@@ -48,6 +47,13 @@ Material* ResourceManager::LoadMaterial(string const& pathVertexShader, string c
 Node3D* ResourceManager::LoadModel(string const& filePath) {
     resourceCount++;
     return ModelImporter::LoadModel(filePath);;
+}
+
+Shader* ResourceManager::LoadShader(const string& vertexPath, const string& fragmentPath) {
+    Shader* shader = new Shader(vertexPath, fragmentPath);
+    resourceCount++;
+    shader->SetID(resourceCount);
+    return shader;
 }
 
 ResourceManager* ResourceManager::GetSingleton() {
@@ -64,7 +70,7 @@ Texture* ResourceManager::LoadTexture(string const& path, string const& name) {
 
 SpatialMaterial* ResourceManager::LoadSpatialMaterial(string const& pathVertexShader, string const& pathFragmentShader, string const& name) {
     if (spatialMaterials.find(name) == spatialMaterials.end()) {
-        spatialMaterials[name] = LoadSpatialMaterialFromFile(pathVertexShader, pathFragmentShader);
+        spatialMaterials[name] = _LoadSpatialMaterial(pathVertexShader, pathFragmentShader, name);
         spatialMaterials[name]->SetName(name);
     }
     return spatialMaterials[name];
@@ -72,7 +78,7 @@ SpatialMaterial* ResourceManager::LoadSpatialMaterial(string const& pathVertexSh
 
 ADSSpatialMaterial* ResourceManager::LoadADSSpatialMaterial(string const& pathVertexShader, string const& pathFragmentShader, string const& name) {
     if (adsSpatialMaterials.find(name) == adsSpatialMaterials.end()) {
-        adsSpatialMaterials[name] = LoadADSSpatialMaterialFromFile(pathVertexShader, pathFragmentShader);
+        adsSpatialMaterials[name] = _LoadADSSpatialMaterial(pathVertexShader, pathFragmentShader, name);
         adsSpatialMaterials[name]->SetName(name);
     }
     return adsSpatialMaterials[name];
@@ -92,7 +98,7 @@ ADSSpatialMaterial* ResourceManager::GetADSSpatialMaterial(string const& name) {
 
 Material* ResourceManager::LoadMaterial(string const& pathVertexShader, string const& pathFragmentShader, string const& name) {
     if (materials.find(name) == materials.end()) {
-        materials[name] = LoadMaterial(pathVertexShader, pathFragmentShader);
+        materials[name] = _LoadMaterial(pathVertexShader, pathFragmentShader, name);
         materials[name]->SetName(name);
     }
     return materials[name];
@@ -112,6 +118,14 @@ Node3D* ResourceManager::LoadModel(string const& path, string const& name) {
 
 Node3D* ResourceManager::GetModel(string const& name) {
     return models[name];
+}
+
+Shader* ResourceManager::LoadShader(const string& vertexPath, const string& fragmentPath, const string& name) {
+    if (shaders.find(name) == shaders.end()) {
+        shaders[name] = LoadShader(vertexPath, fragmentPath);
+        shaders[name]->SetName(name);
+    }
+    return shaders[name];
 }
 
 int ResourceManager::GetResourcesCount() {

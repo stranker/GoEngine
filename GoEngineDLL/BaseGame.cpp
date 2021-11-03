@@ -49,6 +49,7 @@ bool BaseGame::DestroyEngine() {
 }
 
 void BaseGame::LoopEngine() {
+
 	while (!window->ShouldClose()) {
 
 		if (Input::IsKeyPressed(Input::KEY_ESCAPE)) {
@@ -62,17 +63,19 @@ void BaseGame::LoopEngine() {
 		Time::AddElapsedTime(deltaTime);
 		lastFrame = currentFrame;
 
-		renderer->BeginRender();
-
 		UILayer::NewFrame();
+		renderer->BeginRender();
 
 		Update(deltaTime);
 
+
 		Render();
 
-		UILayer::Render();
-
 		renderer->EndRender();
+
+		UILayer::EndRender();
+
+		renderer->SwapBuffers();
 
 		window->PoolEvents();
 		Profiler::Clear();

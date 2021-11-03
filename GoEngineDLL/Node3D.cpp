@@ -1,32 +1,4 @@
 #include "Node3D.h"
-#include "Line3D.h"
-
-void Gizmo3D::Draw(const Transform& _transform) {
-	if (!IsVisible()) { return; };
-	for (size_t i = 0; i < lines.size(); i++) {
-		lines.at(i)->Draw(_transform);
-	}
-}
-
-void Gizmo3D::Destroy() {
-	for (size_t i = 0; i < lines.size(); i++) {
-		delete lines.at(i);
-	}
-	if (!lines.empty()) {
-		lines.clear();
-	}
-}
-
-Gizmo3D::Gizmo3D() {
-	Line3D* redLine, *blueLine, *greenLine;
-	redLine = new Line3D(Vector3().Zero(), Vector3().Right() * 1.5f, Color().Red());
-	blueLine = new Line3D(Vector3().Zero(), Vector3().Back() * 1.5f, Color().Blue());
-	greenLine = new Line3D(Vector3().Zero(), Vector3().Up() * 1.5f, Color().Green());
-	lines.push_back(redLine);
-	lines.push_back(blueLine);
-	lines.push_back(greenLine);
-	SetVisible(false);
-}
 
 void Node3D::UpdateChildrensTransform() {
 	if (parent) {
@@ -163,10 +135,6 @@ BoundingBox Node3D::GetGlobalBBox() const {
 	return globalBoundingBox;
 }
 
-void Node3D::SetGizmoVisible(bool gizmoVisible) {
-	gizmo->SetVisible(gizmoVisible);
-}
-
 Vector3 Node3D::GetPosition() const {
 	return transform->GetPosition();
 }
@@ -196,20 +164,22 @@ bool Node3D::IsBSPEnabled() const {
 }
 
 void Node3D::Draw() {
-	gizmo->Draw(*globalTransform);
 	if (!CanBeDrawed()) {return CanvasNode::Draw();}
 	Profiler::nodesDrawing.push_back(GetName());
 	CanvasNode::Draw();
 }
 
-void Node3D::ForceDraw() {
-	gizmo->Draw(*globalTransform);
+void Node3D::ForceDraw(SpatialMaterial* material) {
 	Profiler::nodesDrawing.push_back(GetName());
-	CanvasNode::ForceDraw();
+	CanvasNode::ForceDraw(material);
 }
 
 bool Node3D::CanBeDrawed() {
 	return IsInsideFrustum() && IsVisible() && IsBSPEnabled();
+}
+
+void Node3D::SetPrimitive(Renderer::Primitive _primitive) {
+	primitive = _primitive;
 }
 
 bool Node3D::IsInsideFrustum() {
@@ -218,19 +188,16 @@ bool Node3D::IsInsideFrustum() {
 
 void Node3D::ShowUI() {
 	Node::ShowUI();
-	gizmo->SetVisible(true);
 	UILayer::ShowNode3D(this);
 }
 
 void Node3D::HideUI() {
 	Node::HideUI();
-	gizmo->SetVisible(false);
 }
 
 Node3D::Node3D(){
 	className = "Node3D";
 	SetDefaultName(className);
-	gizmo = new Gizmo3D();
 	transform = new Transform();
 	globalTransform = new Transform();
 	*globalTransform = *transform;

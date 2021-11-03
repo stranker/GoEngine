@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #include "Node2D.h"
 
 void Node2D::SetPosition(Vector2 vec) {
@@ -44,3 +45,4 @@ Transform * Node2D::GetTransform() {
 Node2D::Node2D(){
 	selfModulate = Color();
 }
+#endif

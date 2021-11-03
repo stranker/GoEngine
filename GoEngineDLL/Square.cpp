@@ -1,5 +1,5 @@
+#ifndef ENGINE_3D
 #include "Square.h"
-
 
 void Square::Draw() {
 	if (material) {
@@ -37,3 +37,4 @@ Square::Square() {
 
 Square::~Square() {
 }
+#endif

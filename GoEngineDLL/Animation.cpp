@@ -1,3 +1,5 @@
+#ifndef ENGINE_3D
+
 #include "Animation.h"
 
 void Animation::Play() {
@@ -70,3 +72,4 @@ Animation::Animation(Sprite * _sprite) {
 
 Animation::~Animation() {
 }
+#endif // !

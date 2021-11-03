@@ -5,7 +5,6 @@ void MeshInstance::Draw() {
 	if (!CanBeDrawed()) { return Node3D::Draw(); }
 	if (mesh->adsMaterial) {
 		mesh->adsMaterial->Use();
-		mesh->adsMaterial->SetMat4("model", globalTransform->GetTransform());
 	}
 	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, mesh->indices.size(), true);
 	Node3D::Draw();

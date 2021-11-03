@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #include "ParticleSystem.h"
 
 ParticleSystem::Particle::Particle() {
@@ -114,3 +115,4 @@ ParticleSystem::ParticleSystem() {
 
 ParticleSystem::~ParticleSystem() {
 }
+#endif

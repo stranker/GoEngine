@@ -21,6 +21,7 @@ class Renderer;
 #include "MeshInstance.h"
 #include "BSP.h"
 #include "RayCast3D.h"
+#include "Sphere.h"
 
 class ENGINEDLL_API BaseGame {
 protected:

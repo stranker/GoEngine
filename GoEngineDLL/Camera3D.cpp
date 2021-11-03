@@ -92,7 +92,6 @@ Camera3D::Camera3D(float _width, float _height) : Camera(_width, _height) {
     aspect = _width / _height;
     Renderer::GetSingleton()->SetCurrentCamera(this);
     UpdateProjection();
-    SetGizmoVisible(false);
     frustum.CalculateFrustum(this);
     is3DNode = false;
 }

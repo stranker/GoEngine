@@ -1,9 +1,7 @@
-#version 330 core
-
-out vec4 FragColor;  
+shader_type spatial;
 uniform vec4 lineColor;
   
-void main()
+void fragment()
 {
-    FragColor = lineColor;
+    ALBEDO = lineColor;
 }

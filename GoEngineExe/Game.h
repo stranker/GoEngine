@@ -3,6 +3,7 @@
 #include "BaseGame.h"
 #include "GameCamera.h"
 #include "Card3D.h"
+#include "Container.h"
 
 class Game :
 	public BaseGame
@@ -13,14 +14,14 @@ private:
 	int screenHeight;
 	const char* screenTitle;
 	GameCamera* camera;
-	Cube* cube;
+	Container* container;
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
+	PointLight* plight;
+	PointLight* plight2;
 	SpatialMaterial* cubeMaterial;
 	Node3D* blenderScene;
 	Node3D* link;
-	void CreateBullets(int count);
-	void CreateMines(int count);
 public:
 	void OnUpdate(float delta) override;
 	void Start() override;

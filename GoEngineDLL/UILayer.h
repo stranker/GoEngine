@@ -22,14 +22,17 @@ private:
 	static Node* currentSelected;
 	static void _TreeNode(Node* node);
 	static void DrawBBox(Node3D* node);
+	static void DrawGizmo(Node3D* node);
 	static void UpdateBBoxLines();
 	static vector<Line3D*> boxLines;
+	static vector<Line3D*> gizmoLines;
 public:
 	static Node* GetCurrentNodeSelected();
 	static void CreateContext(Window* window);
 	static void Destroy();
 	static void NewFrame();
 	static void Render();
+	static void EndRender();
 	static void TreeNode(Node* node);
 	static void ShowNode3D(Node3D* node3d);
 	static void ShowTransform(Node3D* node);

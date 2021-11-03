@@ -1,12 +1,9 @@
 #include "Cube.h"
 
 void Cube::Draw() {
-    if (!CanBeDrawed()) {
-        return Node3D::Draw();
-    }
+    if (!CanBeDrawed()) {return Node3D::Draw(); }
     if (spatialMaterial) {
-        spatialMaterial->Use(); // Uso el material
-        spatialMaterial->SetMat4("model", globalTransform->GetTransform());
+        spatialMaterial->Use();
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
     Node3D::Draw();
@@ -14,49 +11,49 @@ void Cube::Draw() {
 
 Cube::Cube() {
     className = "Cube";
-    SetDefaultName("Cube");
+    SetDefaultName(className);
     float position_vertex_data[] = {
-        -1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
 
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
 
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
 
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
 
-        -1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f, -0.5f,
 
-        -1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
     };
     float normal_vertex_data[] = {
          0.0f,  0.0f, -1.0f,
@@ -102,47 +99,47 @@ Cube::Cube() {
          0.0f,  1.0f,  0.0f,
     };
     float uv_vertex_data[] = {
-     1.0f,  0.0f,
-     0.0f,  0.0f,
-     1.0f,  1.0f,
-     1.0f,  1.0f,
-     0.0f,  1.0f,
-     0.0f,  0.0f,
+         1.0f,  0.0f,
+         0.0f,  0.0f,
+         1.0f,  1.0f,
+         1.0f,  1.0f,
+         0.0f,  1.0f,
+         0.0f,  0.0f,
 
-     0.0f,  0.0f,
-     1.0f,  0.0f,
-     1.0f,  1.0f,
-     1.0f,  1.0f,
-     0.0f,  1.0f,
-     0.0f,  0.0f,
+         0.0f,  0.0f,
+         1.0f,  0.0f,
+         1.0f,  1.0f,
+         1.0f,  1.0f,
+         0.0f,  1.0f,
+         0.0f,  0.0f,
 
-     1.0f,  0.0f,
-     1.0f,  1.0f,
-     0.0f,  1.0f,
-     0.0f,  1.0f,
-     0.0f,  0.0f,
-     1.0f,  0.0f,
+         1.0f,  0.0f,
+         1.0f,  1.0f,
+         0.0f,  1.0f,
+         0.0f,  1.0f,
+         0.0f,  0.0f,
+         1.0f,  0.0f,
 
-     1.0f,  0.0f,
-     1.0f,  1.0f,
-     0.0f,  1.0f,
-     0.0f,  1.0f,
-     0.0f,  0.0f,
-     1.0f,  0.0f,
+         1.0f,  0.0f,
+         1.0f,  1.0f,
+         0.0f,  1.0f,
+         0.0f,  1.0f,
+         0.0f,  0.0f,
+         1.0f,  0.0f,
 
-     0.0f,  1.0f,
-     1.0f,  1.0f,
-     1.0f,  0.0f,
-     1.0f,  0.0f,
-     0.0f,  0.0f,
-     0.0f,  1.0f,
+         0.0f,  1.0f,
+         1.0f,  1.0f,
+         1.0f,  0.0f,
+         1.0f,  0.0f,
+         0.0f,  0.0f,
+         0.0f,  1.0f,
 
-     0.0f,  1.0f,
-     1.0f,  1.0f,
-     1.0f,  0.0f,
-     1.0f,  0.0f,
-     0.0f,  0.0f,
-     0.0f,  1.0f,
+         0.0f,  1.0f,
+         1.0f,  1.0f,
+         1.0f,  0.0f,
+         1.0f,  0.0f,
+         0.0f,  0.0f,
+         0.0f,  1.0f,
     };
     CreateVertexArrayID(); //crea el VAO
     BindVertexArray();

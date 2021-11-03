@@ -29,7 +29,7 @@ public:
 	unsigned int GetNodeID() const;
 	virtual void Ready();
 	virtual void Draw();
-	virtual void ForceDraw();
+	virtual void ForceDraw(SpatialMaterial * material);
 	virtual void Update(float deltaTime);
 	virtual void Destroy();
 	virtual void ShowUI();

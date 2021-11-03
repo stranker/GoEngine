@@ -3,18 +3,14 @@
 void Quad::Draw() {
     if (!CanBeDrawed()) { return Node3D::Draw();}
     if (spatialMaterial) {
-        spatialMaterial->Use(); // Uso el material
-        spatialMaterial->SetMat4("model", globalTransform->GetTransform());
+        spatialMaterial->Use();
+        spatialMaterial->GetShader()->SetMat4("model", globalTransform->GetTransform());
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, true);
     Node3D::Draw();
 }
 
-void Quad::ForceDraw() {
-    if (spatialMaterial) {
-        spatialMaterial->Use(); // Uso el material
-        spatialMaterial->SetMat4("model", globalTransform->GetTransform());
-    }
+void Quad::ForceDraw(SpatialMaterial* material) {
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, true);
     Node3D::Draw();
 }
@@ -33,16 +29,24 @@ Quad::Quad() : Primitive() {
 	SetDefaultName("Quad");
     className = "Quad";
     float position_vertex_data[] = {
-        -1.0f, 1.0f, 0.f,
-        -1.0f,-1.0f, 0.f,
-         1.0f,-1.0f, 0.f,
-         1.0f, 1.0f, 0.f
+        -1.0f, 1.0f, 0.0f,
+        -1.0f,-1.0f, 0.0f,
+         1.0f,-1.0f, 0.0f,
+         1.0f, 1.0f, 0.0f
     };
+    Vector3 normal;
+    for (int i = 0; i < 4; i++) {
+        int j = (i + 1) % 4;
+        Vector3 vertex1 = Vector3(position_vertex_data[i * 3], position_vertex_data[i * 3 + 1], position_vertex_data[i * 3 + 2]);
+        Vector3 vertex2 = Vector3(position_vertex_data[j * 3], position_vertex_data[j * 3 + 1], position_vertex_data[j * 3 + 2]);
+        normal += vertex1.Cross(vertex2); // cross product
+    }
+    normal = normal.Normalize();
     float normal_vertex_data[] = {
-         0.0f,  0.0f, -1.0f,
-         0.0f,  0.0f, -1.0f,
-         0.0f,  0.0f, -1.0f,
-         0.0f,  0.0f, -1.0f
+        normal.x, normal.y, normal.z,
+        normal.x, normal.y, normal.z,
+        normal.x, normal.y, normal.z,
+        normal.x, normal.y, normal.z,
     };
     float uv_vertex_data[] = {
          0.0f,  1.0f,
@@ -54,6 +58,7 @@ Quad::Quad() : Primitive() {
          0, 1, 2,
          2, 3, 0
     };
+    drawVertices = sizeof(indices_vertex_data) / sizeof(indices_vertex_data[0]);
     CreateVertexArrayID(); //crea el VAO
     BindVertexArray();
     CreateVertexData(position_vertex_data, sizeof(position_vertex_data), 3, Renderer::ARRAY_BUFFER, 0); // VBO

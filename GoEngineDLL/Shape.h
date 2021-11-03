@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "Node2D.h"
 
@@ -11,4 +12,4 @@ public:
 	Shape();
 	~Shape();
 };
-
+#endif

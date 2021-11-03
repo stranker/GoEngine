@@ -1,4 +1,6 @@
-#include "CollisionManager.h"
+#ifndef ENGINE_3D
+
+include "CollisionManager.h"
 
 CollisionInfo CollisionManager::CheckCollision(const AABB & a, const AABB & b) {
 	CollisionInfo colInfo;
@@ -82,3 +84,4 @@ vector<CollisionInfo> CollisionManager::CheckCollision(const AABB &a, const Tile
 }
 
 
+#endif

@@ -4,23 +4,9 @@
 #include "Material.h"
 #include "BSP.h"
 
-class Line3D;
-
-class ENGINEDLL_API Gizmo3D :
-	public CanvasNode {
-private:
-	Material* lineMaterial;
-	vector<Line3D*> lines;
-public:
-	void Draw(const Transform& transform);
-	virtual void Destroy() override;
-	Gizmo3D();
-};
-
 class ENGINEDLL_API Node3D :
     public CanvasNode {
 protected:
-	Gizmo3D* gizmo;
 	Transform* transform;
 	Transform* globalTransform;
 	BoundingBox boundingBox;
@@ -44,7 +30,6 @@ public:
 	void LookAt(Vector3 _position, Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _target, Vector3 _upVector);
 	void LookAt(Vector3 _target);
-	void SetGizmoVisible(bool gizmoVisible);
 	BoundingBox GetBBox() const;
 	BoundingBox GetGlobalBBox() const;
 	void AddBBox(const BoundingBox& bbox);
@@ -62,8 +47,9 @@ public:
 	void SetBSPEnabled(bool value);
 	bool IsBSPEnabled() const;
 	void Draw() override;
-	void ForceDraw() override;
+	void ForceDraw(SpatialMaterial* material) override;
 	bool CanBeDrawed();
+	void SetPrimitive(Renderer::Primitive primitive);
 	Node3D();
 	Node3D(const string& _name);
 };

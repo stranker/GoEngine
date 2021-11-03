@@ -99,9 +99,9 @@ void Node::Draw() {
 	}
 }
 
-void Node::ForceDraw() {
+void Node::ForceDraw(SpatialMaterial* material) {
 	for (Node* child : childrens) {
-		child->ForceDraw();
+		child->ForceDraw(material);
 	}
 }
 

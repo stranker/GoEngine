@@ -53,8 +53,16 @@ void Primitive::CreateBBox(vector<Vector3> posData) {
     boundingBox = BoundingBox(minVtx, maxVtx);
     globalBoundingBox = boundingBox;
 }
+
+void Primitive::CreateBBox(vector<Vector3> posData, float radius) {
+    Vector3 boundingBoxMin = Vector3().One() * -radius;
+    Vector3 boundingBoxMax = Vector3().One() * radius;
+    boundingBox = BoundingBox(boundingBoxMin, boundingBoxMax);
+    globalBoundingBox = boundingBox;
+}
+
 Primitive::Primitive() {
-	defaultMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/SpatialMaterial.fs", "defaultMaterial");
-	defaultMaterial->CreateMaterial(0.5f, 0.0f, "white_texture.png", "white_texture.png");
-	spatialMaterial = defaultMaterial;
+    defaultMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/SpatialMaterial.fs", "defaultMaterial");
+    spatialMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/SpatialMaterial.fs", "spatialMaterial");
+    spatialMaterial->AddMat4("model", globalTransform->GetTransform());
 }

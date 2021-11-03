@@ -1,9 +1,9 @@
-#version 330 core
+shader_type spatial;
 
+#define DEFAULT_UNSHADED
 uniform vec3 lightColor;
-out vec4 FragColor;
 
-void main()
+void fragment()
 {
-    FragColor = vec4(lightColor, 1.0);
+    ALBEDO = vec4(lightColor, 1.0);
 }

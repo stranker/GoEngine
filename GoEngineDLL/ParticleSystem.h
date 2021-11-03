@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "Exports.h"
 #include "Sprite.h"
@@ -43,4 +44,4 @@ public:
 	ParticleSystem();
 	virtual ~ParticleSystem();
 };
-
+#endif

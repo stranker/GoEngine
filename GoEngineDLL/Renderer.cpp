@@ -2,9 +2,9 @@
 #include "GlInclude.h"
 #include "Window.h"
 #include "Light.h"
-#include "Material.h"
 #include "Camera3D.h"
 #include "Quad.h"
+#include "Shader.h"
 
 bool Renderer::Init(){
 	if (!window) {
@@ -14,58 +14,17 @@ bool Renderer::Init(){
 		return false;
 	}
 	glEnable(GL_BLEND);
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	UILayer::CreateContext(window);
-	
+
+	firstCamera = new Camera3D(window->GetSize().x, window->GetSize().y);
+	currentCamera = firstCamera;
+
 	viewport = new Quad();
-	viewport->SetName("Viewport");
-
-	// colors
-	glGenTextures(4, colorTex);
-	for (size_t i = 0; i < 4; i++) {
-		glBindTexture(GL_TEXTURE_2D, colorTex[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window->GetWidth(), window->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	}
-	// depth
-	glGenTextures(1, &depthTex);
-	glBindTexture(GL_TEXTURE_2D, depthTex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, window->GetWidth(), window->GetHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-
-	// FBO
-	fbo = GenFrameBuffer();
-	BindFrameBuffer(fbo);
-
-	for (size_t i = 0; i < 4; i++) {
-		FrameBufferTexture(colorTex[i], i);
-	}
-	glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTex, 0);
-
-	if (!CheckFrameBuffer()) {
-		PRINT_DEBUG("FAIL TO CREATE RENDER BUFFER");
-	}
-	GLuint attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
-	glDrawBuffers(3, attachments);
-
-	viewportTexture = new Texture();
-	viewportTexture->CreateTexture(NULL, window->GetWidth(), window->GetHeight(), 3, "");
-	FrameBufferTexture(viewportTexture->GetTextureID(), 0);
-	BindDefaultFrameBuffer();
-	SpatialMaterial* mat = ResourceManager::LoadSpatialMaterial("Shaders/Framebuffer.vs","Shaders/Framebuffer.fs", "viewport");
-	viewport->SetMaterial(mat);
-	mat->AddTexture("screenTexture", viewportTexture);
-
-	/*rbo = GenRenderBuffer();
-	BindRenderBuffer(rbo);
-	RenderbufferStorage(window->GetWidth(), window->GetHeight());
-	AttachRenderbuffer(rbo);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, viewportTexture->GetTextureID(), 0);
-	GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
-	if (!CheckFrameBuffer()) {
-		PRINT_DEBUG("FAIL TO CREATE RENDER BUFFER");
-	}*/
+	//viewportMaterial = ResourceManager::LoadSpatialMaterial("Shaders/Viewport.vs","Shaders/Viewport.fs","viewportMaterial");
+	//viewport->SetMaterial(viewportMaterial);
+	//viewportMaterial->SetInt("inputTexture", 0);
+	UILayer::CreateContext(window);
 	return true;
 }
 
@@ -106,8 +65,8 @@ unsigned int Renderer::CreateTextureBuffer(unsigned char * data, int width, int 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	return textureID;
 }
 
@@ -201,15 +160,6 @@ void Renderer::DestroyVertexData(vector<VertexData> data) {
 	}
 }
 
-void Renderer::SetEnableDepthBuffer(bool value) {
-	if (value) 	{
-		glEnable(GL_DEPTH_TEST);
-	}
-	else {
-		glDisable(GL_DEPTH_TEST);
-	}
-}
-
 Renderer* Renderer::singleton = NULL;
 
 Renderer* Renderer::GetSingleton() {
@@ -222,22 +172,32 @@ void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, boo
 	Profiler::objectsDrawing++;
 }
 
+void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw, Transform* modelTransform) {
+	Draw(vao, _primitive, vertexCount, elementDraw);
+}
+
+void Renderer::Draw(unsigned int vao, Primitive _primitive, int vertexCount, bool elementDraw, Transform* modelTransform, SpatialMaterial* material) {
+	Draw(vao, _primitive, vertexCount, elementDraw);
+}
+
 void Renderer::Draw(Primitive _primitive, int vertexCount, bool elementDraw) {
-	glStencilFunc(GL_ALWAYS, 0, 0xFFFF);
 	if (elementDraw) {
 		DrawElements(_primitive, vertexCount);
 	}
 	else {
 		Draw(_primitive, vertexCount);
 	}
-	glStencilFunc(GL_ALWAYS, 0, 0xFFFF);
 }
 
 Camera* Renderer::GetCamera() const{
 	return currentCamera;
 }
 
-void Renderer::SetCurrentCamera(Camera* _camera){
+Camera3D* Renderer::GetCamera3D() const {
+	return currentCamera;
+}
+
+void Renderer::SetCurrentCamera(Camera3D* _camera){
 	currentCamera = _camera;
 }
 
@@ -264,57 +224,57 @@ int Renderer::GetSpotLights() const {
 	return spotLights.size();
 }
 
-void Renderer::ProcessLighting(Material* material) {
-	material->SetInt("dirLightSize", dirLights.size());
-	material->SetInt("pointLightSize", pointLights.size());
-	material->SetInt("spotLightSize", spotLights.size());
+void Renderer::ProcessLighting(Shader* shader) {
+	shader->SetInt("dirLightSize", dirLights.size());
+	shader->SetInt("pointLightSize", pointLights.size());
+	shader->SetInt("spotLightSize", spotLights.size());
 	for (size_t i = 0; i < dirLights.size(); i++){
 		string dirArrayIdx = "dirLights[" + to_string(i) + "]";
-		material->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetTransform()->GetFoward());
-		material->SetVec3(dirArrayIdx + ".ambient", dirLights[i]->GetLightColor());
-		material->SetFloat(dirArrayIdx + ".specular", dirLights[i]->GetSpecular());
-		material->SetFloat(dirArrayIdx + ".energy", dirLights[i]->GetEnergy());
+		shader->SetVec3(dirArrayIdx + ".direction", dirLights[i]->GetTransform()->GetFoward());
+		shader->SetVec3(dirArrayIdx + ".ambient", dirLights[i]->GetLightColor());
+		shader->SetFloat(dirArrayIdx + ".specular", dirLights[i]->GetSpecular());
+		shader->SetFloat(dirArrayIdx + ".energy", dirLights[i]->GetEnergy());
+		shader->SetBool(dirArrayIdx + ".visible", dirLights[i]->IsVisible());
 	}
 	for (size_t i = 0; i < pointLights.size(); i++) {
 		string dirArrayIdx = "pointLights[" + to_string(i) + "]";
-		material->SetVec3(dirArrayIdx + ".position", pointLights[i]->GetTransform()->GetPosition());
-		material->SetVec3(dirArrayIdx + ".ambient", pointLights[i]->GetLightColor());
-		material->SetFloat(dirArrayIdx + ".specular", pointLights[i]->GetSpecular());
-		material->SetFloat(dirArrayIdx + ".energy", pointLights[i]->GetEnergy());
-		material->SetFloat(dirArrayIdx + ".constant", pointLights[i]->GetAttenuation().x);
-		material->SetFloat(dirArrayIdx + ".linear", pointLights[i]->GetAttenuation().y);
-		material->SetFloat(dirArrayIdx + ".quadratic", pointLights[i]->GetAttenuation().z);
-		material->SetFloat(dirArrayIdx + ".range", pointLights[i]->GetRange());
+		shader->SetVec3(dirArrayIdx + ".position", pointLights[i]->GetTransform()->GetPosition());
+		shader->SetVec3(dirArrayIdx + ".ambient", pointLights[i]->GetLightColor());
+		shader->SetFloat(dirArrayIdx + ".specular", pointLights[i]->GetSpecular());
+		shader->SetFloat(dirArrayIdx + ".energy", pointLights[i]->GetEnergy());
+		shader->SetFloat(dirArrayIdx + ".constant", pointLights[i]->GetAttenuation().x);
+		shader->SetFloat(dirArrayIdx + ".linear", pointLights[i]->GetAttenuation().y);
+		shader->SetFloat(dirArrayIdx + ".quadratic", pointLights[i]->GetAttenuation().z);
+		shader->SetFloat(dirArrayIdx + ".range", pointLights[i]->GetRange());
+		shader->SetBool(dirArrayIdx + ".visible", pointLights[i]->IsVisible());
 	}
 	for (size_t i = 0; i < spotLights.size(); i++) {
 		string dirArrayIdx = "spotLights[" + to_string(i) + "]";
-		material->SetVec3(dirArrayIdx + ".direction", spotLights[i]->GetTransform()->GetFoward());
-		material->SetVec3(dirArrayIdx + ".position", spotLights[i]->GetTransform()->GetPosition());
-		material->SetVec3(dirArrayIdx + ".ambient", spotLights[i]->GetLightColor());
-		material->SetFloat(dirArrayIdx + ".specular", spotLights[i]->GetSpecular());
-		material->SetFloat(dirArrayIdx + ".energy", spotLights[i]->GetEnergy());
-		material->SetFloat(dirArrayIdx + ".constant", spotLights[i]->GetAttenuation().x);
-		material->SetFloat(dirArrayIdx + ".linear", spotLights[i]->GetAttenuation().y);
-		material->SetFloat(dirArrayIdx + ".quadratic", spotLights[i]->GetAttenuation().z);
-		material->SetFloat(dirArrayIdx + ".cutOff", glm::cos(glm::radians(spotLights[i]->GetCutOff())));
-		material->SetFloat(dirArrayIdx + ".outerCutOff", glm::cos(glm::radians(spotLights[i]->GetOuterCutOff())));
-		material->SetFloat(dirArrayIdx + ".range", spotLights[i]->GetRange());
+		shader->SetVec3(dirArrayIdx + ".direction", spotLights[i]->GetTransform()->GetFoward());
+		shader->SetVec3(dirArrayIdx + ".position", spotLights[i]->GetTransform()->GetPosition());
+		shader->SetVec3(dirArrayIdx + ".ambient", spotLights[i]->GetLightColor());
+		shader->SetFloat(dirArrayIdx + ".specular", spotLights[i]->GetSpecular());
+		shader->SetFloat(dirArrayIdx + ".energy", spotLights[i]->GetEnergy());
+		shader->SetFloat(dirArrayIdx + ".constant", spotLights[i]->GetAttenuation().x);
+		shader->SetFloat(dirArrayIdx + ".linear", spotLights[i]->GetAttenuation().y);
+		shader->SetFloat(dirArrayIdx + ".quadratic", spotLights[i]->GetAttenuation().z);
+		shader->SetFloat(dirArrayIdx + ".cutOff", glm::cos(glm::radians(spotLights[i]->GetCutOff())));
+		shader->SetFloat(dirArrayIdx + ".outerCutOff", glm::cos(glm::radians(spotLights[i]->GetOuterCutOff())));
+		shader->SetFloat(dirArrayIdx + ".range", spotLights[i]->GetRange());
+		shader->SetBool(dirArrayIdx + ".visible", spotLights[i]->IsVisible());
 	}
 }
 
 bool Renderer::IsInsideFrustum(const Vector3& pos) {
-	Camera3D* camera = (Camera3D*)currentCamera;
-	return camera->IsPointInFrustum(pos);
+	return currentCamera->IsPointInFrustum(pos);
 }
 
 bool Renderer::IsInsideFrustum(const Transform& transform, const BoundingBox& bbox) {
-	Camera3D* camera = (Camera3D*)currentCamera;
-	return camera->IsBoxVisible(transform, bbox);
+	return currentCamera->IsBoxVisible(transform, bbox);
 }
 
 bool Renderer::IsInsideFrustum(const BoundingBox& bbox) {
-	Camera3D* camera = (Camera3D*)currentCamera;
-	return camera->IsBoxVisible(bbox);
+	return currentCamera->IsBoxVisible(bbox);
 }
 
 bool Renderer::GetBBoxDrawDebug() const {
@@ -333,74 +293,32 @@ Transform* Renderer::GetCameraTransform() const {
 	return ((Camera3D*)currentCamera)->GetGlobalTransform();
 }
 
-unsigned int Renderer::GenFrameBuffer() {
-	unsigned int fbo;
-	glGenFramebuffers(1, &fbo);
-	return fbo;
-}
-
-void Renderer::BindFrameBuffer(unsigned int fbo) {
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-}
-
-void Renderer::BindDefaultFrameBuffer() {
-	BindFrameBuffer(0);
-}
-
-void Renderer::DeleteFrameBuffer(unsigned int fbo) {
-	glDeleteFramebuffers(1, &fbo);
-}
-
-void Renderer::FrameBufferTexture(unsigned int textureId, short index) {
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, GL_TEXTURE_2D, textureId, 0);
-}
-
-unsigned int Renderer::GenRenderBuffer() {
-	unsigned int rbo;
-	glGenRenderbuffers(1, &rbo);
-	return rbo;
-}
-
-void Renderer::BindRenderBuffer(unsigned int rbo) {
-	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-}
-
-void Renderer::RenderbufferStorage(int _width, int _height) {
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height);
-}
-
-void Renderer::AttachRenderbuffer(unsigned int rbo) {
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-}
-
-bool Renderer::CheckFrameBuffer() {
-	return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
-}
-
 void Renderer::BeginRender() {
-	BindFrameBuffer(fbo);
-	glEnable(GL_DEPTH_TEST);
-	SetClearColor(Color(0.1, 0.1, 0.1, 1));
+	SetClearColor(Color().Black());
 	ClearScreen();
 	EnableClientState();
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::EndRender() {
-	BindDefaultFrameBuffer();
-	glDisable(GL_DEPTH_TEST);
-	SetClearColor(Color(0.1, 0.1, 0.1, 1));
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	viewport->ForceDraw();
-	glBindTexture(GL_TEXTURE_2D, viewportTexture->GetTextureID());
 	DisableClientState();
-	SwapBuffers();
+}
+
+void Renderer::DrawViewport() {
+	viewport->Draw();
+}
+
+void Renderer::DrawViewport(SpatialMaterial* material) {
+	glDisable(GL_DEPTH_TEST);
+	viewport->Draw();
+}
+
+Vector2 Renderer::GetWindowSize() {
+	return window->GetSize();
 }
 
 Renderer::Renderer(Window* _window){
 	window = _window;
-	firstCamera = new Camera(window->GetSize().x, window->GetSize().y);
-	currentCamera = firstCamera;
 	singleton = this;
 }
 
