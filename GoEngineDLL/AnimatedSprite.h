@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "Sprite.h"
 #include "Animation.h"
@@ -11,7 +12,7 @@ private:
 	string currentAnimName;
 	Animation* currentAnimation;
 public:
-	void AddAnimation(const char* animName, unsigned int *frames, int framesSize, bool looped, float speed);
+	void AddAnimation(const char* animName, unsigned int* frames, int framesSize, bool looped, float speed);
 	void Play(const char* animName);
 	void Stop();
 	void Resume();
@@ -19,3 +20,6 @@ public:
 	AnimatedSprite();
 	~AnimatedSprite();
 };
+#endif // !ENGINE_3D
+
+

@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #include "Sprite.h"
 
 Vector2 Sprite::GetSize() const{
@@ -111,3 +112,4 @@ Sprite::Sprite() {
 
 Sprite::~Sprite() {
 }
+#endif

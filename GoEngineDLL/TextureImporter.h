@@ -24,7 +24,7 @@ public:
 class ENGINEDLL_API TextureImporter {
 public:
 	static Texture LoadTexture(string const& filePath);
-	TextureImporter() {};
+	TextureImporter() { };
 	~TextureImporter() {};
 };
 

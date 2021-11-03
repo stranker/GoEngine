@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "Exports.h"
 #include "Sprite.h"
@@ -7,7 +8,7 @@ using namespace std;
 
 class ENGINEDLL_API Animation {
 protected:
-	Sprite *sprite;
+	Sprite* sprite;
 private:
 	const char* name;
 	int currentFrame;
@@ -25,7 +26,9 @@ public:
 	void Stop();
 	void SetLooped(bool value);
 	bool IsPlaying();
-	void CreateAnimation(const char* animName, unsigned int * frames, int _totalFrames, bool looped, float _animSpeed);
-	Animation(Sprite *_sprite);
+	void CreateAnimation(const char* animName, unsigned int* frames, int _totalFrames, bool looped, float _animSpeed);
+	Animation(Sprite* _sprite);
 	~Animation();
 };
+
+#endif // !ENGINE_3D

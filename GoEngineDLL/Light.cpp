@@ -4,10 +4,10 @@ void Light::Draw() {
     if (!CanBeDrawed()) { return Node3D::Draw(); }
     if (spatialMaterial) {
         spatialMaterial->Use();
-        spatialMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(*transform));
-        spatialMaterial->SetVec3("lightColor", lightColor);
+        spatialMaterial->GetShader()->SetVec3("lightColor", lightColor);
+        spatialMaterial->GetShader()->SetMat4("model", globalTransform->GetTransform());
     }
-    Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
+    Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, true);
     Primitive::Draw();
 }
 
@@ -22,7 +22,7 @@ void Light::SetSpecular(float _specular) {
 
 void Light::SetEnergy(float _energy) {
     energy = _energy;
-    energy = Utils::Clamp(energy, 0, 10);
+    energy = Utils::Clamp(energy, 0, 16);
 }
 
 void Light::ShowUI() {
@@ -52,9 +52,9 @@ Light::Light(Vector3 _color, float _energy, float _specular) : Light(){
     specular = _specular;
 }
 
-Light::Light() : Cube() {
+Light::Light() : Sphere() {
     SetDefaultName("Light");
-    spatialMaterial = ResourceManager::LoadSpatialMaterial("Shaders/Simple3D.vs", "Shaders/LightCube.fs", "light");
+    spatialMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/LightCube.fs", "lightMaterial");
 }
 
 Light::~Light() {

@@ -6,12 +6,6 @@ Game::Game(int _screenWidth, int _screenHeight, const char* _screenTitle) : Base
 	screenTitle = _screenTitle;
 }
 
-void Game::CreateBullets(int count) {
-}
-
-void Game::CreateMines(int count) {
-}
-
 void Game::OnUpdate(float delta) {
 	if (link) {
 		const int spotSpeed = 7;
@@ -30,6 +24,15 @@ void Game::OnUpdate(float delta) {
 		}
 		link->Translate(spotVelocity.Normalize() * delta * spotSpeed);
 	}
+	if (plight) {
+		float x = cos(Time::ElapsedTime()) * 9;
+		float z = sin(Time::ElapsedTime()) * 9;
+		plight->SetPosition(Vector3(x, 0, z));
+	}
+	if (plight2) {
+		float x = cos(Time::ElapsedTime()) * 9;
+		plight2->SetPosition(Vector3(x, plight2->GetPosition().y, plight2->GetPosition().z));
+	}
 }
 
 void Game::Start() {
@@ -39,14 +42,9 @@ void Game::Start() {
 	//// Cubes
 	Node3D* spatialNode = new Node3D("SpatialNode");
 	GetRoot()->AddChildren(spatialNode);
-	cubeMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/SpatialMaterial.fs", "cubeMaterial");
-	cubeMaterial->CreateMaterial(0.5f, 0.0f, "container2.png", "container2_specular.png");
-	cube = new Cube();
-	cube->SetName("CuboCentro");
-	cube->SetMaterial(cubeMaterial);
-	cube->SetPosition(Vector3(0, 0, 0));
-	cube->SetScale(Vector3().One() * 0.7);
-	spatialNode->AddChildren(cube);
+
+	//container = new Container();
+	//spatialNode->AddChildren(container);
 	//// Lights
 	//spotLight = CreateSpotLight(Vector3(1, 0, 1), 1, 0.5f, 3, Vector3(1, 0.09, 0.032), 12, 15);
 	dirLight = new DirectionalLight(Vector3(1, 1, 1), 1, 0.5f);
@@ -54,15 +52,26 @@ void Game::Start() {
 	dirLight->SetPosition(Vector3(0, 10, 5));
 	dirLight->SetScale(Vector3().One() * 0.2);
 	spatialNode->AddChildren(dirLight);
+
+	plight = new PointLight();
+	plight->SetPosition(Vector3(0,0,9));
+	spatialNode->AddChildren(plight);
+
+	plight2 = new PointLight();
+	plight2->SetPosition(Vector3(0, 2, 3));
+	spatialNode->AddChildren(plight2);
 	//// Models
-	/*tank = new Tank();
-	GetRoot()->AddChildren(tank);*/
-	blenderScene = ResourceManager::LoadModel("Models/Link.gltf", "LinkScene");
+	/*blenderScene = ResourceManager::LoadModel("Models/Link.gltf", "LinkScene");
 	blenderScene->SetScale(Vector3().One() * 0.4f);
 	link = (Node3D*)blenderScene->GetNode("Link");
-	spatialNode->AddChildren(blenderScene);
-	//RayCast3D* rayCast = new RayCast3D(Vector3().Zero(), Vector3().Right(), 5, Color().Magenta());
-	//spatialNode->AddChildren(rayCast);
+	spatialNode->AddChildren(blenderScene);*/
+
+	Card3D* card = new Card3D();
+	spatialNode->AddChildren(card);
+
+	string testStr = "Hola como estas papu, todo bien? Me encantaria comerte papu.";
+	string asd = Utils::ReplaceString(testStr, "papu", "gomez");
+	PRINT_DEBUG(asd);
 	return OnStart();
 }
 

@@ -1,24 +1,17 @@
 #include "Cube.h"
 
 void Cube::Draw() {
-    if (!CanBeDrawed()) {
-        return Node3D::Draw();
-    }
+    if (!CanBeDrawed()) {return Node3D::Draw(); }
     if (spatialMaterial) {
-        spatialMaterial->Use(); // Uso el material
-        spatialMaterial->SetMat4("model", globalTransform->GetTransform());
-        spatialMaterial->SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
-        spatialMaterial->SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-        spatialMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCameraTransform()->GetPosition());
+        spatialMaterial->Use();
     }
     Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, drawVertices, false);
-    spatialMaterial->ResetTextureActive();
     Node3D::Draw();
 }
 
 Cube::Cube() {
     className = "Cube";
-    SetDefaultName("Cube");
+    SetDefaultName(className);
     float position_vertex_data[] = {
         -0.5f, -0.5f, -0.5f,
          0.5f, -0.5f, -0.5f,

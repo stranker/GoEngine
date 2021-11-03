@@ -7,6 +7,7 @@
 Node* UILayer::lastSelected;
 Node* UILayer::currentSelected;
 vector<Line3D*> UILayer::boxLines;
+vector<Line3D*> UILayer::gizmoLines;
 
 void UILayer::TreeNode(Node* node) {
 	_TreeNode(node);
@@ -61,14 +62,20 @@ void UILayer::DrawBBox(Node3D* node) {
 	if (Renderer::GetSingleton()->GetBBoxDrawDebug()) {
 		UpdateBBoxLines();
 		for (size_t i = 0; i < 12; i++) {
-			boxLines[i]->Draw(*node->GetGlobalTransform());
+			boxLines[i]->Draw(node->GetGlobalTransform());
 		}
+	}
+}
+
+void UILayer::DrawGizmo(Node3D* node) {
+	for (size_t i = 0; i < 3; i++) {
+		gizmoLines[i]->Draw(node->GetGlobalTransform());
 	}
 }
 
 void UILayer::UpdateBBoxLines() {
 	if (!currentSelected->Is3DNode()) return;
-	float acc = currentSelected->IsBSPPlane() ? 10 : 1;
+	float acc = currentSelected->IsBSPPlane() ? 10 : 1.015f;
 	Vector3 minVtx = ((Node3D*)currentSelected)->GetBBox().min * acc;
 	Vector3 maxVtx = ((Node3D*)currentSelected)->GetBBox().max * acc;
 	boxLines[0]->SetLine(Vector3(minVtx.x, minVtx.y, minVtx.z), Vector3(maxVtx.x, minVtx.y, minVtx.z));
@@ -104,6 +111,9 @@ void UILayer::CreateContext(Window* window) {
 	for (size_t i = 0; i < 12; i++) {
 		boxLines.push_back(new Line3D(Vector3().Zero(), Vector3().Zero(), Color().Orange()));
 	}
+	gizmoLines.push_back(new Line3D(Vector3().Zero(), Vector3().Back() * 1.2, Color().Blue()));
+	gizmoLines.push_back(new Line3D(Vector3().Zero(), Vector3().Up() * 1.2, Color().Green()));
+	gizmoLines.push_back(new Line3D(Vector3().Zero(), Vector3().Right() * 1.2, Color().Red()));
 }
 
 void UILayer::Destroy() {
@@ -119,16 +129,21 @@ void UILayer::NewFrame() {
 }
 
 void UILayer::Render() {
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	if (currentSelected && currentSelected->Is3DNode()) {
 		Node3D* node = (Node3D*)currentSelected;
 		DrawBBox(node);
+		DrawGizmo(node);
 	}
+}
+
+void UILayer::EndRender() {
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void UILayer::ShowNode3D(Node3D* node3D) {
 	ShowTransform(node3D);
+	Render();
 }
 
 void UILayer::ShowTransform(Node3D* node) {
@@ -139,9 +154,9 @@ void UILayer::ShowTransform(Node3D* node) {
 	if (ImGui::Button("Toggle Render mode")) {
 		node->ToggleRenderMode();
 	}
-	bool bspEnabled = node->IsBSPEnabled();
-	if (ImGui::Checkbox("BSP Enabled", &bspEnabled)) {
-		//node->ToggleBspEnabled();
+	if (BSP::HasPartitionPlanes()) 	{
+		bool bspEnabled = node->IsBSPEnabled();
+		ImGui::Checkbox("BSP Enabled", &bspEnabled);
 	}
 	Vector3 pos = node->GetPosition();
 	Vector3 rot = node->GetRotation();
@@ -160,32 +175,6 @@ void UILayer::ShowTransform(Node3D* node) {
 		node->SetScale(Vector3(newScl[0], newScl[1], newScl[2]));
 	}
 	ImGui::Separator();
-	ImGui::Text("Global Transform");
-	Vector3 gPos = node->GetGlobalTransform()->GetPosition();
-	Vector3 gRot = node->GetGlobalTransform()->GetRotation();
-	Vector3 gScl = node->GetGlobalTransform()->GetScale();
-	float newGPos[3] = { gPos.x, gPos.y, gPos.z };
-	float newGRot[3] = { gRot.x, gRot.y, gRot.z };
-	float newGScl[3] = { gScl.x, gScl.y, gScl.z };
-	ImGui::InputFloat3("GPosition", newGPos, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputFloat3("GRotation", newGRot, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputFloat3("GScale", newGScl, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::Separator();
-	
-	/*ImGui::Text("Local AABB");
-	Vector3 minAABB = node->GetBBox().min;
-	Vector3 maxAABB = node->GetBBox().max;
-	float min[3] = { minAABB.x,minAABB.y,minAABB.z };
-	float max[3] = { maxAABB.x,maxAABB.y,maxAABB.z };
-	ImGui::InputFloat3("GMin", min, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputFloat3("GMax", max, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::Text("Global AABB");
-	Vector3 minGlobalAABB = node->GetGlobalBBox().min;
-	Vector3 maxGlobalAABB = node->GetGlobalBBox().max;
-	float minG[3] = { minGlobalAABB.x,minGlobalAABB.y,minGlobalAABB.z };
-	float maxG[3] = { maxGlobalAABB.x,maxGlobalAABB.y,maxGlobalAABB.z };
-	ImGui::InputFloat3("GMin", minG, "%.3f", ImGuiInputTextFlags_ReadOnly);
-	ImGui::InputFloat3("GMax", maxG, "%.3f", ImGuiInputTextFlags_ReadOnly);*/
 	if (node->GetClass() == "BSPQuad" || (node->GetClass()  == "MeshInstance" && (node->GetName().find("BSPPlane") >=0 && node->GetName().find("BSPPlane") <= 140))) {
 		ImGui::Text("Plane");
 		Primitive* prim = (Primitive*)node;
@@ -196,6 +185,43 @@ void UILayer::ShowTransform(Node3D* node) {
 		ImGui::InputFloat3("Normal", normal, "%.1f", ImGuiInputTextFlags_ReadOnly);
 	}
 	ImGui::Separator();
+}
+
+void UILayer::ShowMaterial(SpatialMaterial* material) {
+	if (ImGui::TreeNode("SpatialMaterial")) {
+		ImGui::Text(string("Name: " + material->GetName()).c_str());
+		bool unshaded = material->IsUnshaded();
+		if (ImGui::Checkbox("Unshaded", &unshaded)) {
+			material->SetUnshaded(unshaded);
+		}
+		if (!material->GetTextures().empty()) {
+			map<string, Texture*> textures = material->GetTextures();
+			map<string, Texture*>::iterator it = textures.begin();
+			while (it != textures.end()) {
+				ImGui::Text(it->second->GetName().c_str());
+				it++;
+			}
+		}
+		else {
+			if (material->GetAlbedoTexture()) {
+				ImGui::Text(string("Diffuse Texture:" + material->GetAlbedoTexture()->GetName()).c_str());
+			}
+			if (material->GetSpecularTexture()) {
+				ImGui::Text(string("Specular Texture:" + material->GetSpecularTexture()->GetName()).c_str());
+			}
+		}
+
+		map<string, Vector3> floatValues = material->GetFloats();
+		map<string, Vector3>::iterator iter = floatValues.begin();
+		while (iter != floatValues.end()) {
+			float f = iter->second.x;
+			if (ImGui::SliderFloat(iter->first.c_str(), &f, iter->second.y, iter->second.z)) {
+				material->AddFloat(iter->first, f, iter->second.y, iter->second.z);
+			}
+			iter++;
+		}
+		ImGui::TreePop();
+	}
 }
 
 void UILayer::ShowNodeInfo(Node* node) {
@@ -218,7 +244,7 @@ void UILayer::ShowLightInfo(Light* light) {
 	float specular = light->GetSpecular();
 	float energy = light->GetEnergy();
 	ImGui::ColorEdit3("Color", newColor, ImGuiColorEditFlags_NoAlpha);
-	ImGui::SliderFloat("Energy", &energy, 1, 16);
+	ImGui::SliderFloat("Energy", &energy, 0, 16);
 	ImGui::SliderFloat("Specular", &specular, 0, 1);
 	light->SetLightColor(Vector3(newColor[0], newColor[1], newColor[2]));
 	light->SetEnergy(energy);
@@ -233,6 +259,11 @@ void UILayer::ShowLightInfo(Light* light) {
 		((SpotLight*)light)->SetCutOff(cutOff);
 		((SpotLight*)light)->SetOuterCutOff(outerCutOff);
 		((SpotLight*)light)->SetRange(range);
+	}
+	if (light->GetType() == Renderer::LightType::POINT) {
+		float range = ((SpotLight*)light)->GetRange();
+		ImGui::SliderFloat("Range", &range, 0, 256);
+		((PointLight*)light)->SetRange(range);
 	}
 	ImGui::Separator();
 }

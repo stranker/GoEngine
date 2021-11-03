@@ -5,10 +5,6 @@ void MeshInstance::Draw() {
 	if (!CanBeDrawed()) { return Node3D::Draw(); }
 	if (mesh->adsMaterial) {
 		mesh->adsMaterial->Use();
-		mesh->adsMaterial->SetMat4("model", globalTransform->GetTransform());
-		mesh->adsMaterial->SetMat4("view", Renderer::GetSingleton()->GetCamera()->GetView());
-		mesh->adsMaterial->SetMat4("projection", Renderer::GetSingleton()->GetCamera()->GetProjection());
-		mesh->adsMaterial->SetVec3("viewPos", Renderer::GetSingleton()->GetCameraTransform()->GetPosition());
 	}
 	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, mesh->indices.size(), true);
 	Node3D::Draw();

@@ -15,8 +15,7 @@
 #include "Vector3.h"
 #include "Rect2.h"
 #include "Color.h"
-
-#define PI 3.14159265
+#include "Constants.h"
 
 #define PRINT_DEBUG(x) cout << x << endl;
 
@@ -87,5 +86,6 @@ public:
 	static float Min(float v1, float v2);
 	static float Min(double v1, double v2);
 	static Vector3 IntersectPlanes(const Plane& p1, const Plane& p2, const Plane& p3);
+	static string ReplaceString(const string& text, const string& word, const string& replaceWord);
 };
 

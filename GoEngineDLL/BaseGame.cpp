@@ -49,6 +49,7 @@ bool BaseGame::DestroyEngine() {
 }
 
 void BaseGame::LoopEngine() {
+
 	while (!window->ShouldClose()) {
 
 		if (Input::IsKeyPressed(Input::KEY_ESCAPE)) {
@@ -58,22 +59,24 @@ void BaseGame::LoopEngine() {
 		// Calculo deltaTime
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
+		Time::SetDeltaTime(deltaTime);
+		Time::AddElapsedTime(deltaTime);
 		lastFrame = currentFrame;
 
-		renderer->SetClearColor(Color(0.1,0.1,0.1,1));
-		renderer->ClearScreen();
-		renderer->EnableClientState();
-
 		UILayer::NewFrame();
+		renderer->BeginRender();
 
 		Update(deltaTime);
 
+
 		Render();
 
-		UILayer::Render();
+		renderer->EndRender();
 
-		renderer->DisableClientState();
+		UILayer::EndRender();
+
 		renderer->SwapBuffers();
+
 		window->PoolEvents();
 		Profiler::Clear();
 	}

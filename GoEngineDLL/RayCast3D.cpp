@@ -3,7 +3,7 @@
 void RayCast3D::Draw() {
 	if (!CanBeDrawed()) { return Node3D::Draw(); }
 	if (line) {
-		line->Draw(*globalTransform);
+		line->Draw(globalTransform);
 	}
 }
 

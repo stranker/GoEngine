@@ -7,15 +7,21 @@ class ENGINEDLL_API SpatialMaterial :
 private:
     float specular = 0;
     float metallic = 0;
-    Texture* diffuseTexture;
+    Color albedo;
+    Texture* albedoTexture;
     Texture* specularTexture;
-protected:
-    void SetDiffuseMap(const char* filePath);
-    void SetSpecularMap(const char* filePath);
+    bool unshaded = false;
 public:
     void Use() override;
-    void CreateMaterial(float _specular, float _metallic, string const& diffusePath, string const& specularPath);
-    SpatialMaterial() {};
+    void SetAlbedo(Color color);
+    void SetSpecular(float _specular);
+    void SetAlbedoMap(const string& filePath);
+    void SetSpecularMap(const string& filePath);
+    void SetUnshaded(bool value);
+    bool IsUnshaded() const;
+    Texture* GetAlbedoTexture() { return albedoTexture; };
+    Texture* GetSpecularTexture() { return specularTexture; };
+    SpatialMaterial(string const& vertexShader, string const& fragmentShader, const string& name);
 };
 
 class ENGINEDLL_API ADSSpatialMaterial :
@@ -33,6 +39,7 @@ public:
     void SetShininess(float _shininess) {shininess = _shininess ; };
     void SetDiffuseTexture(Texture* _texture) { diffuseTexture = _texture; };
     void Use() override;
-    void CreateMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular, float _shininess, Texture* _diffuseTexture);
-    ADSSpatialMaterial() {};
+    ADSSpatialMaterial(Vector3 _ambient, Vector3 _diffuse, Vector3 _specular);
+    ADSSpatialMaterial(string const& albedoPath, string const& specularPath);
+    ADSSpatialMaterial();
 };

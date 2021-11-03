@@ -1,8 +1,8 @@
 #pragma once
-#include "Cube.h"
+#include "Sphere.h"
 
 class ENGINEDLL_API Light :
-    public Cube {
+    public Sphere {
 protected:
     Renderer::LightType type;
     Vector3 lightColor;
@@ -41,7 +41,7 @@ protected:
     float kQuadratic;
 public:
     float GetRange() const { return range; };
-    void SetRange(float _range) { range = _range; };
+    void SetRange(float _range) { range = _range;};
     Vector3 GetAttenuation() const { return Vector3(kConstant, kLinear, kQuadratic); };
     PointLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 _attenuation);
     PointLight();

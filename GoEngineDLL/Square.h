@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "Shape.h"
 
@@ -10,4 +11,4 @@ public:
 	Square();
 	virtual ~Square();
 };
-
+#endif

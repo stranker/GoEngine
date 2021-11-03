@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "Exports.h"
 #include "Utils.h"
@@ -60,4 +61,5 @@ public:
 	Tilemap();
 	~Tilemap();
 };
+#endif
 

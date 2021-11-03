@@ -60,6 +60,16 @@ Vector3 Utils::IntersectPlanes(const Plane& p1, const Plane& p2, const Plane& p3
 	return Vector3(d.Dot(u) / denom, m3.Dot(v) / denom, -(m2.Dot(v)) / denom);
 }
 
+string Utils::ReplaceString(const string& text, const string& word, const string& replaceWord) {
+	string textCpy = text;
+	while (textCpy.find(word) != textCpy.npos) {
+		size_t pos = textCpy.find(word);
+		size_t len = word.length();
+		textCpy.replace(pos, len, replaceWord);
+	}
+	return textCpy;
+}
+
 
 AABB::AABB(Rect2 rect) {
 	min = Vector2(rect.x, rect.y);

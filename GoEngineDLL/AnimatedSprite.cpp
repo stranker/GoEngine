@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #include "AnimatedSprite.h"
 
 void AnimatedSprite::AddAnimation(const char* animName, unsigned int *frames, int framesSize, bool looped, float speed) {
@@ -56,3 +57,4 @@ AnimatedSprite::AnimatedSprite(){
 AnimatedSprite::~AnimatedSprite() {
 	animations.clear();
 }
+#endif
