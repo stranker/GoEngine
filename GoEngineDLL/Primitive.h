@@ -12,6 +12,7 @@ protected:
     void CreateBBox(vector<Vector3> posData, float radius);
     bool isPartitionPlane = false;
     int drawVertices;
+    void ComputeTangentBasis();
 public:
     void SetMaterial(SpatialMaterial* spatialMaterial);
     void Draw() override;
