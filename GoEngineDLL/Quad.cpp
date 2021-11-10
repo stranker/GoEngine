@@ -44,9 +44,6 @@ Quad::Quad() : Primitive() {
     normal = normal.Normalize();
     float normal_vertex_data[] = {
         normal.x, normal.y, normal.z,
-        normal.x, normal.y, normal.z,
-        normal.x, normal.y, normal.z,
-        normal.x, normal.y, normal.z,
     };
     float uv_vertex_data[] = {
          0.0f,  1.0f,

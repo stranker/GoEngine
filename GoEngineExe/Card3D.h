@@ -8,6 +8,7 @@ private:
 	Texture* noise;
 	Texture* foil;
 	Texture* mask;
+	Texture* normal;
 public:
 	void Ready();
 	void Update(float deltaTime);
