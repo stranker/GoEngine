@@ -13,6 +13,7 @@ struct ENGINEDLL_API Color {
 	Color(float _r, float _g, float _b);
 	Color(Vector3 vec);
 	Color Red() const;
+	Color Orange() const;
 	Color Green() const;
 	Color Blue() const;
 	Color Yellow() const;

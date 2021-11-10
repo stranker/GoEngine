@@ -9,6 +9,7 @@ protected:
 public:
     void Draw() override;
 	void SetMesh(MeshData* _mesh);
+    virtual Plane GetPlane() override;
     MeshInstance();
 };
 

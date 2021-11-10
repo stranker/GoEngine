@@ -26,7 +26,7 @@ bool BaseGame::InitEngine() {
 	input->SetCurrentWindow(window);
 	currentFrame = glfwGetTime();
 	lastFrame = currentFrame;
-	sceneRoot = new Node("sceneRoot");
+	sceneRoot = new Node("SceneRoot");
 	return true;
 }
 
@@ -49,6 +49,7 @@ bool BaseGame::DestroyEngine() {
 }
 
 void BaseGame::LoopEngine() {
+
 	while (!window->ShouldClose()) {
 
 		if (Input::IsKeyPressed(Input::KEY_ESCAPE)) {
@@ -58,22 +59,24 @@ void BaseGame::LoopEngine() {
 		// Calculo deltaTime
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
+		Time::SetDeltaTime(deltaTime);
+		Time::AddElapsedTime(deltaTime);
 		lastFrame = currentFrame;
 
-		renderer->SetClearColor(Color(0.1,0.1,0.1,1));
-		renderer->ClearScreen();
-		renderer->EnableClientState();
-
 		UILayer::NewFrame();
+		renderer->BeginRender();
 
 		Update(deltaTime);
 
+
 		Render();
 
-		UILayer::Render();
+		renderer->EndRender();
 
-		renderer->DisableClientState();
+		UILayer::EndRender();
+
 		renderer->SwapBuffers();
+
 		window->PoolEvents();
 		Profiler::Clear();
 	}
@@ -81,8 +84,18 @@ void BaseGame::LoopEngine() {
 }
 
 void BaseGame::Render() {
+	Get3DCamera();
+	if (BSP::HasPartitionPlanes()) {
+		BSP::DrawBSPTree(sceneRoot, cam3D->GetGlobalTransform()->GetPosition());
+	}
 	sceneRoot->Draw();
 	UILayer::ShowDebug();
+}
+
+void BaseGame::Get3DCamera() {
+	if (!cam3D) {
+		cam3D = (Camera3D*)renderer->GetCamera();
+	}
 }
 
 void BaseGame::ShowDebugUI() {
@@ -118,33 +131,6 @@ Camera3D* BaseGame::CreateCamera3D(float width, float height) {
 	renderer->SetCurrentCamera(camera);
 	sceneRoot->AddChildren(camera);
 	return camera;
-}
-
-Cube* BaseGame::CreateCube() {
-	Cube* c = new Cube();
-	sceneRoot->AddChildren(c);
-	return c;
-}
-
-DirectionalLight* BaseGame::CreateDirectional(Vector3 lightColor, float energy, float specular) {
-	DirectionalLight* dl = new DirectionalLight(lightColor, energy, specular);
-	Renderer::GetSingleton()->AddLight(dl);
-	sceneRoot->AddChildren(dl);
-	return dl;
-}
-
-PointLight* BaseGame::CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation) {
-	PointLight* pl = new PointLight(lightColor, energy, specular, range, attenuation);
-	Renderer::GetSingleton()->AddLight(pl);
-	sceneRoot->AddChildren(pl);
-	return pl;
-}
-
-SpotLight* BaseGame::CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation, float cutOff, float outCutOff) {
-	SpotLight* sl = new SpotLight(lightColor, energy, specular, range, attenuation, cutOff, outCutOff);
-	Renderer::GetSingleton()->AddLight(sl);
-	sceneRoot->AddChildren(sl);
-	return sl;
 }
 
 Node3D* BaseGame::LoadModel(string const& path) {

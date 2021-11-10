@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #pragma once
 #include "Exports.h"
 #include "Utils.h"
@@ -14,3 +15,4 @@ public:
 	static CollisionInfo CheckCollision(const AABB &a, const AABB &b);
 	static vector<CollisionInfo> CheckCollision(const AABB &a, const Tilemap& tilemap);
 };
+#endif

@@ -12,6 +12,8 @@ protected:
 	void GetNode(const string& nodeName, vector<Node*>& res);
 	string className;
 	bool uiLocked = false;
+	bool is3DNode = false;
+	bool isBspPlane = false;
 public:
 	void SetName(const string& _name);
 	string GetName() const;
@@ -27,11 +29,14 @@ public:
 	unsigned int GetNodeID() const;
 	virtual void Ready();
 	virtual void Draw();
+	virtual void ForceDraw(SpatialMaterial * material);
 	virtual void Update(float deltaTime);
 	virtual void Destroy();
 	virtual void ShowUI();
 	virtual void HideUI();
 	string GetClass() const;
+	bool Is3DNode() const;
+	bool IsBSPPlane() const;
 	Node();
 	Node(const string& _name);
 	virtual ~Node();

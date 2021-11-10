@@ -2,9 +2,8 @@
 
 #include "BaseGame.h"
 #include "GameCamera.h"
-#include "Tank.h"
-#include "TankBullet.h"
-#include "Mine.h"
+#include "Card3D.h"
+#include "Container.h"
 
 class Game :
 	public BaseGame
@@ -15,19 +14,14 @@ private:
 	int screenHeight;
 	const char* screenTitle;
 	GameCamera* camera;
-	Cube* cube;
-	Cube* cube2;
+	Container* container;
 	SpotLight* spotLight;
 	DirectionalLight* dirLight;
+	PointLight* plight;
+	PointLight* plight2;
 	SpatialMaterial* cubeMaterial;
-	Tank* tank;
-	Node3D* minesParent;
-	TankBullet* tankBullet;
-	vector<TankBullet*> bullets;
-	vector<Mine*> mines;
-	Mine* mine;
-	void CreateBullets(int count);
-	void CreateMines(int count);
+	Node3D* blenderScene;
+	Node3D* link;
 public:
 	void OnUpdate(float delta) override;
 	void Start() override;

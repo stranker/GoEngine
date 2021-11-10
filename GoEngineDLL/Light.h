@@ -1,14 +1,13 @@
 #pragma once
-#include "Primitive.h"
+#include "Sphere.h"
 
 class ENGINEDLL_API Light :
-    public Primitive {
+    public Sphere {
 protected:
     Renderer::LightType type;
     Vector3 lightColor;
-    float energy;
-    float specular;
-    const int drawVertices = 36;
+    float energy = 0;
+    float specular = 0.5f;
 public:
     void Draw() override;
     void SetLightColor(Vector3 _color);
@@ -42,7 +41,7 @@ protected:
     float kQuadratic;
 public:
     float GetRange() const { return range; };
-    void SetRange(float _range) { range = _range; };
+    void SetRange(float _range) { range = _range;};
     Vector3 GetAttenuation() const { return Vector3(kConstant, kLinear, kQuadratic); };
     PointLight(Vector3 _color, float _energy, float _specular, float _range, Vector3 _attenuation);
     PointLight();

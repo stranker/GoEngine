@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.3.2\include;$(SolutionDir)lib\glew-2.1.0\include;$(SolutionDir)lib\glm-9.9.8\include;$(SolutionDir)lib\freetype\include;$(SolutionDir)lib\rapidjson\include;$(SolutionDir)lib\assimp\include;$(SolutionDir)lib\imgui\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ENGINEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WINDLL;STB_IMAGE_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ENGINE_3D;ENGINEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WINDLL;STB_IMAGE_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\glfw-3.3.2\lib-vc2017;$(SolutionDir)lib\glew-2.1.0\lib\Release\Win32;$(SolutionDir)lib\glm-9.9.8\lib;$(SolutionDir)lib\freetype\win32;$(SolutionDir)lib\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -154,13 +154,16 @@
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="BaseGame.h" />
+    <ClInclude Include="BSP.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="CameraFrustum.h" />
     <ClInclude Include="CanvasNode.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Node2D.h" />
     <ClInclude Include="Node3D.h" />
@@ -176,18 +179,22 @@
     <ClInclude Include="Quad.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Profiler.h" />
+    <ClInclude Include="RayCast3D.h" />
     <ClInclude Include="Rect2.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="SpatialMaterial.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="Tilemap.h" />
+    <ClInclude Include="TimeApi.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="UILayer.h" />
@@ -209,6 +216,7 @@
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="BaseGame.cpp" />
+    <ClCompile Include="BSP.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="CameraFrustum.cpp" />
@@ -216,6 +224,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Node2D.cpp" />
     <ClCompile Include="Node3D.cpp" />
@@ -229,17 +238,21 @@
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Profiler.cpp" />
+    <ClCompile Include="RayCast3D.cpp" />
     <ClCompile Include="Rect2.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="SpatialMaterial.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="TextureImporter.cpp" />
     <ClCompile Include="Tilemap.cpp" />
+    <ClCompile Include="TimeApi.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="UILayer.cpp" />

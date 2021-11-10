@@ -20,6 +20,7 @@ bool Window::Init(){
 	}
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
+	glViewport(0, 0, width, height);
 	return true;
 }
 

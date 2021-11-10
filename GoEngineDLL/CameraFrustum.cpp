@@ -1,6 +1,7 @@
 #include "CameraFrustum.h"
 #include "Camera3D.h"
 #include "Line3D.h"
+#include "Quad.h"
 
 void CameraFrustum::CalculateFrustum(Camera3D* camera) {
 	float proj[16];								// This will hold our projection matrix
@@ -15,6 +16,7 @@ void CameraFrustum::CalculateFrustum(Camera3D* camera) {
 	for (size_t i = 0; i < 16; i++) {
 		proj[i] = projMtx[i];
 	}
+
 	clip[0] = modl[0] * proj[0] + modl[1] * proj[4] + modl[2] * proj[8] + modl[3] * proj[12];
 	clip[1] = modl[0] * proj[1] + modl[1] * proj[5] + modl[2] * proj[9] + modl[3] * proj[13];
 	clip[2] = modl[0] * proj[2] + modl[1] * proj[6] + modl[2] * proj[10] + modl[3] * proj[14];
@@ -37,30 +39,46 @@ void CameraFrustum::CalculateFrustum(Camera3D* camera) {
 
 	planes.clear();
 	Plane newPlane;
-	// RIGHT
+	// RIGHT 0
 	newPlane = Plane(clip[3] - clip[0], clip[7] - clip[4], clip[11] - clip[8], clip[15] - clip[12]);
-	//newPlane.Normalize();
+	newPlane.Normalize();
 	planes.push_back(newPlane);
-	// LEFT
+	// LEFT 1
 	newPlane = Plane(clip[3] + clip[0], clip[7] + clip[4], clip[11] + clip[8], clip[15] + clip[12]);
-	//newPlane.Normalize();
+	newPlane.Normalize();
 	planes.push_back(newPlane);
-	// BOTTOM
+	// BOTTOM 2
 	newPlane = Plane(clip[3] + clip[1], clip[7] + clip[5], clip[11] + clip[9], clip[15] + clip[13]);
-	//newPlane.Normalize();
+	newPlane.Normalize();
 	planes.push_back(newPlane);
-	// TOP
+	// TOP 3
 	newPlane = Plane(clip[3] - clip[1], clip[7] - clip[5], clip[11] - clip[9], clip[15] - clip[13]);
-	//newPlane.Normalize();
+	newPlane.Normalize();
 	planes.push_back(newPlane);
-	// FAR
+	// FAR 4
 	newPlane = Plane(clip[3] - clip[2], clip[7] - clip[6], clip[11] - clip[10], clip[15] - clip[14]);
-	//newPlane.Normalize();
+	newPlane.Normalize();
 	planes.push_back(newPlane);
-	// NEAR
+	// NEAR 5
 	newPlane = Plane(clip[3] + clip[2], clip[7] + clip[6], clip[11] + clip[10], clip[15] + clip[14]);
-	//newPlane.Normalize();
+	newPlane.Normalize();
 	planes.push_back(newPlane);
+
+	frustumCorners[0] = Utils::IntersectPlanes(planes[0], planes[2], planes[5]); // N R B
+	frustumCorners[1] = Utils::IntersectPlanes(planes[0], planes[3], planes[5]); // N R T
+	frustumCorners[2] = Utils::IntersectPlanes(planes[1], planes[3], planes[5]); // N L T
+	frustumCorners[3] = Utils::IntersectPlanes(planes[1], planes[2], planes[5]); // N L B
+	frustumCorners[4] = Utils::IntersectPlanes(planes[0], planes[2], planes[4]); // F R B
+	frustumCorners[5] = Utils::IntersectPlanes(planes[0], planes[3], planes[4]); // F R T
+	frustumCorners[6] = Utils::IntersectPlanes(planes[1], planes[3], planes[4]); // F L T
+	frustumCorners[7] = Utils::IntersectPlanes(planes[1], planes[2], planes[4]); // F L B
+	UpdateFrustumLines();
+}
+
+void CameraFrustum::Draw(Transform* cameraTransform) {
+}
+
+void CameraFrustum::UpdateFrustumLines() {
 }
 
 vector<Plane> CameraFrustum::GetPlanes() {
@@ -68,17 +86,35 @@ vector<Plane> CameraFrustum::GetPlanes() {
 }
 
 bool CameraFrustum::IsBBoxInside(const Transform& transform, const BoundingBox& bbox) {
-	BoundingBox transformedBbox = transform * bbox;
-	return IsBBoxInside(transformedBbox);
+	int totalIn = 0;
+	vector<Vector3> corners = bbox.corners;
+	for (int p = 0; p < planes.size(); ++p) {
+		int countIn = bbox.corners.size();
+		int partialIn = 1;
+		for (int i = 0; i < bbox.corners.size(); ++i) {
+			if (planes[p].DistanceToPoint(transform * corners[i]) < 0) {
+				partialIn = 0;
+				--countIn;
+			}
+		}
+		if (countIn == 0)
+			return false;
+		countIn += partialIn;
+	}
+	if (totalIn == corners.size())
+		return true;
+	return true;
+	//BoundingBox transformedBbox = transform * bbox;
+	//return IsBBoxInside(transformedBbox);
 }
 
 bool CameraFrustum::IsBBoxInside(const BoundingBox& bbox) {
 	int totalIn = 0;
 	vector<Vector3> corners = bbox.corners;
-	for (int p = 0; p < 6; ++p) {
-		int countIn = 8;
+	for (int p = 0; p < planes.size(); ++p) {
+		int countIn = bbox.corners.size();
 		int partialIn = 1;
-		for (int i = 0; i < 8; ++i) {
+		for (int i = 0; i < bbox.corners.size(); ++i) {
 			if (planes[p].DistanceToPoint(corners[i]) < 0) {
 				partialIn = 0;
 				--countIn;
@@ -88,13 +124,13 @@ bool CameraFrustum::IsBBoxInside(const BoundingBox& bbox) {
 			return false;
 		countIn += partialIn;
 	}
-	if (totalIn == 6)
+	if (totalIn == corners.size())
 		return true;
 	return true;
 }
 
 bool CameraFrustum::IsPointInside(const Vector3& point) {
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < planes.size(); i++) {
 		if (planes[i].DistanceToPoint(point) < 0)
 			return false;
 	}

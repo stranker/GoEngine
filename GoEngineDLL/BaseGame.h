@@ -19,6 +19,9 @@ class Renderer;
 #include "Light.h"
 #include "SpatialMaterial.h"
 #include "MeshInstance.h"
+#include "BSP.h"
+#include "RayCast3D.h"
+#include "Sphere.h"
 
 class ENGINEDLL_API BaseGame {
 protected:
@@ -34,6 +37,7 @@ private:
 	bool DestroyEngine();
 	void LoopEngine();
 	void Render();
+	void Get3DCamera();
 	Window* window;
 	Renderer* renderer;
 	Input* input;
@@ -42,6 +46,7 @@ private:
 	double lastFrame;
 	double deltaTime;
 	void ShowDebugUI();
+	Camera3D* cam3D;
 public:
 	static BaseGame* GetSingleton();
 	BaseGame(int _screen_width, int _screen_height, const char* _screen_title);
@@ -51,10 +56,6 @@ public:
 
 	//ENTITIES
 	Camera3D* CreateCamera3D(float width, float height);
-	Cube* CreateCube();
-	DirectionalLight* CreateDirectional(Vector3 lightColor, float energy, float specular);
-	PointLight* CreatePointLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation);
-	SpotLight* CreateSpotLight(Vector3 lightColor, float energy, float specular, float range, Vector3 attenuation, float cutOff, float outCutOff);
 	Node3D* LoadModel(string const& path);
 	Node* GetRoot();
 	//WINDOW

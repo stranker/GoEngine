@@ -99,6 +99,12 @@ void Node::Draw() {
 	}
 }
 
+void Node::ForceDraw(SpatialMaterial* material) {
+	for (Node* child : childrens) {
+		child->ForceDraw(material);
+	}
+}
+
 void Node::Update(float deltaTime) {
 	for (Node* child : childrens) {
 		child->Update(deltaTime);
@@ -121,6 +127,14 @@ void Node::HideUI() {
 
 string Node::GetClass() const {
 	return className;
+}
+
+bool Node::Is3DNode() const {
+	return is3DNode;
+}
+
+bool Node::IsBSPPlane() const {
+	return isBspPlane;
 }
 
 Node::Node() {

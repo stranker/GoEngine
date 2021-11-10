@@ -1,37 +1,8 @@
 #include "Node3D.h"
-#include "Line3D.h"
-
-void Gizmo3D::Draw(const Transform& _transform) {
-	if (!IsVisible()) { return; };
-	if (!Renderer::GetSingleton()->IsInsideFrustum(_transform.GetPosition())) { return; };
-	for (size_t i = 0; i < lines.size(); i++) {
-		lines.at(i)->Draw(_transform);
-	}
-}
-
-void Gizmo3D::Destroy() {
-	for (size_t i = 0; i < lines.size(); i++) {
-		delete lines.at(i);
-	}
-	if (!lines.empty()) {
-		lines.clear();
-	}
-}
-
-Gizmo3D::Gizmo3D() {
-	Line3D* redLine, *blueLine, *greenLine;
-	redLine = new Line3D(Vector3().Zero(), Vector3().Right() * 1.5f, Color().Red());
-	blueLine = new Line3D(Vector3().Zero(), Vector3().Back() * 1.5f, Color().Blue());
-	greenLine = new Line3D(Vector3().Zero(), Vector3().Up() * 1.5f, Color().Green());
-	lines.push_back(redLine);
-	lines.push_back(blueLine);
-	lines.push_back(greenLine);
-	SetVisible(false);
-}
 
 void Node3D::UpdateChildrensTransform() {
 	if (parent) {
-		if (parent->GetClass() != "Node") {
+		if (parent->Is3DNode()) {
 			Node3D* parent3D = (Node3D*)parent;
 			*globalTransform = *parent3D->GetGlobalTransform() * *transform;
 		}
@@ -86,9 +57,11 @@ void Node3D::UpdateGlobalBBox() {
 
 void Node3D::UpdateGlobalBBoxChildren() {
 	if (childrens.empty()) { return UpdateParentBBox(); }
-	boundingBox = BoundingBox();
+	if (GetClass() == "Node3D") {
+		boundingBox = BoundingBox();
+	}
 	for (Node* child : childrens) {
-		if (child->GetClass() == "Node3D" || child->GetClass() == "MeshInstance") {
+		if (child->Is3DNode()) {
 			Node3D* child3D = (Node3D*)child;
 			AddBBox(*child3D->GetTransform() * child3D->GetBBox());
 		}
@@ -162,10 +135,6 @@ BoundingBox Node3D::GetGlobalBBox() const {
 	return globalBoundingBox;
 }
 
-void Node3D::SetGizmoVisible(bool gizmoVisible) {
-	gizmo->SetVisible(gizmoVisible);
-}
-
 Vector3 Node3D::GetPosition() const {
 	return transform->GetPosition();
 }
@@ -186,35 +155,53 @@ Transform* Node3D::GetGlobalTransform() {
 	return globalTransform;
 }
 
+void Node3D::SetBSPEnabled(bool value) {
+	bspEnabled = value;
+}
+
+bool Node3D::IsBSPEnabled() const {
+	return bspEnabled;
+}
+
 void Node3D::Draw() {
-	if (!IsInsideFrustum()) {return;}
+	if (!CanBeDrawed()) {return CanvasNode::Draw();}
 	Profiler::nodesDrawing.push_back(GetName());
-	gizmo->Draw(*globalTransform);
 	CanvasNode::Draw();
 }
 
+void Node3D::ForceDraw(SpatialMaterial* material) {
+	Profiler::nodesDrawing.push_back(GetName());
+	CanvasNode::ForceDraw(material);
+}
+
+bool Node3D::CanBeDrawed() {
+	return IsInsideFrustum() && IsVisible() && IsBSPEnabled();
+}
+
+void Node3D::SetPrimitive(Renderer::Primitive _primitive) {
+	primitive = _primitive;
+}
+
 bool Node3D::IsInsideFrustum() {
-	return Renderer::GetSingleton()->IsInsideFrustum(globalBoundingBox);
+	return Renderer::GetSingleton()->IsInsideFrustum(*globalTransform, boundingBox);
 }
 
 void Node3D::ShowUI() {
 	Node::ShowUI();
-	gizmo->SetVisible(true);
 	UILayer::ShowNode3D(this);
 }
 
 void Node3D::HideUI() {
 	Node::HideUI();
-	gizmo->SetVisible(false);
 }
 
 Node3D::Node3D(){
 	className = "Node3D";
 	SetDefaultName(className);
-	gizmo = new Gizmo3D();
 	transform = new Transform();
 	globalTransform = new Transform();
 	*globalTransform = *transform;
+	is3DNode = true;
 }
 
 Node3D::Node3D(const string& _name) : Node3D() {

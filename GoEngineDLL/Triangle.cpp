@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #include "Triangle.h"
 
 void Triangle::Draw() {
@@ -30,3 +31,4 @@ Triangle::Triangle() {
 
 Triangle::~Triangle() {
 }
+#endif

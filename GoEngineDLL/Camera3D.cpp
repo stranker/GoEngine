@@ -77,6 +77,10 @@ bool Camera3D::IsBoxVisible(const BoundingBox& bbox) {
     return frustum.IsBBoxInside(bbox);
 }
 
+void Camera3D::Draw() {
+    frustum.Draw(globalTransform);
+}
+
 Camera3D::Camera3D(float _width, float _height, float _fov, float _near, float _far) : Camera3D(_width, _height){
     fov = _fov;
     near = _near;
@@ -88,6 +92,6 @@ Camera3D::Camera3D(float _width, float _height) : Camera(_width, _height) {
     aspect = _width / _height;
     Renderer::GetSingleton()->SetCurrentCamera(this);
     UpdateProjection();
-    SetGizmoVisible(false);
     frustum.CalculateFrustum(this);
+    is3DNode = false;
 }

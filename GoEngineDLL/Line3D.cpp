@@ -1,21 +1,18 @@
 #include "Line3D.h"
 
-void Line3D::Draw(const Transform& transform) {
-	Renderer::GetSingleton()->SetEnableDepthBuffer(false);
-	if (lineMaterial != NULL) {
-		lineMaterial->Use();
-		lineMaterial->SetMat4("mvp", Renderer::GetSingleton()->GetCamera()->GetMVPOf(transform));
-		lineMaterial->SetVec4("lineColor", Rect2(lineColor.r, lineColor.g, lineColor.b, lineColor.a));
+void Line3D::Draw(Transform* transform) {
+	if (spatialMaterial) {
+		spatialMaterial->Use();
+		spatialMaterial->GetShader()->SetVec4("lineColor", Rect2(lineColor.r, lineColor.g, lineColor.b, lineColor.a));
+		spatialMaterial->GetShader()->SetMat4("model", transform->GetTransform());
 	}
 	Renderer::GetSingleton()->Draw(GetVertexArrayID(), primitive, 2, false);
-	Renderer::GetSingleton()->SetEnableDepthBuffer(true);
 }
 
-void Line3D::CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor, Material* material) {
+void Line3D::CreateLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor) {
 	startPoint = _startPoint;
 	endPoint = _endPoint;
 	lineColor = _lineColor;
-	lineMaterial = material;
 	float position_vertex_data[] = {
 		startPoint.x, startPoint.y, startPoint.z,
 		endPoint.x, endPoint.y, endPoint.z,
@@ -37,11 +34,16 @@ void Line3D::SetLine(Vector3 _startPoint, Vector3 _endPoint) {
 	UpdateVertexData(position_vertex_data, sizeof(position_vertex_data), 0);
 }
 
+void Line3D::SetLine(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor) {
+	SetLine(_startPoint, _endPoint);
+	lineColor = _lineColor;
+}
+
 Line3D::Line3D(Vector3 _startPoint, Vector3 _endPoint, Color _lineColor) : Line3D(){
-	CreateLine(_startPoint, _endPoint, _lineColor, lineMaterial);
+	CreateLine(_startPoint, _endPoint, _lineColor);
 }
 
 Line3D::Line3D() {
-	lineMaterial = ResourceManager::LoadMaterial("Shaders/SimpleVertex3dShader.shader", "Shaders/LineFragmentShader.shader", "lineMaterial");
 	SetDefaultName("Line3D");
+	spatialMaterial = ResourceManager::LoadSpatialMaterial("Shaders/SpatialMaterial.vs", "Shaders/Line3D.fs", "lineMaterial");
 }

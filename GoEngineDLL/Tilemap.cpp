@@ -1,3 +1,4 @@
+#ifndef ENGINE_3D
 #include "Tilemap.h"
 
 void Tilemap::ProcessLayers(Value& layers, Value& tilesets) {
@@ -160,3 +161,4 @@ Tilemap::Tilemap() {
 
 Tilemap::~Tilemap() {
 }
+#endif
