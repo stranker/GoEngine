@@ -52,7 +52,7 @@ void BaseGame::LoopEngine() {
 
 	while (!window->ShouldClose()) {
 
-		if (Input::IsKeyPressed(Input::KEY_ESCAPE)) {
+		if (Input::IsKeyPressed(Input::KEY_ESCAPE)) { // 
 			window->CloseWindow();
 		}
 

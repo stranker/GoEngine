@@ -21,9 +21,7 @@ bool Renderer::Init(){
 	currentCamera = firstCamera;
 
 	viewport = new Quad();
-	//viewportMaterial = ResourceManager::LoadSpatialMaterial("Shaders/Viewport.vs","Shaders/Viewport.fs","viewportMaterial");
-	//viewport->SetMaterial(viewportMaterial);
-	//viewportMaterial->SetInt("inputTexture", 0);
+
 	UILayer::CreateContext(window);
 	return true;
 }

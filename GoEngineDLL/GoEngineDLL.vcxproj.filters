@@ -198,6 +198,9 @@
     <ClInclude Include="Sphere.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystem3D.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseGame.cpp">
@@ -366,6 +369,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="Sphere.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem3D.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
