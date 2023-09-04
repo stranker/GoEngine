@@ -99,7 +99,8 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;user32.lib;gdi32.lib;shell32.lib;glu32.lib;freetype.lib;assimp-vc142-mtd.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy "$(SolutionDir)lib\glew-2.1.0\bin\Release\Win32\glew32.dll" "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

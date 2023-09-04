@@ -3,7 +3,7 @@
 
 class ENGINEDLL_API Texture : public Resource {
 private:
-	unsigned int textureId;
+	unsigned int textureId = 0;
 	int width = 0;
 	int height = 0;
 	int nrChannels = 0;

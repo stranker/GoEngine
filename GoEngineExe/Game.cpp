@@ -60,18 +60,15 @@ void Game::Start() {
 	plight2 = new PointLight();
 	plight2->SetPosition(Vector3(0, 2, 3));
 	spatialNode->AddChildren(plight2);
-	//// Models
-	/*blenderScene = ResourceManager::LoadModel("Models/Link.gltf", "LinkScene");
-	blenderScene->SetScale(Vector3().One() * 0.4f);
-	link = (Node3D*)blenderScene->GetNode("Link");
-	spatialNode->AddChildren(blenderScene);*/
+	// Models
+	//blenderScene = ResourceManager::LoadModel("Models/Link.gltf", "LinkScene");
+	//blenderScene->SetScale(Vector3().One() * 0.4f);
+	//link = (Node3D*)blenderScene->GetNode("Link");
+	//spatialNode->AddChildren(blenderScene);
 
 	Card3D* card = new Card3D();
 	spatialNode->AddChildren(card);
 
-	string testStr = "Hola como estas papu, todo bien? Me encantaria comerte papu.";
-	string asd = Utils::ReplaceString(testStr, "papu", "gomez");
-	PRINT_DEBUG(asd);
 	return OnStart();
 }
 
